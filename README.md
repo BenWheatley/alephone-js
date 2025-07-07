@@ -1,3 +1,17 @@
+# Goals with this fork
+
+I would like to learn several things:
+
+* Old-school first-person game engines
+* JavaScript
+* AI based software development
+
+So I'm planning to combine all three by converting this into JavaScript.
+
+As for why Marathon: we have DOOM on enough platforms already, why not give the 90s Mac equivalent some love?
+
+----
+
 # Aleph One
 
 Aleph One is the open source continuation of Bungie™’s _Marathon® 2_ and _Marathon Infinity_ game engines. Aleph One plays _Marathon_, _Marathon 2_, _Marathon Infinity_, and third-party content on a variety of platforms.
