@@ -23,6 +23,7 @@
  *  shell.cpp - Main game loop and input handling
  */
 
+/*
 #include "cseries.h"
 
 #include "map.h"
@@ -38,13 +39,13 @@
 #include "images.h"
 #include "vbl.h"
 #include "preferences.h"
-#include "tags.h" /* for scenario file type.. */
+#include "tags.h" // for scenario file type..
 #include "mouse.h"
 #include "joystick.h"
 #include "screen_drawing.h"
 #include "computer_interface.h"
-#include "game_wad.h" /* yuck... */
-#include "game_window.h" /* for draw_interface() */
+#include "game_wad.h" // yuck...
+#include "game_window.h" // for draw_interface()
 #include "extensions.h"
 #include "items.h"
 #include "interface_menus.h"
@@ -139,7 +140,7 @@ DirectorySpecifier log_dir;           // Directory for Aleph One Log.txt
 std::vector<item_subscribed_query_result::item> subscribed_workshop_items;
 steam_game_information steam_game_info;
 #endif
-
+*/
 /*
 // Command-line options
 bool option_nogl = false;             // Disable OpenGL
@@ -151,7 +152,7 @@ bool insecure_lua = false;
 static bool force_fullscreen = false; // Force fullscreen mode
 static bool force_windowed = false;   // Force windowed mode
 */
-
+/*
 void PlayInterfaceButtonSound(short SoundID);
 
 // From preprocess_map_sdl.cpp
@@ -1691,3 +1692,4 @@ void PlayInterfaceButtonSound(short SoundID)
 	if (TEST_FLAG(input_preferences->modifiers,_inputmod_use_button_sounds))
 		SoundManager::instance()->PlaySound(SoundID, (world_location3d *) NULL, NONE);
 }
+*/
