@@ -360,9 +360,6 @@ void initialize_application()
 	
 	WadImageCache::instance()->initialize_cache();
 
-#ifndef HAVE_OPENGL
-	graphics_preferences->screen_mode.acceleration = _no_acceleration;
-#endif
 	if (shell_options.nogl)
 		graphics_preferences->screen_mode.acceleration = _no_acceleration;
 	if (shell_options.force_fullscreen)
@@ -908,13 +905,11 @@ static void handle_game_key(const SDL_Event &event)
 		}
 		else if (sc == SDL_SCANCODE_F4)		// Reset OpenGL textures
 		{
-#ifdef HAVE_OPENGL
 			if (OGL_IsActive()) {
 				// Play the button sound in advance to get the full effect of the sound
 				PlayInterfaceButtonSound(Sound_OGL_Reset());
 				OGL_ResetTextures();
 			} else
-#endif
 				PlayInterfaceButtonSound(Sound_ButtonInoperative());
 		}
 		else if (sc == SDL_SCANCODE_F5) // Make the chase cam switch sides
