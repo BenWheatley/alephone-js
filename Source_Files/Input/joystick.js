@@ -26,7 +26,7 @@ Based on JOYSTICK.H and JOYSTICK_SDL.CPP in original repo
 const SDL_CONTROLLER_BUTTON_MAX = 15; // typical max buttons on a controller
 const SDL_CONTROLLER_AXIS_MAX = 6;    // typical max axes on a controller
 const SDL_CONTROLLER_AXIS_LEFTY = 1;
-const SDL_CONTROLLER_AXIS_RIGHTY = 4;
+const SDL_CONTROLLER_AXIS_RIGHTY = 3;
 
 // this is where we start stuffing button presses into the big keymap array,
 // comfortably past SDL2's defined scancodes
