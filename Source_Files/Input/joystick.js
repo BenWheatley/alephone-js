@@ -41,7 +41,6 @@ JOYSTICK_SDL.CPP
 /*
 #include "player.h" // for mask_in_absolute_positioning_information
 #include "preferences.h"
-#include "joystick.h"
 #include "Logging.h"
 
 // internal handles
