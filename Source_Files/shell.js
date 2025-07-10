@@ -186,7 +186,7 @@ static int char_is_not_filesafe(int c)
     return (c != ' ' && !std::isalnum(c));
 }
 */
-void initialize_application()
+function initialize_application()
 {
 /*
 	log_dir = get_data_path(kPathLogs);
@@ -526,7 +526,7 @@ short get_level_number_from_user(void)
 // Constants
 const TICKS_BETWEEN_EVENT_POLL = 16; // ~60Hz
 
-void main_event_loop()
+function main_event_loop()
 {
 /*
 	uint32 last_event_poll = 0;
