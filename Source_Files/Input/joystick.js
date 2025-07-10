@@ -110,28 +110,44 @@ static const std::vector<AxisInfo> axis_mappings = {
 	{ 8, _flags_pitch, true },
 	{ 9, _flags_pitch, false }
 };
-
-static int axis_mapped_to_action(int action, bool* negative) {
-	auto codeset = input_preferences->key_bindings[action];
-	for (auto it = codeset.begin(); it != codeset.end(); ++it) {
-		const SDL_Scancode code = *it;
+*/
+/** Since JS lacks pointer semantics, negative_out must be passed as an object:
+let neg = { value: false };
+let axis = axis_mapped_to_action(action_index, neg);
+*/
+function axis_mapped_to_action(action, negative_out) {
+	const codeset = input_preferences.key_bindings[action]; // TODO: needs preferences.h stubbed out at least
+	if (!codeset) {
+		return -1;
+	}
+	
+	for (let i = 0; i < codeset.length; ++i) {
+		const code = codeset[i];
 		
 		if (code < AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE)
 			continue;
 		if (code > (AO_SCANCODE_BASE_JOYSTICK_BUTTON + NUM_SDL_JOYSTICK_BUTTONS))
 			continue;
 		
-		*negative = false;
-		int axis = code - AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE;
+		let negative = false;
+		
+		let axis = code - AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE;
 		if (code >= AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE) {
-			*negative = true;
+			negative = true;
 			axis = code - AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE;
 		}
+		
+		// TODO: does this actually work in JS-land?
+		if (negative_out) {
+			negative_out.value = negative;
+		}
+		
 		return axis;
 	}
+	
 	return -1;
 }
-
+/*
 void joystick_buttons_become_keypresses(Uint8* ioKeyMap) {
     // if we're not using the joystick, avoid this
     if (!joystick_active)
