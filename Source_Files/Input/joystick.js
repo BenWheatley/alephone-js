@@ -43,7 +43,7 @@ import * as Logging from '../Misc/Logging.js';
 
 // internal handles
 let joystick_active = true;
-const active_instances = new Map(); // originally <int, SDL_GameController*>, but not using SDL in JS
+function active_instances() { return navigator.getGamepads(); } // originally map<int, SDL_GameController*>, but not using SDL in JS
 const axis_values = new Array(SDL_CONTROLLER_AXIS_MAX).fill(0);
 const button_values = new Array(NUM_SDL_JOYSTICK_BUTTONS).fill(false);
 
