@@ -41,7 +41,7 @@ const LogLevel = Object.freeze({
 
 // JS conversion note: change of syntax from GetCurrentLogger().foo() to Logging.foo()
 
-let loggingThreshhold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched
+let loggingThreshhold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched // TODO: fix mis-spelling once the app actually works
 
 let logDomain = "global"; // TODO: delete after conversion complete — there is only one domain
 
