@@ -52,15 +52,15 @@ void initialize_joystick(void) {
 	for (int i = 0; i < SDL_NumJoysticks(); ++i)
 		joystick_added(i);
 }
-
-void enter_joystick(void) {
+*/
+function enter_joystick() {
 	joystick_active = true;
 }
 
-void exit_joystick(void) {
+function exit_joystick() {
 	joystick_active = false;
 }
-
+/*
 void joystick_added(int device_index) {
 	if (!SDL_IsGameController(device_index)) {
 		SDL_Joystick *joystick = SDL_JoystickOpen(device_index);
