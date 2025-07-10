@@ -23,7 +23,7 @@ Based on JOYSTICK.H and JOYSTICK_SDL.CPP in original repo
 */
 // Constants roughly matching the original numeric values (SDL constants not defined in JS)
 // TODO: rename when this is finished, there is no SDL in this project
-const SDL_CONTROLLER_BUTTON_MAX = 15; // typical max buttons on a controller
+const SDL_CONTROLLER_BUTTON_MAX = 21; // typical max buttons on a controller
 const SDL_CONTROLLER_AXIS_MAX = 6;    // typical max axes on a controller
 const SDL_CONTROLLER_AXIS_LEFTY = 1;
 const SDL_CONTROLLER_AXIS_RIGHTY = 3;
