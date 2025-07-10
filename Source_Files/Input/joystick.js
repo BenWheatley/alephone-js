@@ -38,6 +38,7 @@ const AO_SCANCODE_JOYSTICK_ESCAPE = AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTR
 /*
 JOYSTICK_SDL.CPP
 */
+/*
 #include "player.h" // for mask_in_absolute_positioning_information
 #include "preferences.h"
 #include "joystick.h"
@@ -224,3 +225,4 @@ int process_joystick_axes(int flags) {
 		flags = process_aim_input(flags, {dyaw, dpitch});
 	return flags;
 }
+*/
