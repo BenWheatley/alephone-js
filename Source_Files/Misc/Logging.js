@@ -49,7 +49,7 @@ function logMessage(domain, level, file, line, message, ...args) {
     }
 }
 
-void reset_mml_logging()
+function reset_mml_logging()
 {
 	console.log("reset_mml_logging called but stubbed out"); // TODO: only used by XML parser, so should be deleted eventually
 }
