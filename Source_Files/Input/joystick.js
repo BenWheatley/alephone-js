@@ -175,8 +175,6 @@ function joystick_buttons_become_keypresses(ioKeyMap) {
 		if (buttons_to_avoid.count(code) == 0)
 			ioKeyMap[code] = button_values[i];
     }
-	
-    return;
 */
 }
 /*
