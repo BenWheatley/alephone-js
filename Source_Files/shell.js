@@ -406,9 +406,6 @@ void shutdown_application(void)
 
 	shutdown_dialogs();
         
-#if defined(HAVE_SDL_IMAGE)
-	IMG_Quit();
-#endif
 #if !defined(DISABLE_NETWORKING)
 	SDLNet_Quit();
 #endif
@@ -1294,11 +1291,7 @@ void dump_screen(void)
 	do {
 		char name[256];
 		const char* suffix;
-#if defined (HAVE_SDL_IMAGE) && defined (HAVE_PNG)
 		suffix = "png";
-#else
-		suffix = "bmp";
-#endif
 		if (get_game_state() == _game_in_progress)
 		{
 			sprintf(name, "%s_%04d.%s", to_alnum(static_world->level_name).c_str(), i, suffix);
