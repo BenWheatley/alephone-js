@@ -191,10 +191,7 @@ TopLevelLogger::logMessageV(const char* inDomain, int inLevel, const char* inFil
 
 void TopLevelLogger::flush()
 {
-	if (sOutputFile)
-	{
-		fflush(sOutputFile);
-	}
+	console.log("log flush called, probably redundant in JS land"); // TODO: should eventually be deleted
 }
 
 function
