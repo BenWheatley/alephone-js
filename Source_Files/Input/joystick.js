@@ -56,7 +56,7 @@ function exit_joystick() {
 	joystick_active = false;
 }
 
-function joystick_added(int device_index) {
+function joystick_added(device_index) {
 	// TODO: no-op in JS land, remove it and any calls to it once app is working
 }
 
