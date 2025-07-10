@@ -45,10 +45,10 @@ JOYSTICK_SDL.CPP
 import * as Logging from '../Misc/Logging.js';
 /*
 // internal handles
-int joystick_active = true;
-static std::map<int, SDL_GameController*> active_instances;
-int axis_values[SDL_CONTROLLER_AXIS_MAX] = {};
-bool button_values[NUM_SDL_JOYSTICK_BUTTONS] = {};
+let joystick_active = true;
+const active_instances = new Map(); // originally <int, SDL_GameController*>, but not using SDL in JS
+const axis_values = new Array(SDL_CONTROLLER_AXIS_MAX).fill(0);
+const button_values = new Array(NUM_SDL_JOYSTICK_BUTTONS).fill(false);
 
 void initialize_joystick(void) {
 	SDL_GameControllerEventState(SDL_ENABLE);
