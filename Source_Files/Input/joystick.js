@@ -86,10 +86,9 @@ function joystick_axis_moved(instance_id, axis, value) {
 }
 
 function joystick_button_pressed(instance_id, button, down) {
-/*
-	if (button >= 0 && button < NUM_SDL_JOYSTICK_BUTTONS)
+	if (button >= 0 && button < NUM_SDL_JOYSTICK_BUTTONS) {
 		button_values[button] = down;
-*/
+	}
 }
 /*
 enum {
