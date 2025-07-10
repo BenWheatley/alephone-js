@@ -54,23 +54,12 @@ function enter_joystick() {
 function exit_joystick() {
 	joystick_active = false;
 }
-/*
-void joystick_added(int device_index) {
-	if (!SDL_IsGameController(device_index)) {
-		SDL_Joystick *joystick = SDL_JoystickOpen(device_index);
-		char guidStr[255] = "";
-		SDL_JoystickGetGUIDString(SDL_JoystickGetGUID(joystick), guidStr, 255);
-		logWarning("No mapping found for controller \"%s\" (%s)",
-				   SDL_JoystickName(joystick), guidStr);
-		return;
-	}
-	SDL_GameController *controller = SDL_GameControllerOpen(device_index);
-	if (!controller)
-		return;
-	int instance_id = SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
-	active_instances[instance_id] = controller;
+
+function joystick_added(int device_index) {
+	// TODO: no-op in JS land, remove it and any calls to it once app is working
 }
 
+/*
 bool joystick_removed(int instance_id) {
 	SDL_GameController *controller = active_instances[instance_id];
 	if (controller) {
