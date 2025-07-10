@@ -26,7 +26,6 @@
 
 #include "cseries.h"
 #include "shell.h"
-#include "FileHandler.h"
 #include "InfoTree.h"
 
 const LogLevel = Object.freeze({
