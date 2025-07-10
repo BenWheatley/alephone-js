@@ -43,7 +43,7 @@ const LogLevel = Object.freeze({
 static Logger* currentLogger = InitializeLogging();
 
 let sLoggingThreshold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched
-static bool	sFlushOutput	= false;		// flush output after every log-write?  (good if crash expected)
+
 const char*	logDomain	= "global";
 
 Logger*
@@ -138,10 +138,7 @@ TopLevelLogger::logMessageV(const char* inDomain, int inLevel, const char* inFil
         
         fprintf(sOutputFile, "%s", theString.c_str());
 		fprintf(stderr, "%s", theString.c_str());
-        
-        if(sFlushOutput)
-                fflush(sOutputFile);
-        
+                
         log_data.mMostRecentCommonStackDepth = log_data.mContextStack.size();
         log_data.mMostRecentlyPrintedStackDepth = log_data.mContextStack.size();
     }
