@@ -173,11 +173,6 @@ bool handle_open_document(const std::string& filename)
 	
 	return done;
 }
-
-static int char_is_not_filesafe(int c)
-{
-    return (c != ' ' && !std::isalnum(c));
-}
 */
 export function initialize_application()
 {
@@ -348,8 +343,6 @@ export function initialize_application()
 	quick_saves_dir.CreateDirectory();
 	{
 		std::string scen = Scenario::instance()->GetName();
-		if (scen.length())
-			scen.erase(std::remove_if(scen.begin(), scen.end(), char_is_not_filesafe), scen.end());
 		if (!scen.length())
 			scen = "Unknown";
 		quick_saves_dir += scen;
