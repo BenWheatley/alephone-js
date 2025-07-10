@@ -205,14 +205,6 @@ void TopLevelLogger::flush()
 	}
 }
 
-#if defined(__unix__) || defined(__NetBSD__) || defined(__OpenBSD__) || (defined(__APPLE__) && defined(__MACH__))
-#include <unistd.h>
-#include <sys/types.h>
-#ifdef HAVE_PWD_H
-#include <pwd.h>
-#endif
-#endif
-
 extern DirectorySpecifier log_dir;
 
 char g_loggingFileName[256] = "";
