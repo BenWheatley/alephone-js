@@ -43,7 +43,6 @@ import * as Logging from '../Misc/Logging.js';
 
 // internal handles
 let joystick_active = true;
-function active_instances() { return navigator.getGamepads(); } // originally map<int, SDL_GameController*>, but not using SDL in JS
 const axis_values = new Array(SDL_CONTROLLER_AXIS_MAX).fill(0);
 const button_values = new Array(NUM_SDL_JOYSTICK_BUTTONS).fill(false);
 
@@ -128,7 +127,7 @@ void joystick_buttons_become_keypresses(Uint8* ioKeyMap) {
     // if we're not using the joystick, avoid this
     if (!joystick_active)
         return;
-	if (active_instances.empty())
+	if (navigator.getGamepads().length==0)
 		return;
 
 	std::set<int> buttons_to_avoid;
@@ -156,7 +155,7 @@ void joystick_buttons_become_keypresses(Uint8* ioKeyMap) {
 int process_joystick_axes(int flags) {
     if (!joystick_active)
         return flags;
-	if (active_instances.empty())
+	if (navigator.getGamepads.length==0)
 		return flags;
 	if (!input_preferences->controller_analog)
 		return flags;
