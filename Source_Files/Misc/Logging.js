@@ -42,7 +42,7 @@ const LogLevel = Object.freeze({
 // JS conversion note: change of syntax from GetCurrentLogger().foo() to Logging.currentLogger.foo()
 static Logger* currentLogger = InitializeLogging();
 
-static int	sLoggingThreshhold = logNoteLevel;	// log messages at or above this level will be squelched
+let sLoggingThreshold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched
 static bool	sShowLocations	= true;			// should filenames and line numbers be printed as well?
 static bool	sFlushOutput	= false;		// flush output after every log-write?  (good if crash expected)
 const char*	logDomain	= "global";
