@@ -56,14 +56,6 @@ GetCurrentLogger() {
 }
 
 void
-Logger::pushLogContext(const char* inFile, int inLine, const char* inContext, ...) {
-    va_list theVarArgs;
-    va_start(theVarArgs, inContext);
-    pushLogContextV(inFile, inLine, inContext, theVarArgs);
-    va_end(theVarArgs);
-}
-
-void
 Logger::logMessage(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
     va_list theVarArgs;
     va_start(theVarArgs, inMessage);
@@ -81,8 +73,6 @@ Logger::logMessageNMT(const char* inDomain, int inLevel, const char* inFile, int
 
 class TopLevelLogger : public Logger {
 public:
-    virtual void pushLogContextV(const char* inFile, int inLine, const char* inContext, va_list inArgs);
-    virtual void popLogContext();
     virtual void logMessageV(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, va_list inArgs);
 	void flush();
 protected:
@@ -104,31 +94,6 @@ protected:
 private:
     std::unordered_map<std::thread::id, LogData> _log_data;
 };
-
-void
-TopLevelLogger::pushLogContextV(const char* inFile, int inLine, const char* inContext, va_list inArgs) {
-        char 	stringBuffer[kStringBufferSize];
-        vsnprintf(stringBuffer, kStringBufferSize, inContext, inArgs);
-        string	theContextString(stringBuffer);
-        if(sShowLocations) {
-                // Strictly speaking, the choice of whether to include location info should be
-                // deferred until the context actually gets logged, just in case the setting
-                // changes in between entering the context and logging a message.
-                snprintf(stringBuffer, kStringBufferSize, " (%s:%d)", inFile, inLine);
-                theContextString += stringBuffer;
-        }
-        getLogData().mContextStack.push_back(theContextString);
-}
-
-
-void
-TopLevelLogger::popLogContext() {
-    auto& log_data = getLogData();
-    log_data.mContextStack.pop_back();
-    if(log_data.mContextStack.size() < log_data.mMostRecentCommonStackDepth)
-        log_data.mMostRecentCommonStackDepth = log_data.mContextStack.size();
-}
-
 
 // domains are currently unused; idea is that eventually different logs can be routed to different
 // files, different domains can have different levels of detail, etc.
