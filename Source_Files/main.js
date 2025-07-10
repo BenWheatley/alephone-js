@@ -2,9 +2,9 @@
 
 import * as shell from './shell.js';
 
-var glContext;
+export var glContext;
 
-function main() {
+export function main() {
 	console.log(
 		"Original code by Bungie Software <http://www.bungie.com/>\n" +
 		"Additional work by Loren Petrich, Chris Pruett, Rhys Hill et al.\n" +

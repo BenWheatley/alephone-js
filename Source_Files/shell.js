@@ -179,7 +179,7 @@ static int char_is_not_filesafe(int c)
     return (c != ' ' && !std::isalnum(c));
 }
 */
-function initialize_application()
+export function initialize_application()
 {
 	const canvas = document.getElementById("glCanvas");
 	
@@ -405,7 +405,7 @@ function initialize_application()
 */
 }
 
-function shutdown_application()
+export function shutdown_application()
 {
 	/* TODO: consider inserting a hook to a save dialog, but this is nothing like a normal app shutdown and existing code is unlikely to help
 	For temporary reference only, old code pointed to:
@@ -527,7 +527,7 @@ short get_level_number_from_user(void)
 // Constants
 const TICKS_BETWEEN_EVENT_POLL = 16; // ~60Hz
 
-function main_event_loop()
+export function main_event_loop()
 {
 /*
 	uint32 last_event_poll = 0;
@@ -1284,7 +1284,7 @@ std::string to_alnum(const std::string& input)
 	return output;
 }
 */
-function dump_screen()
+export function dump_screen()
 {
 	// Generate a timestamped filename
 	const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
