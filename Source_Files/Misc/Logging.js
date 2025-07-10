@@ -24,11 +24,21 @@
 	May 21, 2003 (Woody Zenfell): being a little more defensive about NULL file pointer.
 */
 
-#include "Logging.h"
 #include "cseries.h"
 #include "shell.h"
 #include "FileHandler.h"
 #include "InfoTree.h"
+
+enum {
+	logFatalLevel	= 0,	// program must exit
+	logErrorLevel	= 10,	// can't do something significant
+	logWarningLevel	= 20,	// can continue but results could be really screwy
+	logAnomalyLevel	= 30,	// can continue, results could be off a little, but no big deal
+	logNoteLevel	= 40,	// something worth mentioning
+	logSummaryLevel	= 45,	// occasional dumps of aggregate statistics
+	logTraceLevel	= 50,	// details of actions and logic
+	logDumpLevel	= 60	// values of data etc.
+};
 
 static Logger*	sCurrentLogger	= NULL;
 
