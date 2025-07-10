@@ -59,17 +59,11 @@ function joystick_added(int device_index) {
 	// TODO: no-op in JS land, remove it and any calls to it once app is working
 }
 
-/*
-bool joystick_removed(int instance_id) {
-	SDL_GameController *controller = active_instances[instance_id];
-	if (controller) {
-		SDL_GameControllerClose(controller);
-		active_instances.erase(instance_id);
-		return true;
-	}
-	return false;
+function joystick_removed(instance_id) {
+	// TODO: no-op in JS land, remove it and any calls to it once app is working
+	return true;
 }
-
+/*
 void joystick_axis_moved(int instance_id, int axis, int value) {
 	switch (axis) {
 		case SDL_CONTROLLER_AXIS_LEFTY:
