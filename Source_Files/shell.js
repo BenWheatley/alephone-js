@@ -99,7 +99,6 @@ DirectorySpecifier quick_saves_dir;   // Directory for auto-named saved games
 DirectorySpecifier image_cache_dir;   // Directory for image cache
 DirectorySpecifier recordings_dir;    // Directory for recordings (except film buffer, which is stored in local_data_dir)
 DirectorySpecifier screenshots_dir;   // Directory for screenshots
-DirectorySpecifier log_dir;           // Directory for Aleph One Log.txt
 */
 /*
 // Command-line options
@@ -202,7 +201,6 @@ function initialize_application()
 	}
 	
 /*
-	log_dir = get_data_path(kPathLogs);
 	initialize_joystick();
 
 	const string default_data_env = a1_getenv("ALEPHONE_DEFAULT_DATA");
