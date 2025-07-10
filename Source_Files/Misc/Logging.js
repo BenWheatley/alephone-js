@@ -30,8 +30,6 @@
 #include "FileHandler.h"
 #include "InfoTree.h"
 
-enum { kStringBufferSize = 1024 };
-
 static Logger*	sCurrentLogger	= NULL;
 static FILE*	sOutputFile	= NULL;
 static int	sLoggingThreshhold = logNoteLevel;	// log messages at or above this level will be squelched
