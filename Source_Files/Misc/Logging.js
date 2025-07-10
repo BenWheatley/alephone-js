@@ -40,17 +40,13 @@ const LogLevel = Object.freeze({
 	logDumpLevel: 60      // values of data etc.
 });
 
-
-static Logger*	sCurrentLogger	= NULL;
+// JS conversion note: change of syntax from GetCurrentLogger().foo() to Logging.currentLogger.foo()
+static Logger* currentLogger = InitializeLogging();
 
 static int	sLoggingThreshhold = logNoteLevel;	// log messages at or above this level will be squelched
 static bool	sShowLocations	= true;			// should filenames and line numbers be printed as well?
 static bool	sFlushOutput	= false;		// flush output after every log-write?  (good if crash expected)
 const char*	logDomain	= "global";
-
-
-static void InitializeLogging();
-
 
 Logger*
 GetCurrentLogger() {
@@ -59,10 +55,6 @@ GetCurrentLogger() {
 
     return sCurrentLogger;
 }
-
-
-
-
 
 void
 Logger::pushLogContext(const char* inFile, int inLine, const char* inContext, ...) {
@@ -227,25 +219,14 @@ const char *loggingFileName()
 	return g_loggingFileName;
 }
 
-static void
+function
 InitializeLogging() {
-    assert(sOutputFile == NULL);
-    FileSpecifier fs = log_dir;
-    fs += loggingFileName();
-
-#ifdef __WIN32__
-    sOutputFile = _wfopen(utf8_to_wide(fs.GetPath()).c_str(), L"a");
-#else
-    sOutputFile = fopen(fs.GetPath(), "a");
-#endif
-
-    sCurrentLogger = new TopLevelLogger;
-    if(sOutputFile != NULL)
-    {
-	    time_t theTime = time(NULL);
-	    const char* theTimeString = ctime(&theTime);
-	    fprintf(sOutputFile, "\n-------------------- %s\n\n", theTimeString == NULL ? "(timestamp unavailable)" : theTimeString);
-    }
+	if (!currentLogger) {
+		currentLogger = new TopLevelLogger();
+		const timestamp = new Date().toString();
+		console.log(`\n-------------------- ${timestamp}\n`);
+	}
+	return currentLogger;
 }
 
 
