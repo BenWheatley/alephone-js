@@ -206,17 +206,6 @@ void TopLevelLogger::flush()
 	}
 }
 
-char g_loggingFileName[256] = "";
-const char *loggingFileName()
-{
-	if (!strlen(g_loggingFileName))
-	{
-		strncpy(g_loggingFileName, get_application_name().c_str(), 256);
-		strncat(g_loggingFileName, " Log.txt", 256 - strlen(g_loggingFileName));
-	}
-	return g_loggingFileName;
-}
-
 function
 InitializeLogging() {
 	if (!currentLogger) {
