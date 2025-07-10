@@ -43,7 +43,6 @@ const LogLevel = Object.freeze({
 static Logger* currentLogger = InitializeLogging();
 
 let sLoggingThreshold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched
-static bool	sShowLocations	= true;			// should filenames and line numbers be printed as well?
 static bool	sFlushOutput	= false;		// flush output after every log-write?  (good if crash expected)
 const char*	logDomain	= "global";
 
@@ -135,12 +134,7 @@ TopLevelLogger::logMessageV(const char* inDomain, int inLevel, const char* inFil
         
         theString += stringBuffer;
         
-        if(sShowLocations) {
-            snprintf(stringBuffer, kStringBufferSize, " (%s:%d)\n", inFile, inLine);
-            theString += stringBuffer;
-        }
-        else
-            theString += "\n";
+		theString += "\n";
         
         fprintf(sOutputFile, "%s", theString.c_str());
 		fprintf(stderr, "%s", theString.c_str());
