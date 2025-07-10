@@ -122,13 +122,16 @@
 #ifdef HAVE_STEAM
 #include "steamshim_child.h"
 #endif
-
-// Data directories
-vector <DirectorySpecifier> data_search_path; // List of directories in which data files are searched for
-DirectorySpecifier local_data_dir;    // Local (per-user) data file directory
+*/
+// Data directories - not sure how this will map conceptually to JS
+let data_search_path = []; // List of directories in which data files are searched for
+let local_data_dir = '';    // Local (per-user) data file directory
+/*
 DirectorySpecifier default_data_dir;  // Default scenario directory
 DirectorySpecifier bundle_data_dir;	  // Data inside Mac OS X app bundle
-DirectorySpecifier preferences_dir;   // Directory for preferences
+*/
+let preferences_dir = '';   // Directory for preferences
+/*
 DirectorySpecifier saved_games_dir;   // Directory for saved games
 DirectorySpecifier quick_saves_dir;   // Directory for auto-named saved games
 DirectorySpecifier image_cache_dir;   // Directory for image cache
@@ -725,8 +728,10 @@ short get_level_number_from_user(void)
 	update_game_window();
 	return level;
 }
-
-const uint32 TICKS_BETWEEN_EVENT_POLL = 16; // 60 Hz
+*/
+// Constants
+const TICKS_BETWEEN_EVENT_POLL = 16; // ~60Hz
+/*
 void main_event_loop(void)
 {
 	uint32 last_event_poll = 0;
