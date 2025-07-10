@@ -64,7 +64,6 @@ Logger::pushLogContext(const char* inFile, int inLine, const char* inContext, ..
     va_end(theVarArgs);
 }
 
-
 void
 Logger::logMessage(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
     va_list theVarArgs;
@@ -73,7 +72,6 @@ Logger::logMessage(const char* inDomain, int inLevel, const char* inFile, int in
     va_end(theVarArgs);
 }
 
-
 void
 Logger::logMessageNMT(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
 	va_list theVarArgs;
@@ -81,13 +79,6 @@ Logger::logMessageNMT(const char* inDomain, int inLevel, const char* inFile, int
 	logMessageV(inDomain, inLevel, inFile, inLine, inMessage, theVarArgs);
 	va_end(theVarArgs);
 }
-
-Logger::~Logger() {
-}
-
-
-
-
 
 class TopLevelLogger : public Logger {
 public:
