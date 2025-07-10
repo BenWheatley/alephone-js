@@ -45,67 +45,11 @@ let loggingThreshhold = LogLevel.logNoteLevel; // log messages at or above this 
 
 let logDomain = "global"; // TODO: delete after conversion complete — there is only one domain
 
-function logMessage(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
-    va_list theVarArgs;
-    va_start(theVarArgs, inMessage);
-    logMessageV(inDomain, inLevel, inFile, inLine, inMessage, theVarArgs);
-    va_end(theVarArgs);
-}
-
-function logMessageNMT(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
-	va_list theVarArgs;
-	va_start(theVarArgs, inMessage);
-	logMessageV(inDomain, inLevel, inFile, inLine, inMessage, theVarArgs);
-	va_end(theVarArgs);
-}
-
-// domains are currently unused; idea is that eventually different logs can be routed to different
-// files, different domains can have different levels of detail, etc.
-// Something like network.h would declare extern const char* NetworkLoggingDomain;, and some
-// .cpp would (obviously) provide it - then files that want to log in that domain would put
-// static const char* logDomain = NetworkLoggingDomain; so that all logging calls (via the macros)
-// would end up in the Network logging domain instead of the Global domain.  (Also this way creates
-// an identifier that the compiler can spell-check etc., which you wouldn't get with
-// static const char* logDomain = "Network"; or the like.
-void
-TopLevelLogger::logMessageV(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, va_list inArgs) {
-    // Obviously eventually this will be settable more dynamically...
-    // Also eventually some logged messages could be posted in a dialog in addition to appended to the file.
-    if(sOutputFile != NULL && inLevel < loggingThreshhold) {
-        char	stringBuffer[kStringBufferSize];
-        auto& log_data = getLogData();
-
-        size_t firstDepthToPrint = log_data.mMostRecentCommonStackDepth;
-    /*
-        // This was designed to give a little context when coming back from deep stacks, but it seems
-        // rather annoying to me in practice.  (Maybe should be set to only kick in for bigger stack depth differences,
-        // or after a certain number of entries at deeper depths, etc.)
-        if(mMostRecentlyPrintedStackDepth != mMostRecentCommonStackDepth && firstDepthToPrint > 0)
-            firstDepthToPrint--;
-    */
-        for(size_t depth = firstDepthToPrint; depth < log_data.mContextStack.size(); depth++) {
-            string	theString(depth * 2, ' ');
-    
-            theString += "while ";
-            theString += log_data.mContextStack[depth];
-            
-            fprintf(sOutputFile, "%s\n", theString.c_str());
-			fprintf(stderr, "%s\n", theString.c_str());
-        }
-        
-        vsnprintf(stringBuffer, kStringBufferSize, inMessage, inArgs);
-    
-        string	theString(log_data.mContextStack.size() * 2, ' ');
-        
-        theString += stringBuffer;
-        
-		theString += "\n";
-        
-        fprintf(sOutputFile, "%s", theString.c_str());
-		fprintf(stderr, "%s", theString.c_str());
-                
-        log_data.mMostRecentCommonStackDepth = log_data.mContextStack.size();
-        log_data.mMostRecentlyPrintedStackDepth = log_data.mContextStack.size();
+function logMessage(domain, level, file, line, message, ...args) {
+	// TODO: rm `domain`, `file`, `line` as not sensible in JS land, but only after app actually runs
+	if (level < loggingThreshhold) {
+		let formattedMessage = formatString(message, args);
+		console.log(formattedMessage, args); // We don't *actually need* a real formatter for this, it's debug info, it doesn't need to be pretty
     }
 }
 
