@@ -188,6 +188,19 @@ static int char_is_not_filesafe(int c)
 */
 function initialize_application()
 {
+	const canvas = document.getElementById("glCanvas");
+	
+	if (!canvas) {
+		console.error("Canvas element with id 'glCanvas' not found.");
+		return;
+	}
+	
+	window.glContext = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+	if (!window.glContext) {
+		console.error("Unable to initialize WebGL.");
+		return;
+	}
+	
 /*
 	log_dir = get_data_path(kPathLogs);
 	initialize_joystick();

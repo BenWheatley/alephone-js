@@ -2,6 +2,8 @@
 
 import * as shell from './shell.js';
 
+var glContext;
+
 function main() {
 	console.log(
 		"Original code by Bungie Software <http://www.bungie.com/>\n" +
