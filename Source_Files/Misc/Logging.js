@@ -31,7 +31,7 @@
 #include "InfoTree.h"
 
 static Logger*	sCurrentLogger	= NULL;
-static FILE*	sOutputFile	= NULL;
+
 static int	sLoggingThreshhold = logNoteLevel;	// log messages at or above this level will be squelched
 static bool	sShowLocations	= true;			// should filenames and line numbers be printed as well?
 static bool	sFlushOutput	= false;		// flush output after every log-write?  (good if crash expected)
