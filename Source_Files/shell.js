@@ -399,21 +399,17 @@ function initialize_application()
 	initialize_game_state();
 */
 }
-/*
-void shutdown_application(void)
+
+function shutdown_application()
 {
+	/* TODO: consider inserting a hook to a save dialog, but this is nothing like a normal app shutdown and existing code is unlikely to help
+	For temporary reference only, old code pointed to:
 	WadImageCache::instance()->save_cache();
 
 	shutdown_dialogs();
-        
-#if !defined(DISABLE_NETWORKING)
-	SDLNet_Quit();
-#endif
-	TTF_Quit();
-	SDL_Quit();
-
+	*/
 }
-
+/*
 bool networking_available(void)
 {
 #if !defined(DISABLE_NETWORKING)
