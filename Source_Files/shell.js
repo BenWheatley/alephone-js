@@ -63,13 +63,6 @@
 
 #include "mytm.h"	// mytm_initialize(), for platform-specific shell_*.h
 
-#include <stdlib.h>
-#include <ctype.h>
-#include <vector>
-
-#include <sstream>
-#include <boost/algorithm/string/predicate.hpp>
-
 #include "resource_manager.h"
 #include "sdl_dialogs.h"
 #include "sdl_fonts.h"
@@ -77,11 +70,6 @@
 
 #include "DefaultStringSets.h"
 #include "TextStrings.h"
-
-#include <ctime>
-#include <exception>
-#include <algorithm>
-#include <vector>
 
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
