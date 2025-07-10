@@ -86,12 +86,6 @@
 #include "HTTP.h"
 #include "WadImageCache.h"
 
-#ifdef __WIN32__
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#undef CreateDirectory
-#endif
-
 #include "shell_options.h"
 
 #ifdef HAVE_STEAM
@@ -150,13 +144,8 @@ short vidmasterLevelOffset = 1; // can be set with MML
 
 static std::string a1_getenv(const char* name)
 {
-#ifdef __WIN32__
-	wchar_t* wstr = _wgetenv(utf8_to_wide(name).c_str());
-	return wstr ? wide_to_utf8(wstr) : std::string{};
-#else
 	char* str = getenv(name);
 	return str ? str : std::string{};
-#endif
 }
 
 extern bool handle_open_replay(FileSpecifier& File);
