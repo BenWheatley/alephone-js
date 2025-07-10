@@ -230,50 +230,12 @@ InitializeLogging() {
 }
 
 
-// Currently these ignore the domain since domains are effectively not implemented.
-void
-setLoggingThreshhold(const char* inDomain, int16 inThreshhold) {
-        sLoggingThreshhold = inThreshhold;
-}
-
-
-void
-setShowLoggingLocations(const char* inDomain, bool inShowLoggingLocations) {
-        sShowLocations = inShowLoggingLocations;
-}
-
-
-void
-setFlushLoggingOutput(const char* inDomain, bool inFlushOutput) {
-        sFlushOutput = inFlushOutput;
-
-        // Flush now for good measure
-        if(sFlushOutput && sOutputFile != NULL)
-                fflush(sOutputFile);
-}
-
-
 void reset_mml_logging()
 {
-	// no reset
+	console.log("reset_mml_logging called but stubbed out"); // TODO: only used by XML parser, so should be deleted eventually
 }
 
-void parse_mml_logging(const InfoTree& root)
+function parse_mml_logging()
 {
-	for (const InfoTree &dtree : root.children_named("logging_domain"))
-	{
-		std::string domain;
-		if (!dtree.read_attr("domain", domain) || !domain.size())
-			continue;
-		
-		int16 threshhold;
-		if (dtree.read_attr("threshhold", threshhold))
-			setLoggingThreshhold(domain.c_str(), threshhold);
-		bool locations;
-		if (dtree.read_attr("show_locations", locations))
-			setShowLoggingLocations(domain.c_str(), locations);
-		bool flush;
-		if (dtree.read_attr("flush", flush))
-			setFlushLoggingOutput(domain.c_str(), flush);
-	}
+	console.log("parse_mml_logging called but stubbed out — should be deleted once app is running"); // TODO: only used by XML parser, so should be deleted eventually
 }
