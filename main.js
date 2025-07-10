@@ -1,5 +1,7 @@
 // This one file was written by Ben, not AI, examining main.cpp and replacing it with what seems to makes sense for a JS webapp (i.e. it's not starting off by loading any files)
 
+import * as shell from './shell.js';
+
 function main() {
 	console.log(
 		"Original code by Bungie Software <http://www.bungie.com/>\n" +
@@ -12,6 +14,6 @@ function main() {
 		"You are welcome to redistribute it under certain conditions.\n" +
 		"For details, see the file COPYING.\n"
 	);
-	initialize_application();
-	main_event_loop();
+	shell.initialize_application();
+	shell.main_event_loop();
 }
