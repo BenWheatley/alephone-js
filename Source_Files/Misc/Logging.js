@@ -37,7 +37,7 @@ export const Level = Object.freeze({
 
 // JS conversion note: change of syntax from GetCurrentLogger().foo() to Logging.foo()
 
-export let loggingThreshhold = Level.logNoteLevel; // log messages at or above this level will be squelched // TODO: fix mis-spelling once the app actually works
+export let loggingThreshhold = Level.note; // log messages at or above this level will be squelched // TODO: fix mis-spelling once the app actually works
 
 export function logMessage(level, file, line, message, ...args) {
 	// TODO: rm `file`, `line` as not sensible in JS land, but only after app actually runs
