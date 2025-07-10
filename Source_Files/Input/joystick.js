@@ -147,8 +147,9 @@ function axis_mapped_to_action(action, negative_out) {
 	
 	return -1;
 }
+
+function joystick_buttons_become_keypresses(ioKeyMap) {
 /*
-void joystick_buttons_become_keypresses(Uint8* ioKeyMap) {
     // if we're not using the joystick, avoid this
     if (!joystick_active)
         return;
@@ -175,8 +176,9 @@ void joystick_buttons_become_keypresses(Uint8* ioKeyMap) {
     }
 	
     return;
+*/
 }
-
+/*
 int process_joystick_axes(int flags) {
     if (!joystick_active)
         return flags;
