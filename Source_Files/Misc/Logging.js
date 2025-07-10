@@ -24,10 +24,6 @@
 	May 21, 2003 (Woody Zenfell): being a little more defensive about NULL file pointer.
 */
 
-#include "cseries.h"
-#include "shell.h"
-#include "InfoTree.h"
-
 const LogLevel = Object.freeze({
 	logFatalLevel: 0,     // program must exit
 	logErrorLevel: 10,    // can't do something significant
