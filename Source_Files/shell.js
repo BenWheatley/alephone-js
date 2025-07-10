@@ -198,7 +198,6 @@ export function initialize_application()
 	initialize_joystick();
 
 	const string default_data_env = a1_getenv("ALEPHONE_DEFAULT_DATA");
-#ifndef SCENARIO_IS_BUNDLED
 	// see if there are scenarios to choose from
 	DirectorySpecifier scenario_dir(get_data_path(kPathDefaultData));
 	if (!shell_options.directory.empty())
@@ -234,14 +233,11 @@ export function initialize_application()
 			shell_options.directory = chosen_path;
 		}
 	}
-#endif
 
 	// Find data directories, construct search path
 	InitDefaultStringSets();
 	
-#ifndef SCENARIO_IS_BUNDLED
 	default_data_dir = get_data_path(kPathDefaultData);
-#endif
 	
 	local_data_dir = get_data_path(kPathLocalData);
 	preferences_dir = get_data_path(kPathPreferences);
