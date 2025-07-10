@@ -1291,80 +1291,25 @@ std::string to_alnum(const std::string& input)
 
 	return output;
 }
-
-void dump_screen(void)
+*/
+function dump_screen()
 {
-	// Find suitable file name
-	FileSpecifier file;
-	int i = 0;
-	do {
-		char name[256];
-		const char* suffix;
-		suffix = "png";
-		if (get_game_state() == _game_in_progress)
-		{
-			sprintf(name, "%s_%04d.%s", to_alnum(static_world->level_name).c_str(), i, suffix);
-		}
-		else
-		{
-			sprintf(name, "Screenshot_%04d.%s", i, suffix);
-		}
-
-		file = screenshots_dir + name;
-		i++;
-	} while (file.Exists());
-
-	// Without OpenGL, dumping the screen is easy
-	if (!MainScreenIsOpenGL()) {
-#if defined (HAVE_SDL_IMAGE) && defined (HAVE_PNG)
-		IMG_SavePNG(MainScreenSurface(), file.GetPath());
-#else
-		SDL_SaveBMP(MainScreenSurface(), file.GetPath());
-#endif
-		return;
-	}
+	// Generate a timestamped filename
+	const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+	const filename = `screenshot_${timestamp}.png`;
 	
-	int video_w = MainScreenPixelWidth();
-	int video_h = MainScreenPixelHeight();
-
-#ifdef HAVE_OPENGL
-	// Otherwise, allocate temporary surface...
-	SDL_Surface *t = SDL_CreateRGBSurface(SDL_SWSURFACE, video_w, video_h, 24,
-#if SDL_BYTEORDER == SDL_LIL_ENDIAN
-	  0x000000ff, 0x0000ff00, 0x00ff0000, 0);
-#else
-	  0x00ff0000, 0x0000ff00, 0x000000ff, 0);
-#endif
-	if (t == NULL)
-		return;
-
-	// ...and pixel buffer
-	void *pixels = malloc(video_w * video_h * 3);
-	if (pixels == NULL) {
-		SDL_FreeSurface(t);
-		return;
-	}
-
-	// Read OpenGL frame buffer
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glReadPixels(0, 0, video_w, video_h, GL_RGB, GL_UNSIGNED_BYTE, pixels);
-	glPixelStorei(GL_PACK_ALIGNMENT, 4);  // return to default
-
-	// Copy pixel buffer (which is upside-down) to surface
-	for (int y = 0; y < video_h; y++)
-		memcpy((uint8 *)t->pixels + t->pitch * y, (uint8 *)pixels + video_w * 3 * (video_h - y - 1), video_w * 3);
-	free(pixels);
-
-	// Save surface
-#if defined (HAVE_SDL_IMAGE) && defined (HAVE_PNG)
-	IMG_SavePNG(t, file.GetPath());
-#else
-	SDL_SaveBMP(t, file.GetPath());
-#endif
-	SDL_FreeSurface(t);
-#endif
+	// Convert content of WebGL context' canvas to data URL
+	const dataURL = glContext.canvas.toDataURL('image/png');
+	
+	// Create a temporary link element to trigger download
+	const link = document.createElement('a');
+	link.href = dataURL;
+	link.download = filename;
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
 }
-
+/*
 static bool _ParseMMLDirectory(DirectorySpecifier& dir, bool load_menu_mml_only)
 {
 	// Get sorted list of files in directory
