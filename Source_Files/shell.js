@@ -190,7 +190,6 @@ export function initialize_application()
 	}
 	
 /*
-	initialize_joystick();
 
 	const string default_data_env = a1_getenv("ALEPHONE_DEFAULT_DATA");
 	// see if there are scenarios to choose from
