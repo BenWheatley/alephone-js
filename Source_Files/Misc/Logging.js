@@ -206,8 +206,6 @@ void TopLevelLogger::flush()
 	}
 }
 
-extern DirectorySpecifier log_dir;
-
 char g_loggingFileName[256] = "";
 const char *loggingFileName()
 {
