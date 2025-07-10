@@ -84,9 +84,6 @@
 
 #include "shell_options.h"
 
-#ifdef HAVE_STEAM
-#include "steamshim_child.h"
-#endif
 */
 // Data directories - not sure how this will map conceptually to JS
 let data_search_path = []; // List of directories in which data files are searched for
@@ -103,11 +100,6 @@ DirectorySpecifier image_cache_dir;   // Directory for image cache
 DirectorySpecifier recordings_dir;    // Directory for recordings (except film buffer, which is stored in local_data_dir)
 DirectorySpecifier screenshots_dir;   // Directory for screenshots
 DirectorySpecifier log_dir;           // Directory for Aleph One Log.txt
-
-#ifdef HAVE_STEAM
-std::vector<item_subscribed_query_result::item> subscribed_workshop_items;
-steam_game_information steam_game_info;
-#endif
 */
 /*
 // Command-line options
@@ -216,56 +208,6 @@ void initialize_application()
 	ScenarioChooser chooser;
 	chooser.add_primary_scenario(scenario_dir.GetPath());
 
-#ifdef HAVE_STEAM
-	if (!STEAMSHIM_init())
-	{
-		alert_user("You must launch the Steam version of Classic Marathon using the Classic Marathon Launcher.", fatalError);
-		exit(1);
-	}
-
-	bool got_info = false, got_items = false;
-	STEAMSHIM_getGameInfo();
-	if (shell_options.editor || shell_options.no_chooser)
-	{
-		got_items = true;
-	}
-	else
-	{
-		STEAMSHIM_queryWorkshopItemScenario();
-	}
-
-	while (STEAMSHIM_alive() && (!got_info || !got_items))
-	{
-		auto result = STEAMSHIM_pump();
-
-		if (!result)
-		{
-			sleep_for_machine_ticks(30);
-			continue;
-		}
-
-		switch (result->type)
-		{
-			case SHIMEVENT_GET_GAME_INFO:
-				steam_game_info = result->game_info;
-				got_info = true;
-				break;
-			case SHIMEVENT_WORKSHOP_QUERY_ITEM_SUBSCRIBED_RESULT:
-				if (result->items_subscribed.result_code == 1)
-				{
-					for (const auto& steam_scenario : result->items_subscribed.items)
-					{
-						chooser.add_workshop_scenario(steam_scenario.install_folder_path);
-					}
-				}
-				got_items = true;
-				break;
-			default:
-				break;
-		}
-	}
-#endif // HAVE_STEAM
-
 	auto is_workshop_scenario = false;
 	if (!shell_options.editor && !shell_options.no_chooser)
 	{
@@ -301,16 +243,6 @@ void initialize_application()
 	saved_games_dir = get_data_path(kPathSavedGames);
 	quick_saves_dir = get_data_path(kPathQuickSaves);
 
-#ifdef HAVE_STEAM
-	if (is_workshop_scenario)
-	{
-		quick_saves_dir += "Marathon Infinity";
-		quick_saves_dir.CreateDirectory();
-		quick_saves_dir += "Workshop";
-		quick_saves_dir.CreateDirectory();
-	}
-#endif
-	
 	image_cache_dir = get_data_path(kPathImageCache);
 	recordings_dir = get_data_path(kPathRecordings);
 	screenshots_dir = get_data_path(kPathScreenshots);
@@ -400,33 +332,6 @@ void initialize_application()
 		}
 	}
 
-#ifdef HAVE_STEAM
-	STEAMSHIM_queryWorkshopItemMod(Scenario::instance()->GetName());
-
-	while (STEAMSHIM_alive())
-	{
-		auto result = STEAMSHIM_pump();
-
-		if (!result)
-		{
-			sleep_for_machine_ticks(30);
-			continue;
-		}
-
-		if (result->type == SHIMEVENT_WORKSHOP_QUERY_ITEM_SUBSCRIBED_RESULT)
-		{
-			if (result->items_subscribed.result_code == 1)
-			{
-				for (const auto& item : result->items_subscribed.items)
-					{
-						subscribed_workshop_items.push_back(item);
-					}
-			}
-			break;
-		}
-	}
-#endif
-
 	initialize_fonts(true);
 	Plugins::instance()->enumerate();			
 	
@@ -513,9 +418,6 @@ void shutdown_application(void)
 	TTF_Quit();
 	SDL_Quit();
 
-#ifdef HAVE_STEAM
-	STEAMSHIM_deinit();
-#endif
 }
 
 bool networking_available(void)
@@ -691,22 +593,6 @@ void main_event_loop()
 			{
 				process_event(event);
 			}
-
-#ifdef HAVE_STEAM
-			while (auto steam_event = STEAMSHIM_pump()) {
-				switch (steam_event->type) {
-					case SHIMEVENT_IS_OVERLAY_ACTIVATED:
-						if (steam_event->okay && get_game_state() == _game_in_progress && !game_is_networked)
-						{
-							pause_game();
-						}
-						break;
-
-					default:
-						break;
-				}
-			}
-#endif
 		}
 
 		execute_timer_tasks(machine_tick_count());
@@ -1068,11 +954,7 @@ static void handle_game_key(const SDL_Event &event)
 				ShowPosition = !ShowPosition;
 			}
 		}
-		else if (sc == SDL_SCANCODE_F11
-#ifdef HAVE_STEAM
-				 && (event.key.keysym.mod & KMOD_SHIFT)
-#endif
-				 ) // Decrease gamma level
+		else if (sc == SDL_SCANCODE_F11) // Decrease gamma level
 		{
 			if (graphics_preferences->screen_mode.gamma_level) {
 				PlayInterfaceButtonSound(Sound_ButtonSuccess());
@@ -1082,11 +964,7 @@ static void handle_game_key(const SDL_Event &event)
 			} else
 				PlayInterfaceButtonSound(Sound_ButtonFailure());
 		}
-		else if (sc == SDL_SCANCODE_F12
-#ifdef HAVE_STEAM
-				 && (event.key.keysym.mod & KMOD_SHIFT)
-#endif
-				 ) // Increase gamma level
+		else if (sc == SDL_SCANCODE_F12) // Increase gamma level
 		{
 			if (graphics_preferences->screen_mode.gamma_level < NUMBER_OF_GAMMA_LEVELS - 1) {
 				PlayInterfaceButtonSound(Sound_ButtonSuccess());
