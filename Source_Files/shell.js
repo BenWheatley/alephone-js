@@ -71,10 +71,6 @@
 #include "DefaultStringSets.h"
 #include "TextStrings.h"
 
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
 #include "OGL_Headers.h"
 
 #include "alephversion.h"
