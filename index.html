@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AlephOne JS</title>
+  <style>
+	html, body {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+		background-color: #000;
+		color: #ccc;
+		font-family: sans-serif;
+		display: flex;
+		flex-direction: column;
+	}
+	
+	main {
+		flex: 1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	canvas {
+		display: block;
+		width: 800px;
+		height: 600px;
+		background-color: #040;
+		border: double 3px #0f0;
+		color: #0f0;
+		text-align: center;
+		font-size: 1rem;
+	}
+	
+	footer {
+		text-align: center;
+		padding: 10px;
+		font-size: 0.9em;
+		background-color: #111;
+	}
+	
+	footer a {
+		color: #66f;
+		text-decoration: none;
+	}
+	
+	footer a:hover {
+		text-decoration: underline;
+	}
+  </style>
+</head>
+<body>
+  <main>
+    <canvas id="glCanvas" width="800" height="600">
+    Your browser does not support HTML5 Canvas or it has JavaScript/WebGL disabled. Please use a modern browser or enable JavaScript.
+    </canvas>
+  </main>
+  <footer>
+    <a href="https://github.com/BenWheatley/alephone-js" target="_blank" rel="noopener">View AlephOne-JS project on GitHub</a>
+  </footer>
+  <script type="module">
+    import main from './Source_Files/main.js';
+    main();
+  </script>
+</body>
+</html>
