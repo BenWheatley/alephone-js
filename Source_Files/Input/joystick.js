@@ -41,8 +41,9 @@ JOYSTICK_SDL.CPP
 /*
 #include "player.h" // for mask_in_absolute_positioning_information
 #include "preferences.h"
-#include "Logging.h"
-
+*/
+import * as Logging from '../Misc/Logging.js';
+/*
 // internal handles
 int joystick_active = true;
 static std::map<int, SDL_GameController*> active_instances;
