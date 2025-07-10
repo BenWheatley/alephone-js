@@ -24,7 +24,7 @@
 	May 21, 2003 (Woody Zenfell): being a little more defensive about NULL file pointer.
 */
 
-const LogLevel = Object.freeze({
+export const LogLevel = Object.freeze({
 	logFatalLevel: 0,     // program must exit
 	logErrorLevel: 10,    // can't do something significant
 	logWarningLevel: 20,  // can continue but results could be really screwy
@@ -37,24 +37,21 @@ const LogLevel = Object.freeze({
 
 // JS conversion note: change of syntax from GetCurrentLogger().foo() to Logging.foo()
 
-let loggingThreshhold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched // TODO: fix mis-spelling once the app actually works
+export let loggingThreshhold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched // TODO: fix mis-spelling once the app actually works
 
-let logDomain = "global"; // TODO: delete after conversion complete — there is only one domain
-
-function logMessage(domain, level, file, line, message, ...args) {
-	// TODO: rm `domain`, `file`, `line` as not sensible in JS land, but only after app actually runs
+export function logMessage(level, file, line, message, ...args) {
+	// TODO: rm `file`, `line` as not sensible in JS land, but only after app actually runs
 	if (level < loggingThreshhold) {
-		let formattedMessage = formatString(message, args);
-		console.log(formattedMessage, args); // We don't *actually need* a real formatter for this, it's debug info, it doesn't need to be pretty
+		console.log(message, args); // We don't *actually need* a real formatter for this, it's debug info, it doesn't need to be pretty
     }
 }
 
-function reset_mml_logging()
+export function reset_mml_logging()
 {
 	console.log("reset_mml_logging called but stubbed out"); // TODO: only used by XML parser, so should be deleted eventually
 }
 
-function parse_mml_logging()
+export function parse_mml_logging()
 {
 	console.log("parse_mml_logging called but stubbed out — should be deleted once app is running"); // TODO: only used by XML parser, so should be deleted eventually
 }
