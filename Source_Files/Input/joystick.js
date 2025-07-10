@@ -68,7 +68,7 @@ function joystick_removed(instance_id) {
 function joystick_axis_moved(instance_id, axis, value) {
 
 	// TODO: Gamepad API [-1, 1], while historical (SDL) API was [-32768, 32767], so this will likely need changes elsewhere, and if something's gone wrong, check this for why
-	Logging.logMessage(logDomain, LogLevel.logWarningLevel, 0, 0, "Gamepad API [-1, 1], while historical (SDL) API was [-32768, 32767], so this will likely need changes elsewhere, and if something's gone wrong, check this for why");
+	Logging.logMessage(Logging.Level.note, 0, 0, "Gamepad API [-1, 1], while historical (SDL) API was [-32768, 32767], so this will likely need changes elsewhere, and if something's gone wrong, check this for why");
 	
 	// Flip Y axes to match historical behavior
 	if (axis === 1 || axis === 4) { // LEFTY or RIGHTY
