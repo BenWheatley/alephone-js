@@ -27,20 +27,8 @@
 #include "Logging.h"
 #include "cseries.h"
 #include "shell.h"
-#include <thread>
-#include <mutex>
-#include <fstream>
-#include <string>
-#include <vector>
-#include <time.h>	// apparently is in C std library, used here to print time/date log section started.
-#include <stdio.h>
 #include "FileHandler.h"
 #include "InfoTree.h"
-
-#ifndef NO_STD_NAMESPACE
-using std::vector;
-using std::string;
-#endif
 
 enum { kStringBufferSize = 1024 };
 
