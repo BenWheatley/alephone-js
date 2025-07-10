@@ -149,13 +149,14 @@ function axis_mapped_to_action(action, negative_out) {
 }
 
 function joystick_buttons_become_keypresses(ioKeyMap) {
-/*
-    // if we're not using the joystick, avoid this
-    if (!joystick_active)
-        return;
-	if (navigator.getGamepads().length==0)
+	// if we're not using the joystick, avoid this
+	if (!joystick_active) {
 		return;
-
+	}
+	if (navigator.getGamepads().length==0) {
+		return;
+	}
+/*
 	std::set<int> buttons_to_avoid;
 	if (input_preferences->controller_analog) {
 		// avoid setting buttons mapped to analog aiming
