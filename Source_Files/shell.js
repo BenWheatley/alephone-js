@@ -41,7 +41,9 @@
 #include "preferences.h"
 #include "tags.h" // for scenario file type..
 #include "mouse.h"
-#include "joystick.h"
+*/
+import * as joystick from './Input/joystick.js';
+/*
 #include "screen_drawing.h"
 #include "computer_interface.h"
 #include "game_wad.h" // yuck...
