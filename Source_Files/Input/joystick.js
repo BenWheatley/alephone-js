@@ -46,13 +46,14 @@ let joystick_active = true;
 const active_instances = new Map(); // originally <int, SDL_GameController*>, but not using SDL in JS
 const axis_values = new Array(SDL_CONTROLLER_AXIS_MAX).fill(0);
 const button_values = new Array(NUM_SDL_JOYSTICK_BUTTONS).fill(false);
+function initialize_joystick() {
 /*
-void initialize_joystick(void) {
 	SDL_GameControllerEventState(SDL_ENABLE);
 	for (int i = 0; i < SDL_NumJoysticks(); ++i)
 		joystick_added(i);
-}
 */
+}
+
 function enter_joystick() {
 	joystick_active = true;
 }
