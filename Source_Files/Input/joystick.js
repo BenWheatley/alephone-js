@@ -62,8 +62,8 @@ function joystick_removed(instance_id) {
 	// TODO: no-op in JS land, remove it and any calls to it once app is working
 	return true;
 }
+function joystick_axis_moved(instance_id, axis, value) {
 /*
-void joystick_axis_moved(int instance_id, int axis, int value) {
 	switch (axis) {
 		case SDL_CONTROLLER_AXIS_LEFTY:
 		case SDL_CONTROLLER_AXIS_RIGHTY:
@@ -76,12 +76,16 @@ void joystick_axis_moved(int instance_id, int axis, int value) {
 	}
 	button_values[AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE - AO_SCANCODE_BASE_JOYSTICK_BUTTON + axis] = (value >= 16384);
 	button_values[AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE - AO_SCANCODE_BASE_JOYSTICK_BUTTON + axis] = (value <= -16384);
-}
-void joystick_button_pressed(int instance_id, int button, bool down) {
-	if (button >= 0 && button < NUM_SDL_JOYSTICK_BUTTONS)
-		button_values[button] = down;
+*/
 }
 
+function joystick_button_pressed(instance_id, button, down) {
+/*
+	if (button >= 0 && button < NUM_SDL_JOYSTICK_BUTTONS)
+		button_values[button] = down;
+*/
+}
+/*
 enum {
 	_flags_yaw,
 	_flags_pitch,
