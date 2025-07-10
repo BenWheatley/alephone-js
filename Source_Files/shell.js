@@ -89,19 +89,6 @@
 
 #include "OGL_Headers.h"
 
-#if !defined(DISABLE_NETWORKING)
-#include <SDL2/SDL_net.h>
-#endif
-
-#ifdef HAVE_SDL_IMAGE
-#include <SDL2/SDL_image.h>
-#if defined(__WIN32__)
-#include "alephone32.xpm"
-#elif !(defined(__APPLE__) && defined(__MACH__))
-#include "alephone.xpm"
-#endif
-#endif
-
 #include "alephversion.h"
 
 #include "Logging.h"
@@ -233,57 +220,10 @@ static int char_is_not_filesafe(int c)
 {
     return (c != ' ' && !std::isalnum(c));
 }
-
-void initialize_application(void)
+*/
+void initialize_application()
 {
-#if defined(__WIN32__)
-	if (LoadLibraryW(L"exchndl.dll")) shell_options.debug = true;
-	SDL_setenv("SDL_AUDIODRIVER", "directsound", 0);
-#endif
-
-	// Initialize SDL
-	int retval = SDL_Init(SDL_INIT_VIDEO |
-						  (shell_options.nosound ? 0 : SDL_INIT_AUDIO) |
-						  (shell_options.nojoystick ? 0 : SDL_INIT_JOYSTICK|SDL_INIT_GAMECONTROLLER) |
-						  (shell_options.debug ? SDL_INIT_NOPARACHUTE : 0));
-	if (retval < 0)
-	{
-		const char *sdl_err = SDL_GetError();
-		if (sdl_err)
-			fprintf(stderr, "Couldn't initialize SDL (%s)\n", sdl_err);
-		else
-			fprintf(stderr, "Couldn't initialize SDL\n");
-		exit(1);
-	}
-#if defined(HAVE_SDL_IMAGE)
-	IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG);
-#endif
-	// We only want text input events at specific times
-	SDL_StopTextInput();
-	
-	// See if we had a scenario folder dropped on us
-	if (shell_options.directory == "") {
-		SDL_EventState(SDL_DROPFILE, SDL_ENABLE);
-		SDL_Event event;
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-				case SDL_DROPFILE:
-					FileSpecifier f(event.drop.file);
-					if (f.IsDir())
-					{
-						shell_options.directory = event.drop.file;
-					}
-					else
-					{
-						shell_options.files.push_back(event.drop.file);
-					}
-					SDL_free(event.drop.file);
-					break;
-			}
-		}
-		SDL_EventState(SDL_DROPFILE, SDL_DISABLE);
-	}
-
+/*
 	log_dir = get_data_path(kPathLogs);
 	initialize_joystick();
 
@@ -555,22 +495,6 @@ void initialize_application(void)
 
 	Plugins::instance()->load_mml(true);
 
-//	SDL_WM_SetCaption(application_name, application_name);
-
-// #if defined(HAVE_SDL_IMAGE) && !(defined(__APPLE__) && defined(__MACH__))
-// 	SDL_WM_SetIcon(IMG_ReadXPMFromArray(const_cast<char**>(alephone_xpm)), 0);
-// #endif
-
-#if !defined(DISABLE_NETWORKING)
-	if (SDLNet_Init() < 0)
-	{
-		std::ostringstream oss;
-		oss << "Couldn't initialize SDL_net (" << SDLNet_GetError() << ")";
-
-		throw std::runtime_error(oss.str());
-	}
-#endif
-
 	if (TTF_Init() < 0)
 	{
 		std::ostringstream oss;
@@ -598,8 +522,9 @@ void initialize_application(void)
 	initialize_images_manager();
 	load_environment_from_preferences();
 	initialize_game_state();
+*/
 }
-
+/*
 void shutdown_application(void)
 {
 	WadImageCache::instance()->save_cache();
@@ -731,9 +656,10 @@ short get_level_number_from_user(void)
 */
 // Constants
 const TICKS_BETWEEN_EVENT_POLL = 16; // ~60Hz
-/*
-void main_event_loop(void)
+
+void main_event_loop()
 {
+/*
 	uint32 last_event_poll = 0;
 	short game_state;
 
@@ -839,8 +765,9 @@ void main_event_loop(void)
 			}
 		}
 	}
+*/
 }
-
+/*
 static bool has_cheat_modifiers(void)
 {
 	SDL_Keymod m = SDL_GetModState();
