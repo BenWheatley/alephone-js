@@ -94,21 +94,14 @@ function joystick_button_pressed(instance_id, button, down) {
 const _flags_yaw = 0;
 const _flags_pitch = 1;
 const NUMBER_OF_ABSOLUTE_POSITION_VALUES = 2;
-/*
-typedef struct AxisInfo {
-	int key_binding_index;
-	int abs_pos_index;
-	bool negative;
-	
-} AxisInfo;
 
-static const std::vector<AxisInfo> axis_mappings = {
-	{ 2, _flags_yaw, true },
-	{ 3, _flags_yaw, false },
-	{ 8, _flags_pitch, true },
-	{ 9, _flags_pitch, false }
-};
-*/
+const axis_mappings = [
+	{ key_binding_index: 2, abs_pos_index: _flags_yaw, negative: true },
+	{ key_binding_index: 3, abs_pos_index: _flags_yaw, negative: false },
+	{ key_binding_index: 8, abs_pos_index: _flags_pitch, negative: true },
+	{ key_binding_index: 9, abs_pos_index: _flags_pitch, negative: false },
+];
+
 /** Since JS lacks pointer semantics, negative_out must be passed as an object:
 let neg = { value: false };
 let axis = axis_mapped_to_action(action_index, neg);
