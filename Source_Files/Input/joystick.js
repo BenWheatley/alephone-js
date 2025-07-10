@@ -171,13 +171,12 @@ function joystick_buttons_become_keypresses(ioKeyMap) {
 		}
 */
 	}
-/*
-	for (int i = 0; i < NUM_SDL_JOYSTICK_BUTTONS; ++i) {
-		int code = AO_SCANCODE_BASE_JOYSTICK_BUTTON + i;
-		if (buttons_to_avoid.count(code) == 0)
+	for (let i = 0; i < NUM_SDL_JOYSTICK_BUTTONS; ++i) {
+		const code = AO_SCANCODE_BASE_JOYSTICK_BUTTON + i;
+		if (!buttons_to_avoid.has(code)) {
 			ioKeyMap[code] = button_values[i];
-    }
-*/
+		}
+	}
 }
 /*
 int process_joystick_axes(int flags) {
