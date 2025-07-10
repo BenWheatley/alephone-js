@@ -39,60 +39,25 @@ const LogLevel = Object.freeze({
 	logDumpLevel: 60      // values of data etc.
 });
 
-// JS conversion note: change of syntax from GetCurrentLogger().foo() to Logging.currentLogger.foo()
-static Logger* currentLogger = InitializeLogging();
+// JS conversion note: change of syntax from GetCurrentLogger().foo() to Logging.foo()
 
-let sLoggingThreshold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched
+let loggingThreshhold = LogLevel.logNoteLevel; // log messages at or above this level will be squelched
 
-const char*	logDomain	= "global";
+let logDomain = "global"; // TODO: delete after conversion complete — there is only one domain
 
-Logger*
-GetCurrentLogger() {
-    if(sCurrentLogger == NULL)
-        InitializeLogging();
-
-    return sCurrentLogger;
-}
-
-void
-Logger::logMessage(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
+function logMessage(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
     va_list theVarArgs;
     va_start(theVarArgs, inMessage);
     logMessageV(inDomain, inLevel, inFile, inLine, inMessage, theVarArgs);
     va_end(theVarArgs);
 }
 
-void
-Logger::logMessageNMT(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
+function logMessageNMT(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, ...) {
 	va_list theVarArgs;
 	va_start(theVarArgs, inMessage);
 	logMessageV(inDomain, inLevel, inFile, inLine, inMessage, theVarArgs);
 	va_end(theVarArgs);
 }
-
-class TopLevelLogger : public Logger {
-public:
-    virtual void logMessageV(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, va_list inArgs);
-	void flush();
-protected:
-
-    struct LogData
-    {
-        vector<string>	mContextStack;
-        size_t	mMostRecentCommonStackDepth = 0;
-        size_t	mMostRecentlyPrintedStackDepth = 0;
-    };
-
-    LogData& getLogData()
-    {
-        static std::mutex mutex;
-        std::lock_guard lock(mutex);
-        return _log_data[std::this_thread::get_id()];
-    }
-
-private:
-    std::unordered_map<std::thread::id, LogData> _log_data;
-};
 
 // domains are currently unused; idea is that eventually different logs can be routed to different
 // files, different domains can have different levels of detail, etc.
@@ -106,7 +71,7 @@ void
 TopLevelLogger::logMessageV(const char* inDomain, int inLevel, const char* inFile, int inLine, const char* inMessage, va_list inArgs) {
     // Obviously eventually this will be settable more dynamically...
     // Also eventually some logged messages could be posted in a dialog in addition to appended to the file.
-    if(sOutputFile != NULL && inLevel < sLoggingThreshhold) {
+    if(sOutputFile != NULL && inLevel < loggingThreshhold) {
         char	stringBuffer[kStringBufferSize];
         auto& log_data = getLogData();
 
@@ -143,22 +108,6 @@ TopLevelLogger::logMessageV(const char* inDomain, int inLevel, const char* inFil
         log_data.mMostRecentlyPrintedStackDepth = log_data.mContextStack.size();
     }
 }
-
-void TopLevelLogger::flush()
-{
-	console.log("log flush called, probably redundant in JS land"); // TODO: should eventually be deleted
-}
-
-function
-InitializeLogging() {
-	if (!currentLogger) {
-		currentLogger = new TopLevelLogger();
-		const timestamp = new Date().toString();
-		console.log(`\n-------------------- ${timestamp}\n`);
-	}
-	return currentLogger;
-}
-
 
 void reset_mml_logging()
 {
