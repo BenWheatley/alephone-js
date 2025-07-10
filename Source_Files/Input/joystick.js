@@ -25,6 +25,8 @@ Based on JOYSTICK.H and JOYSTICK_SDL.CPP in original repo
 // TODO: rename when this is finished, there is no SDL in this project
 const SDL_CONTROLLER_BUTTON_MAX = 15; // typical max buttons on a controller
 const SDL_CONTROLLER_AXIS_MAX = 6;    // typical max axes on a controller
+const SDL_CONTROLLER_AXIS_LEFTY = 1;
+const SDL_CONTROLLER_AXIS_RIGHTY = 4;
 
 // this is where we start stuffing button presses into the big keymap array,
 // comfortably past SDL2's defined scancodes
@@ -63,20 +65,23 @@ function joystick_removed(instance_id) {
 	return true;
 }
 function joystick_axis_moved(instance_id, axis, value) {
-/*
-	switch (axis) {
-		case SDL_CONTROLLER_AXIS_LEFTY:
-		case SDL_CONTROLLER_AXIS_RIGHTY:
-			// flip Y axes to better match default movement
-			axis_values[axis] = value * -1;
-			break;
-		default:
-			axis_values[axis] = value;
-			break;
+
+	// TODO: Gamepad API [-1, 1], while historical (SDL) API was [-32768, 32767], so this will likely need changes elsewhere, and if something's gone wrong, check this for why
+	Logging.logMessage(logDomain, LogLevel.logWarningLevel, 0, 0, "Gamepad API [-1, 1], while historical (SDL) API was [-32768, 32767], so this will likely need changes elsewhere, and if something's gone wrong, check this for why");
+	
+	// Flip Y axes to match historical behavior
+	if (axis === 1 || axis === 4) { // LEFTY or RIGHTY
+		axis_values[axis] = -value;
+	} else {
+		axis_values[axis] = value;
 	}
-	button_values[AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE - AO_SCANCODE_BASE_JOYSTICK_BUTTON + axis] = (value >= 16384);
-	button_values[AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE - AO_SCANCODE_BASE_JOYSTICK_BUTTON + axis] = (value <= -16384);
-*/
+	
+	// Determine digital button states based on analog threshold
+	// TODO: we could make the game better with the option of analog (slow) movement!
+	const positiveIndex = AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE - AO_SCANCODE_BASE_JOYSTICK_BUTTON + axis;
+	const negativeIndex = AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE - AO_SCANCODE_BASE_JOYSTICK_BUTTON + axis;
+	button_values[positiveIndex] = (value >= 0.5);
+	button_values[negativeIndex] = (value <= -0.5);
 }
 
 function joystick_button_pressed(instance_id, button, down) {
