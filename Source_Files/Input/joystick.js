@@ -156,10 +156,11 @@ function joystick_buttons_become_keypresses(ioKeyMap) {
 	if (navigator.getGamepads().length==0) {
 		return;
 	}
-/*
-	std::set<int> buttons_to_avoid;
-	if (input_preferences->controller_analog) {
+	
+	const buttons_to_avoid = new Set();
+	if (input_preferences.controller_analog) {  // TODO: needs preferences.h stubbed out at least
 		// avoid setting buttons mapped to analog aiming
+/*
 		for (auto it = axis_mappings.begin(); it != axis_mappings.end(); ++it) {
 			const AxisInfo info = *it;
 			bool negative = false;
@@ -168,8 +169,9 @@ function joystick_buttons_become_keypresses(ioKeyMap) {
 				buttons_to_avoid.insert(axis + (negative ? AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE : AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE));
 			}
 		}
+*/
 	}
-
+/*
 	for (int i = 0; i < NUM_SDL_JOYSTICK_BUTTONS; ++i) {
 		int code = AO_SCANCODE_BASE_JOYSTICK_BUTTON + i;
 		if (buttons_to_avoid.count(code) == 0)
