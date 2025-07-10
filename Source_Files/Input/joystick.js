@@ -90,13 +90,11 @@ function joystick_button_pressed(instance_id, button, down) {
 		button_values[button] = down;
 	}
 }
-/*
-enum {
-	_flags_yaw,
-	_flags_pitch,
-	NUMBER_OF_ABSOLUTE_POSITION_VALUES
-};
 
+const _flags_yaw = 0;
+const _flags_pitch = 1;
+const NUMBER_OF_ABSOLUTE_POSITION_VALUES = 2;
+/*
 typedef struct AxisInfo {
 	int key_binding_index;
 	int abs_pos_index;
