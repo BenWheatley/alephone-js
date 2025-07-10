@@ -18,11 +18,13 @@ Based on JOYSTICK.H and JOYSTICK_SDL.CPP in original repo
         which is included with this source code; it is available online at
         http://www.gnu.org/licenses/gpl.html
 */
-
-#ifndef JOYSTICK_H
-#define JOYSTICK_H
-
+/*
 #include "cstypes.h"
+*/
+// Constants roughly matching the original numeric values (SDL constants not defined in JS)
+// TODO: rename when this is finished, there is no SDL in this project
+const SDL_CONTROLLER_BUTTON_MAX = 15; // typical max buttons on a controller
+const SDL_CONTROLLER_AXIS_MAX = 6;    // typical max axes on a controller
 
 // this is where we start stuffing button presses into the big keymap array,
 // comfortably past SDL2's defined scancodes
@@ -43,7 +45,6 @@ void joystick_button_pressed(int instance_id, int button, bool down);
 void joystick_added(int device_index);
 bool joystick_removed(int instance_id);
 
-#endif // JOYSTICK_H
 
 
 /*
