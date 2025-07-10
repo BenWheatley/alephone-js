@@ -101,11 +101,6 @@ DirectorySpecifier screenshots_dir;   // Directory for screenshots
 */
 /*
 // Command-line options
-bool option_nogl = false;             // Disable OpenGL
-bool option_nosound = false;          // Disable sound output
-bool option_nogamma = false;	      // Disable gamma table effects (menu fades)
-bool option_debug = false;
-bool option_nojoystick = false;
 bool insecure_lua = false;
 static bool force_fullscreen = false; // Force fullscreen mode
 static bool force_windowed = false;   // Force windowed mode
