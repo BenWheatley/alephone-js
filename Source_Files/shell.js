@@ -313,7 +313,6 @@ export function initialize_application()
 
 	// Initialize everything
 	mytm_initialize();
-//	initialize_fonts();
 	SoundManager::instance()->Initialize(*sound_preferences);
 	initialize_marathon_music_handler();
 	initialize_keyboard_controller();
