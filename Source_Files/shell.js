@@ -61,7 +61,6 @@ import * as joystick from './Input/joystick.js';
 #include "FileHandler.h"
 #include "Plugins.h"
 #include "FilmProfile.h"
-#include "ScenarioChooser.h"
 
 #include "mytm.h"	// mytm_initialize(), for platform-specific shell_*.h
 
@@ -191,44 +190,11 @@ export function initialize_application()
 		return;
 	}
 	
-	const default_data_env = a1_getenv("ALEPHONE_DEFAULT_DATA");
+	const urlParams = new URLSearchParams(window.location.search);
+	const scenarioName = urlParams.get("scenario_name") || "Marathon 2";
+	const scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + scenarioName;
+
 /*
-	// see if there are scenarios to choose from
-	DirectorySpecifier scenario_dir(get_data_path(kPathDefaultData));
-	if (!shell_options.directory.empty())
-	{
-		scenario_dir = shell_options.directory;
-	}
-	else if (!default_data_env.empty())
-	{
-		scenario_dir = default_data_env;
-	}
-
-	ScenarioChooser chooser;
-	chooser.add_primary_scenario(scenario_dir.GetPath());
-
-	auto is_workshop_scenario = false;
-	if (!shell_options.editor && !shell_options.no_chooser)
-	{
-		if (chooser.num_scenarios() == 0)
-		{
-			chooser.add_directory(scenario_dir.GetPath());
-		}
-		else
-		{
-			chooser.add_directory((scenario_dir + "Scenarios").GetPath());
-		}
-		
-		if (chooser.num_scenarios() > 1)
-		{
-			std::string chosen_path;
-			std::tie(chosen_path, is_workshop_scenario) = chooser.run();
-			
-			// ugh
-			shell_options.directory = chosen_path;
-		}
-	}
-
 	// Find data directories, construct search path
 	InitDefaultStringSets();
 	
