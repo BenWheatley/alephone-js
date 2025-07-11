@@ -339,16 +339,13 @@ export function shutdown_application()
 	shutdown_dialogs();
 	*/
 }
-/*
-bool networking_available(void)
+
+function networking_available()
 {
-#if !defined(DISABLE_NETWORKING)
-	return true;
-#else
 	return false;
-#endif
 }
 
+/*
 static void initialize_marathon_music_handler(void)
 {
 	FileSpecifier file;
