@@ -85,13 +85,8 @@ void parse_mml_stringset(const InfoTree& root)
 	Logging.logMessage(Logging.Level.error, 0, 0, "parse_mml_stringset is stupid but was called anyway. I suggest replacing this whole thing with a more sensible JSON thing once the app actually runs.");
 }
 
-// Write output as a C string;
-// Returns how many characters resulted.
-// Needs at least (OutMaxLen + 1) characters allocated.
-
-size_t DeUTF8_C(const char *InString, size_t InLen, char *OutString, size_t OutMaxLen)
+// TODO: this is redundant in JS land where everything's the same kind of string, so get rid of it when the app works right. Note that it doesn't match the old list of args for this function, but that's fine as using it the old way would have been an error in JS anyway.
+function DeUTF8_C(InString)
 {
-	size_t Len = DeUTF8(InString,InLen,OutString,OutMaxLen);
-	OutString[Len] = 0;
-	return Len;
+	return InString;
 }
