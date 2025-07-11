@@ -33,7 +33,7 @@ import * as cspaths from './CSeries/cspaths.js';
 #include "player.h"
 #include "render.h"
 */
-import * as interface from './Misc/interface.js';
+import * as _interface from './Misc/interface.js';
 /*
 #include "SoundManager.h"
 #include "fades.h"
