@@ -288,7 +288,6 @@ export function initialize_application()
 	initialize_preferences();
 
 	local_data_dir.CreateDirectory();
-	screenshots_dir.CreateDirectory();
 	
 	WadImageCache::instance()->initialize_cache();
 
