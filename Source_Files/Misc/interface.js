@@ -293,17 +293,12 @@ using alephone::Screen;
 //  ------------- enums 
 
 //  ------------- constants 
-#define DISPLAY_PICT_RESOURCE_TYPE 'PICT'
 #define CLOSE_WITHOUT_WARNING_DELAY (5*TICKS_PER_SECOND)
 
 #define NUMBER_OF_INTRO_SCREENS (3)
 #define INTRO_SCREEN_DURATION (215 * MACHINE_TICKS_PER_SECOND / TICKS_PER_SECOND) // fudge to align with sound
 
-#ifdef DEMO
-#define INTRO_SCREEN_TO_START_SONG_ON (1)
-#else
 #define INTRO_SCREEN_TO_START_SONG_ON (0)
-#endif
 
 #define INTRO_SCREEN_BETWEEN_DEMO_BASE (INTRO_SCREEN_BASE+1) //  +1 to get past the powercomputing 
 #define NUMBER_OF_INTRO_SCREENS_BETWEEN_DEMOS (1)
@@ -324,11 +319,7 @@ using alephone::Screen;
 #define CHAPTER_HEADING_DURATION (7*MACHINE_TICKS_PER_SECOND)
 
 // For exiting the Marathon app
-// #if defined(DEBUG) || !defined(DEMO)
 #define NUMBER_OF_FINAL_SCREENS 0
-// #else
-// #define NUMBER_OF_FINAL_SCREENS 1
-// #endif
 #define FINAL_SCREEN_DURATION (INDEFINATE_TIME_DELAY)
 
 //  For teleportation, end movie, etc. 
