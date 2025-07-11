@@ -82,9 +82,6 @@ function reset_mml_stringset() {
 
 void parse_mml_stringset(const InfoTree& root)
 {
-	int16 index;
-	if (!root.read_attr("index", index))
-		return;
 	
 	for (const InfoTree &child : root.children_named("string"))
 	{
@@ -92,7 +89,6 @@ void parse_mml_stringset(const InfoTree& root)
 		if (!child.read_indexed("index", cindex, INT16_MAX))
 			continue;
 		
-		std::string val = child.get_value<std::string>("");
 		char cbuf[256];
 		DeUTF8_C(val.c_str(), val.size(), cbuf, 255);
 		StringSetRoot[index][cindex] = std::string(cbuf);
