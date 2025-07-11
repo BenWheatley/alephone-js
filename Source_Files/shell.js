@@ -191,9 +191,8 @@ export function initialize_application()
 		return;
 	}
 	
+	const default_data_env = a1_getenv("ALEPHONE_DEFAULT_DATA");
 /*
-
-	const string default_data_env = a1_getenv("ALEPHONE_DEFAULT_DATA");
 	// see if there are scenarios to choose from
 	DirectorySpecifier scenario_dir(get_data_path(kPathDefaultData));
 	if (!shell_options.directory.empty())
