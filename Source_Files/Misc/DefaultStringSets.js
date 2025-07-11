@@ -22,7 +22,7 @@
 
     June 3, 2002: captured text_strings.mml into C++ form for this file.
 */
-
+/*
 #include    "cseries.h"
 #include    "DefaultStringSets.h"
 #include    "TextStrings.h"
@@ -598,3 +598,4 @@ void InitDefaultStringSets() {
 	BUILD_STRINGSET(200, sStringSetNumber200);
 	BUILD_STRINGSET(kTeamColorsStringSetID, sTeamColorNamesStrings);
 }
+*/
