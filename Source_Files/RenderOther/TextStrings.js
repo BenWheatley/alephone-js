@@ -29,7 +29,7 @@ import * as Logging from '../Misc/Logging.js';
 const StringSetRoot = new Map(); // {int: {int: string}}
 
 // Set up a string in the repository; a repeated call will replace an old string
-function TS_PutCString(ID, Index, String) {
+export function TS_PutCString(ID, Index, String) {
 	if (Index >= 0) {
 		if (!StringSetRoot.has(ID)) {
 			StringSetRoot.set(ID, new Map());

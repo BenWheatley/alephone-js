@@ -32,7 +32,6 @@ const kScoreLimitTypeStringSetID	= 148;
 const kSingleOrNetworkStringSetID	= 149;
 const kTeamColorsStringSetID	= 152;
 
-
 function BuildStringSet(inStringSetID, inStrings) {
     for (let i = 0; i < inStrings.length; i++) {
         TextStrings.TS_PutCString(inStringSetID, i, inStrings[i]);
@@ -567,7 +566,7 @@ const sTeamColorNamesStrings = [
     "Green",
 ];
 
-function InitDefaultStringSets() {
+export function InitDefaultStringSets() {
 	BUILD_STRINGSET(128, sStringSetNumber128);
 	BUILD_STRINGSET(129, sStringSetNumber129);
 	BUILD_STRINGSET(130, sStringSetNumber130);
