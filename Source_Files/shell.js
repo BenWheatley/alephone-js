@@ -25,7 +25,9 @@
 
 /*
 #include "cseries.h"
-
+*/
+import * as cspaths from './CSeries/cspaths.js';
+/*
 #include "map.h"
 #include "monsters.h"
 #include "player.h"
@@ -91,14 +93,6 @@ let local_data_dir = '';    // Local (per-user) data file directory
 /*
 DirectorySpecifier default_data_dir;  // Default scenario directory
 DirectorySpecifier bundle_data_dir;	  // Data inside Mac OS X app bundle
-*/
-let preferences_dir = '';   // Directory for preferences
-/*
-DirectorySpecifier saved_games_dir;   // Directory for saved games
-DirectorySpecifier quick_saves_dir;   // Directory for auto-named saved games
-DirectorySpecifier image_cache_dir;   // Directory for image cache
-DirectorySpecifier recordings_dir;    // Directory for recordings (except film buffer, which is stored in local_data_dir)
-DirectorySpecifier screenshots_dir;   // Directory for screenshots
 */
 /*
 // Command-line options
@@ -200,15 +194,8 @@ export function initialize_application()
 	
 	default_data_dir = get_data_path(kPathDefaultData);
 	
-	local_data_dir = get_data_path(kPathLocalData);
-	preferences_dir = get_data_path(kPathPreferences);
-	saved_games_dir = get_data_path(kPathSavedGames);
-	quick_saves_dir = get_data_path(kPathQuickSaves);
+	local_data_dir = get_data_path(cspaths.CSPathType.kPathLocalData);
 
-	image_cache_dir = get_data_path(kPathImageCache);
-	recordings_dir = get_data_path(kPathRecordings);
-	screenshots_dir = get_data_path(kPathScreenshots);
-	
 	if (!get_data_path(kPathBundleData).empty())
 	{
 		bundle_data_dir = get_data_path(kPathBundleData);
@@ -297,25 +284,10 @@ export function initialize_application()
 	initialize_fonts(true);
 	Plugins::instance()->enumerate();			
 	
-	preferences_dir.CreateDirectory();
-	if (!get_data_path(kPathLegacyPreferences).empty())
-		transition_preferences(DirectorySpecifier(get_data_path(kPathLegacyPreferences)));
-
 	// Load preferences
 	initialize_preferences();
 
 	local_data_dir.CreateDirectory();
-	saved_games_dir.CreateDirectory();
-	quick_saves_dir.CreateDirectory();
-	{
-		std::string scen = Scenario::instance()->GetName();
-		if (!scen.length())
-			scen = "Unknown";
-		quick_saves_dir += scen;
-		quick_saves_dir.CreateDirectory();
-	}
-	image_cache_dir.CreateDirectory();
-	recordings_dir.CreateDirectory();
 	screenshots_dir.CreateDirectory();
 	
 	WadImageCache::instance()->initialize_cache();
