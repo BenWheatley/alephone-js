@@ -87,7 +87,7 @@ const sStringSetNumber128 = [
 ];
 
 // STR# Resource: "Filenames"
-const sStringSetNumber129[] = [
+const sStringSetNumber129 = [
     "Shapes",
     "Shapes.16",
     "Sounds",
@@ -106,7 +106,7 @@ const sStringSetNumber129[] = [
 ];
 
 // STR# Resource: "Top-Level Interface Items"
-const sStringSetNumber130[] = [
+const sStringSetNumber130 = [
     "BEGIN GAME",
     "OPEN SAVED GAME",
     "",
@@ -123,7 +123,7 @@ const sStringSetNumber130[] = [
 ];
 
 // STR# Resource: "Prompts"
-const sStringSetNumber131[] = [
+const sStringSetNumber131 = [
     "SAVE GAME",
     "SAVE RECORDING",
     "Select recording as:",
@@ -131,7 +131,7 @@ const sStringSetNumber131[] = [
 ];
 
 // STR# Resource: "Network Errors"
-const sStringSetNumber132[] = [
+const sStringSetNumber132 = [
     "Sorry, that player could not be found on the network.  He may have cancelled his Join Game dialog.",
 
     "One or more of the players in the game could not be found to receive the "
@@ -177,7 +177,7 @@ const sStringSetNumber132[] = [
 ];
 
 // STR# Resource: "Key Codes To Names"
-const sStringSetNumber133[] = [
+const sStringSetNumber133 = [
     "A",
     "S",
     "D",
@@ -309,14 +309,14 @@ const sStringSetNumber133[] = [
 ];
 
 // STR# Resource: "Preferences Advice"
-const sStringSetNumber134[] = [
+const sStringSetNumber134 = [
     "Be sure your external speakers or headphones are connected properly, and that you have enabled stereo output from the Sound Control Panel.",
     "Be sure that your Cybermaxx helmet is properly hooked up to the serial port and turned on.",
     "Please check to be sure you have the file \"QuickTime[TM] Musical Instruments\" in your \"Extensions\" folder, because $appName$'s background music will sound really, really stupid without it.",
 ];
 
 // STR# Resource: "Computer Interface"
-const sStringSetNumber135[] = [
+const sStringSetNumber135 = [
     "U.E.S.C. Marathon",
     "Opening Connection to b.4.5-23",
     "CAS.qterm//CyberAcme Systems Inc.",
@@ -330,14 +330,14 @@ const sStringSetNumber135[] = [
 ];
 
 // STR# Resource: "Join Dialog Messages"
-const sStringSetNumber136[] = [
+const sStringSetNumber136 = [
     "Click 'Join' to wait for an invitation into a network game of $appName$.",
     "Now waiting to be gathered into a network game by a server.  Click 'Cancel' to give up.",
     "You have been accepted into a game.  Now waiting for the server to add the remaining players... ",
 ];
 
 // STR# Resource: "Weapon Names"
-const sStringSetNumber137[] = [
+const sStringSetNumber137 = [
     "FISTS",
     ".44 MAGNUM MEGA CLASS A1",
     "ZEUS-CLASS FUSION PISTOL",
@@ -351,12 +351,12 @@ const sStringSetNumber137[] = [
 ];
 
 // STR# Resource: "file search path"
-const sStringSetNumber138[] = [
+const sStringSetNumber138 = [
     "Marathon Trilogy:Marathon Infinity \xc4:Marathon Infinity:",
 ];
 
 // STR# Resource: "Preferences Groupings"
-const sStringSetNumber139[] = [
+const sStringSetNumber139 = [
     "Graphics",
     "Player",
     "Sound",
@@ -365,7 +365,7 @@ const sStringSetNumber139[] = [
 ];
 
 // STR# Resource: "Postgame network game stats"
-const sStringSetNumber140[] = [
+const sStringSetNumber140 = [
     "%d flags",
     "%d:%02d",
     "%d points",
@@ -381,7 +381,7 @@ const sStringSetNumber140[] = [
 ];
 
 // STR# Resource: "Net Game Setup"
-const sStringSetNumber141[] = [
+const sStringSetNumber141 = [
     "Kill Limit",
     "kills",
     "Capture Limit",
@@ -395,7 +395,7 @@ const sStringSetNumber141[] = [
 ];
 
 // STR# Resource: "New Join Dialog Messages"
-const sStringSetNumber142[] = [
+const sStringSetNumber142 = [
     "You have been accepted into a game of '%s'.  Now waiting for the server to add the remaining players...",
     "Every Man For Himself",
     "You have been accepted into a cooperative game.  Now waiting for the server to add the remaining players...",
@@ -409,7 +409,7 @@ const sStringSetNumber142[] = [
 ];
 
 // STR# Resource: "Progress strings for networking"
-const sStringSetNumber143[] = [
+const sStringSetNumber143 = [
     "Sending map to remote player.",
     "Sending map to remote players.",
     "Receiving map from server.",
@@ -430,7 +430,7 @@ const sStringSetNumber143[] = [
 // Stringsets for SDL w_select widgets.
 // -----------------------------------------------------------------------------------------
 
-const sDifficultyLevelsStrings[] = [
+const sDifficultyLevelsStrings = [
     "Kindergarten",
     "Easy",
     "Normal",
@@ -438,7 +438,7 @@ const sDifficultyLevelsStrings[] = [
     "Total Carnage"
 ];
 
-const sNetworkGameTypesStrings[] = [
+const sNetworkGameTypesStrings = [
     "Every Man for Himself",
     "Cooperative Play",
     "Capture the Flag",
@@ -449,14 +449,14 @@ const sNetworkGameTypesStrings[] = [
     "Netscript",
 ];
 
-const sEndConditionTypeStrings[] = [
+const sEndConditionTypeStrings = [
 //    "No Limit (Alt+Q to quit)",
 	"Unlimited",
     "Time Limit",
     "Score Limit",
 ];
 
-const sSingleOrNetworkStrings[] = [
+const sSingleOrNetworkStrings = [
     "Single-player game",
     "Network game"
 ];
@@ -464,7 +464,7 @@ const sSingleOrNetworkStrings[] = [
 // More Mac OS string-resource stringsets.
 // -----------------------------------------------------------------------------------------
 // STR# Resource: "Item names"
-const sStringSetNumber150[] = [
+const sStringSetNumber150 = [
     "FISTS",
     ".44 MAGNUM MEGA CLASS",
     ".44 MAGNUM MEGA CLASS",
@@ -512,7 +512,7 @@ const sStringSetNumber150[] = [
 ];
 
 // STR# Resource: "Item types"
-const sStringSetNumber151[] = [
+const sStringSetNumber151 = [
     "WEAPONS",
     "AMMUNITION",
     "POWERUPS",
@@ -523,7 +523,7 @@ const sStringSetNumber151[] = [
 ];
 
 // STR# Resource: "Net Statistics Strings"
-const sStringSetNumber153[] = [
+const sStringSetNumber153 = [
     "%d kills",
     "%d deaths",
     "%d suicides",
@@ -546,7 +546,7 @@ const sStringSetNumber153[] = [
 ];
 
 // STR# Resource: "OpenGL-Option Color-Picker Prompts"
-const sStringSetNumber200[] = [
+const sStringSetNumber200 = [
     "What color for the Void?",
     "What day ground color?",
     "What day sky color?",
@@ -559,7 +559,7 @@ const sStringSetNumber200[] = [
     "What fog color?",
 ];
 
-const sTeamColorNamesStrings[] = [
+const sTeamColorNamesStrings = [
     "Slate",
     "Red",
     "Violet",
