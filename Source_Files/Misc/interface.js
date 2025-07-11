@@ -382,48 +382,6 @@ static struct color_table *current_picture_clut= NULL;
 //  -------------- externs 
 extern short interface_bit_depth;
 extern short bit_depth;
-extern bool shapes_file_is_m1();
-
-//  ----------- prototypes/PREPROCESS_MAP_MAC.C 
-extern bool load_game_from_file(FileSpecifier& File, bool run_scripts);
-extern bool choose_saved_game_to_load(FileSpecifier& File);
-
-//  ---------------------- prototypes 
-static void display_credits(void);
-static void draw_button(short index, bool pressed);
-static void draw_powered_by_aleph_one(bool pressed);
-static void handle_replay(bool last_replay);
-static bool begin_game(short user, bool cheat);
-static void start_game(short user, bool changing_level);
-// LP: "static" removed
-void handle_load_game(void);
-static void handle_save_film(void);
-static void finish_game(bool return_to_main_menu);
-static void clean_up_after_failed_game(bool inNetgame, bool inRecording, bool inFullCleanup);
-static void handle_network_game(bool gatherer);
-static void next_game_screen(void);
-static void handle_interface_menu_screen_click(short x, short y, bool cheatkeys_down);
-
-static void display_introduction(void);
-static void display_loading_map_error(void);
-static void display_quit_screens(void);
-static void	display_screen(short base_pict_id);
-static void display_introduction_screen_for_demo(void);
-static void display_epilogue(void);
-static void display_about_dialog();
-
-static void force_system_colors(bool fade_music);
-static bool point_in_rectangle(short x, short y, screen_rectangle *rect);
-
-static void start_interface_fade(short type, struct color_table *original_color_table);
-static void update_interface_fades(void);
-static void interface_fade_out(short pict_resource_number, bool fade_music);
-static bool can_interface_fade_out(void);
-static void transfer_to_new_level(short level_number);
-static void try_and_display_chapter_screen(short level, bool interface_table_is_valid, bool text_block);
-
-static screen_data *get_screen_data(
-	short index);
 
 //  ---------------------- code begins 
 
