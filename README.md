@@ -10,6 +10,8 @@ So I'm planning to combine all three by converting this into JavaScript.
 
 As for why Marathon: we have DOOM on enough platforms already, why not give the 90s Mac equivalent some love?
 
+![Aleph One JS](./aleph-one-js.png)
+
 ----
 
 # Aleph One
