@@ -24,11 +24,7 @@
 	This is the implementation of my replacement for MacOS STR# resources
 */
 
-
-#include <string>
-#include <map>
 #include "cseries.h"
-#include "TextStrings.h"
 #include "InfoTree.h"
 
 typedef std::map<short, std::string> StringSet;
