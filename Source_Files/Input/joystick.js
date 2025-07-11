@@ -66,7 +66,6 @@ function joystick_removed(instance_id) {
 	return true;
 }
 function joystick_axis_moved(instance_id, axis, value) {
-
 	// TODO: Gamepad API [-1, 1], while historical (SDL) API was [-32768, 32767], so this will likely need changes elsewhere, and if something's gone wrong, check this for why
 	Logging.logMessage(Logging.Level.note, 0, 0, "Gamepad API [-1, 1], while historical (SDL) API was [-32768, 32767], so this will likely need changes elsewhere, and if something's gone wrong, check this for why");
 	
@@ -169,6 +168,7 @@ function joystick_buttons_become_keypresses(ioKeyMap) {
 		}
 	}
 }
+
 function process_joystick_axes(flags) {
 	if (!joystick_active) {
 		return flags;
@@ -179,43 +179,50 @@ function process_joystick_axes(flags) {
 	if (!input_preferences.controller_analog) {
 		return flags;
 	}
-/*
-	float angular_deltas[NUMBER_OF_ABSOLUTE_POSITION_VALUES] = { 0, 0 };
-	for (auto it = axis_mappings.begin(); it != axis_mappings.end(); ++it) {
-		const AxisInfo info = *it;
-		bool negative = false;
-		int axis = axis_mapped_to_action(info.key_binding_index, &negative);
-		if (axis < 0)
+	
+	const angular_deltas = new Array(NUMBER_OF_ABSOLUTE_POSITION_VALUES).fill(0);
+	
+	for (const info of axis_mappings) {
+		const negative_out = { value: false };
+		const axis = axis_mapped_to_action(info.key_binding_index, negative_out);
+		if (axis < 0) {
 			continue;
-
-		short controller_deadzone = 0;
-		_fixed controller_sensitivity = 0;
-		switch (info.abs_pos_index)
-		{
-			case _flags_yaw:
-				controller_sensitivity = input_preferences->controller_sensitivity_horizontal;
-				controller_deadzone = input_preferences->controller_deadzone_horizontal;
-				break;
-			case _flags_pitch:
-				controller_sensitivity = input_preferences->controller_sensitivity_vertical;
-				controller_deadzone = input_preferences->controller_deadzone_vertical;
-				break;
 		}
 		
-		int val = axis_values[axis] * (negative ? -1 : 1);
+		let controller_deadzone = 0;
+		let controller_sensitivity = 0;
+		
+		switch (info.abs_pos_index) {
+			case _flags_yaw:
+				controller_sensitivity = input_preferences.controller_sensitivity_horizontal;
+				controller_deadzone = input_preferences.controller_deadzone_horizontal;
+				break;
+			case _flags_pitch:
+				controller_sensitivity = input_preferences.controller_sensitivity_vertical;
+				controller_deadzone = input_preferences.controller_deadzone_vertical;
+				break;
+		}
+		// TODO: new API [-1, 1], vs old [-32768, 32767], so `controller_deadzone` may be broken
+		Logging.logMessage(Logging.Level.note, 0, 0, "TODO: new API [-1, 1], vs old [-32768, 32767], so `controller_deadzone` may be broken");
+		
+		const val = axis_values[axis] * (negative_out.value ? -1 : 1);
 		if (val > controller_deadzone) {
-			float norm = val/32767.f * (static_cast<float>(controller_sensitivity) / FIXED_ONE);
-			constexpr float angle_per_norm = 768/63.f;
-			angular_deltas[info.abs_pos_index] += norm * (info.negative ? -1.0 : 1.0) * angle_per_norm;
+			const norm = val * controller_sensitivity;
+			const angle_per_norm = 768 / 63;
+			const delta = norm * (info.negative ? -1 : 1) * angle_per_norm;
+			angular_deltas[info.abs_pos_index] += delta;
 		}
 	}
 	
+	// TODO: no longer using fixed point, so `norm`, `dyaw`, `dpitch` may be off by constant factor
+	Logging.logMessage(Logging.Level.note, 0, 0, "TODO: no longer using fixed point, so `norm`, `dyaw`, `dpitch` may be off by constant factor");
+	
 	// return this tick's action flags augmented with movement data
-	const fixed_angle dyaw = static_cast<fixed_angle>(angular_deltas[_flags_yaw] * FIXED_ONE);
-	const fixed_angle dpitch = static_cast<fixed_angle>(angular_deltas[_flags_pitch] * FIXED_ONE) * (input_preferences->controller_aim_inverted ? -1 : 1);
-
-	if (dyaw != 0 || dpitch != 0)
-		flags = process_aim_input(flags, {dyaw, dpitch});
+	const dyaw = angular_deltas[_flags_yaw];
+	let dpitch = angular_deltas[_flags_pitch] * (input_preferences.controller_aim_inverted ? -1 : 1);
+	if (dyaw !== 0 || dpitch !== 0) {
+		flags = process_aim_input(flags, { dyaw, dpitch });
+	}
+	
 	return flags;
-*/
 }
