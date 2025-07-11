@@ -21,115 +21,96 @@ INTERFACE.H
 
 #include "cseries.h"
 
-/* ---------- constants */
+//  ---------- constants 
 
-#define strFILENAMES 129
-enum /* filenames in strFILENAMES */
-{
-	filenameSHAPES8,
-	filenameSHAPES16,
-	filenameSOUNDS8,
-	filenameSOUNDS16,
-	filenamePREFERENCES,
-	filenameDEFAULT_MAP,
-	filenameDEFAULT_SAVE_GAME,
-	filenameMARATHON_NAME,
-	filenameMARATHON_RECORDING,
-	filenamePHYSICS_MODEL,
-	filenameMUSIC,
-	filenameIMAGES,
-	filenameMOVIE,
-	filenameDEFAULT_THEME,
-	filenameEXTERNAL_RESOURCES,
-};
+const strFILENAMES = 129;
+const Filenames = Object.freeze({
+	filenameSHAPES8: 0,
+	filenameSHAPES16: 1,
+	filenameSOUNDS8: 2,
+	filenameSOUNDS16: 3,
+	filenamePREFERENCES: 4,
+	filenameDEFAULT_MAP: 5,
+	filenameDEFAULT_SAVE_GAME: 6,
+	filenameMARATHON_NAME: 7,
+	filenameMARATHON_RECORDING: 8,
+	filenamePHYSICS_MODEL: 9,
+	filenameMUSIC: 10,
+	filenameIMAGES: 11,
+	filenameMOVIE: 12,
+	filenameDEFAULT_THEME: 13,
+	filenameEXTERNAL_RESOURCES: 14
+});
 
-#define strPATHS 138
+const strPATHS = 138;
 
-#define strERRORS 128
-enum /* errors in strERRORS */
-{
-	badProcessor= 0,
-	badQuickDraw,
-	badSystem,
-	badMemory,
-	badMonitor,
-	badExtraFileLocations,
-	badSoundChannels,
-	fileError,
-	copyHasBeenModified, // bad serial number
-	copyHasExpired,
-	keyIsUsedForSound,
-	keyIsUsedForMapZooming,
-	keyIsUsedForScrolling,
-	keyIsUsedAlready,
-	outOfMemory,
-	warningExternalPhysicsModel,
-	warningExternalMapsFile,
-	badReadMapGameError,
-	badReadMapSystemError,
-	badWriteMap,
-	badSerialNumber,
-	duplicateSerialNumbers,
-	networkOnlySerialNumber,
-	corruptedMap,
-	checkpointNotFound,
-	pictureNotFound,
-	networkNotSupportedForDemo,
-	serverQuitInCooperativeNetGame,
-	unableToGracefullyChangeLevelsNet,
-	cantFindMap,	// called when the save game can't find the map.  Reverts to default map.
-	cantFindReplayMap, // called when you can't find the map that the replay references..
-	notEnoughNetworkMemory,
-	luascriptconflict,
-	replayVersionTooNew,
-	keyScrollWheelDoesntWork
-};
+const strERRORS = 128;
+const Errors = Object.freeze({
+	badProcessor: 0,
+	badQuickDraw: 1,
+	badSystem: 2,
+	badMemory: 3,
+	badMonitor: 4,
+	badExtraFileLocations: 5,
+	badSoundChannels: 6,
+	fileError: 7,
+	copyHasBeenModified: 8, // bad serial number
+	copyHasExpired: 9,
+	keyIsUsedForSound: 10,
+	keyIsUsedForMapZooming: 11,
+	keyIsUsedForScrolling: 12,
+	keyIsUsedAlready: 13,
+	outOfMemory: 14,
+	warningExternalPhysicsModel: 15,
+	warningExternalMapsFile: 16,
+	badReadMapGameError: 17,
+	badReadMapSystemError: 18,
+	badWriteMap: 19,
+	badSerialNumber: 20,
+	duplicateSerialNumbers: 21,
+	networkOnlySerialNumber: 22,
+	corruptedMap: 23,
+	checkpointNotFound: 24,
+	pictureNotFound: 25,
+	networkNotSupportedForDemo: 26,
+	serverQuitInCooperativeNetGame: 27,
+	unableToGracefullyChangeLevelsNet: 28,
+	cantFindMap: 29,       // called when the save game can't find the map. Reverts to default map.
+	cantFindReplayMap: 30, // called when you can't find the map that the replay references..
+	notEnoughNetworkMemory: 31,
+	luascriptconflict: 32,
+	replayVersionTooNew: 33,
+	keyScrollWheelDoesntWork: 34
+});
 
-enum /* animation types */
-{
-	_animated1= 1,
-	_animated2to8= 2, /* ?? */
-	_animated3to4= 3,
-	_animated4= 4,
-	_animated5to8= 5,
-	_animated8= 8,
-	_animated3to5= 9,
-	_unanimated= 10,
-	_animated5= 11
-};
+const AnimationTypes = Object.freeze({
+	_animated1: 1,
+	_animated2to8: 2, // ??
+	_animated3to4: 3,
+	_animated4: 4,
+	_animated5to8: 5,
+	_animated8: 8,
+	_animated3to5: 9,
+	_unanimated: 10,
+	_animated5: 11
+});
 
-enum /* shading tables */
-{
-	_darkening_table
-};
+// Shape types used in the editor
+const ShapeTypes = Object.freeze({
+	_wall_shape: 0, // things designated as walls
+	_floor_or_ceiling_shape: 1, // walls in raw format
+	_object_shape: 2, // things designated as objects
+	_other_shape: 3 // anything not falling into the above categories (guns, interface elements, etc)
+});
 
-enum /* shape types (this is for the editor) */
-{
-	_wall_shape, /* things designated as walls */
-	_floor_or_ceiling_shape, /* walls in raw format */
-	_object_shape, /* things designated as objects */
-	_other_shape /* anything not falling into the above categories (guns, interface elements, etc) */
-};
+const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
 
-#define TOTAL_SHAPE_COLLECTIONS 128
-
-enum /* The various default key setups a user can select. for vbl.c and it's callers */
-{
-	_standard_keyboard_setup,
-	_left_handed_keyboard_setup,
-	_powerbook_keyboard_setup,
-	NUMBER_OF_KEY_SETUPS,
-	
-	_custom_keyboard_setup = NONE
-};
-
-#define INDEFINATE_TIME_DELAY (INT32_MAX)
-
-/* ---------- shape descriptors */
+/*
+// ---------- shape descriptors
 
 #include "shape_descriptors.h"
 
-/* ---------- structures */
+// ---------- structures
 
 #define _X_MIRRORED_BIT 0x8000
 #define _Y_MIRRORED_BIT 0x4000
@@ -137,9 +118,9 @@ enum /* The various default key setups a user can select. for vbl.c and it's cal
 
 struct shape_information_data
 {
-	uint16 flags; /* [x-mirror.1] [y-mirror.1] [keypoint_obscured.1] [unused.13] */
+	uint16 flags; // [x-mirror.1] [y-mirror.1] [keypoint_obscured.1] [unused.13]
 
-	_fixed minimum_light_intensity; /* in [0,FIXED_ONE] */
+	_fixed minimum_light_intensity; //  in [0,FIXED_ONE] 
 
 	short unused[5];
 
@@ -149,13 +130,13 @@ struct shape_information_data
 
 struct shape_animation_data // Also used in high_level_shape_definition
 {
-	int16 number_of_views; /* must be 1, 2, 5 or 8 */
+	int16 number_of_views; // must be 1, 2, 5 or 8
 	
 	int16 frames_per_view, ticks_per_frame;
 	int16 key_frame;
 	
 	int16 transfer_mode;
-	int16 transfer_mode_period; /* in ticks */
+	int16 transfer_mode_period; //  in ticks 
 	
 	int16 first_frame_sound, key_frame_sound, last_frame_sound;
 
@@ -165,17 +146,17 @@ struct shape_animation_data // Also used in high_level_shape_definition
 
 	int16 unused[14];
 
-	/* N*frames_per_view indexes of low-level shapes follow, where
-	   N = 1 if number_of_views = _unanimated/_animated1,
-	   N = 4 if number_of_views = _animated3to4/_animated4,
-	   N = 5 if number_of_views = _animated3to5/_animated5,
-	   N = 8 if number_of_views = _animated2to8/_animated5to8/_animated8 */
+	// N*frames_per_view indexes of low-level shapes follow, where
+	// N = 1 if number_of_views = _unanimated/_animated1,
+	// N = 4 if number_of_views = _animated3to4/_animated4,
+	// N = 5 if number_of_views = _animated3to5/_animated5,
+	// N = 8 if number_of_views = _animated2to8/_animated5to8/_animated8
 	int16 low_level_shape_indexes[1];
 };
 
-/* ---------- prototypes/SHELL.C */
+//  ---------- prototypes/SHELL.C 
 
-enum { /* controllers */
+enum { //  controllers 
 	_single_player,
 	_network_player,
 	_demo,
@@ -184,7 +165,7 @@ enum { /* controllers */
 	NUMBER_OF_PSEUDO_PLAYERS
 };
 
-enum { /* states. */
+enum { //  states. 
 	_display_intro_screens,
 	_display_main_menu,
 	_display_chapter_heading,
@@ -209,7 +190,7 @@ bool game_window_is_full_screen(void);
 void set_change_level_destination(short level_number);
 bool networking_available(void);
 
-/* ---------- prototypes/INTERFACE.C */
+//  ---------- prototypes/INTERFACE.C 
 
 void initialize_game_state(void);
 void force_game_state_change(void);
@@ -241,7 +222,7 @@ void paint_window_black(void);
 void set_game_focus_lost();
 void set_game_focus_gained();
 
-/* ---------- prototypes/INTERFACE_MACINTOSH.C */
+//  ---------- prototypes/INTERFACE_MACINTOSH.C 
 void do_preferences(void);
 short get_level_number_from_user(void);
 void toggle_menus(bool game_started);
@@ -262,12 +243,12 @@ void free_main_menu_buffers(void);
 void draw_main_menu(void);
 void draw_menu_button(short index, bool pressed);
 
-/* ---------- prototypes/INTERFACE_MACINTOSH.C- couldn't think of a better place... */
+//  ---------- prototypes/INTERFACE_MACINTOSH.C- couldn't think of a better place... 
 void hide_cursor(void);
 void show_cursor(void);
 void set_drawing_clip_rectangle(short top, short left, short bottom, short right);
 
-/* ---------- prototypes/SHAPES.C */
+//  ---------- prototypes/SHAPES.C 
 void *get_global_shading_table(void);
 
 short get_shape_descriptors(short shape_type, shape_descriptor *buffer);
@@ -312,7 +293,7 @@ struct rgb_color_value *get_collection_colors(short collection_index, short clut
 struct low_level_shape_definition *get_low_level_shape_definition(short collection_index, short low_level_shape_index);
 
 
-/* ---------- prototypes/PREPROCESS_MAP_MAC.C */
+//  ---------- prototypes/PREPROCESS_MAP_MAC.C 
 void setup_revert_game_info(struct game_data *game_info, struct player_start_data *start, struct entry_point *entry);
 bool revert_game(void);
 bool load_game(bool use_last_load);
@@ -320,13 +301,13 @@ bool save_game(void);
 bool save_game_full_auto(bool inOverwriteRecent);
 void restart_game(void);
 
-/* ---------- prototypes/GAME_WAD.C */
-/* Map transferring fuctions */
+//  ---------- prototypes/GAME_WAD.C 
+//  Map transferring fuctions 
 int32 get_net_map_data_length(void *data);
-bool process_net_map_data(void *data); /* Note that this frees it as well */
+bool process_net_map_data(void *data); //  Note that this frees it as well 
 void *get_map_for_net_transfer(struct entry_point *entry);
 
-/* ---------- prototypes/VBL.C */
+//  ---------- prototypes/VBL.C 
 
 void set_keyboard_controller_status(bool active);
 bool get_keyboard_controller_status(void);
@@ -348,7 +329,7 @@ void set_replay_speed(short);
 void reset_recording_and_playback_queues(void);
 uint32 parse_keymap(void);
 
-/* ---------- prototypes/GAME_DIALOGS.C */
+//  ---------- prototypes/GAME_DIALOGS.C 
 
 bool handle_preferences_dialog(void);
 void handle_load_game(void);
@@ -356,10 +337,10 @@ void handle_save_game(void);
 bool handle_start_game(void);
 bool quit_without_saving(void);
 
-/* ---------- prototypes/GAME_WINDOW.C */
+//  ---------- prototypes/GAME_WINDOW.C 
 void scroll_inventory(short dy);
 
-/* ---------- prototypes/NETWORK.C */
+//  ---------- prototypes/NETWORK.C 
 
 enum {	// Results for network_join
 	kNetworkJoinFailedUnjoined,
@@ -371,19 +352,19 @@ enum {	// Results for network_join
 bool network_gather(bool inResumingGame, bool& outUseRemoteHub);
 int network_join(void);
 
-/* ---------- prototypes/PHYSICS.C */
+//  ---------- prototypes/PHYSICS.C 
 
 void reset_absolute_positioning_device(_fixed yaw, _fixed pitch, _fixed velocity);
 
-/* ---------- prototypes/IMPORT_DEFINITIONS.C */
+//  ---------- prototypes/IMPORT_DEFINITIONS.C 
 
 void init_physics_wad_data();
 void import_definition_structures(void);
 
-/* ---------- prototypes/KEYBOARD_DIALOG.C */
+//  ---------- prototypes/KEYBOARD_DIALOG.C 
 bool configure_key_setup(short *keycodes);
 
-/* --------- from PREPROCESS_MAP_MAC.C */
+//  --------- from PREPROCESS_MAP_MAC.C 
 bool have_default_files(void);
 void get_default_external_resources_spec(FileSpecifier& File);
 void get_default_map_spec(FileSpecifier& File);
@@ -475,7 +456,7 @@ extern TP2PerfGlobals perf_globals;
 #include "sdl_widgets.h"
 #include "network_dialog_widgets_sdl.h"
 
-/* Change this when marathon changes & replays are no longer valid */
+//  Change this when marathon changes & replays are no longer valid 
 enum recording_version {
 	RECORDING_VERSION_UNKNOWN = 0,
 	RECORDING_VERSION_MARATHON = 1,
@@ -519,9 +500,9 @@ const short max_handled_recording= RECORDING_VERSION_ALEPH_ONE_1_7;
 
 using alephone::Screen;
 
-/* ------------- enums */
+//  ------------- enums 
 
-/* ------------- constants */
+//  ------------- constants 
 #define DISPLAY_PICT_RESOURCE_TYPE 'PICT'
 #define CLOSE_WITHOUT_WARNING_DELAY (5*TICKS_PER_SECOND)
 
@@ -534,7 +515,7 @@ using alephone::Screen;
 #define INTRO_SCREEN_TO_START_SONG_ON (0)
 #endif
 
-#define INTRO_SCREEN_BETWEEN_DEMO_BASE (INTRO_SCREEN_BASE+1) /* +1 to get past the powercomputing */
+#define INTRO_SCREEN_BETWEEN_DEMO_BASE (INTRO_SCREEN_BASE+1) //  +1 to get past the powercomputing 
 #define NUMBER_OF_INTRO_SCREENS_BETWEEN_DEMOS (1)
 #define DEMO_INTRO_SCREEN_DURATION (10 * MACHINE_TICKS_PER_SECOND)
 
@@ -560,10 +541,10 @@ using alephone::Screen;
 // #endif
 #define FINAL_SCREEN_DURATION (INDEFINATE_TIME_DELAY)
 
-/* For teleportation, end movie, etc. */
+//  For teleportation, end movie, etc. 
 #define EPILOGUE_LEVEL_NUMBER 256
 
-/* ------------- structures */
+//  ------------- structures 
 struct game_state {
 	short state;
 	short flags;
@@ -600,7 +581,7 @@ extern steam_game_information steam_game_info;
 
 #endif
 
-/* -------------- constants */
+//  -------------- constants 
 struct screen_data display_screens[]= {
 	{ INTRO_SCREEN_BASE, NUMBER_OF_INTRO_SCREENS, INTRO_SCREEN_DURATION },
 	{ MAIN_MENU_BASE, 1, 0 },
@@ -625,7 +606,7 @@ struct screen_data m1_display_screens[]= {
 
 
 
-/* -------------- local globals */
+//  -------------- local globals 
 static struct game_state game_state;
 static std::shared_ptr<SoundPlayer> introduction_sound = nullptr;
 static FileSpecifier DraggedReplayFile;
@@ -634,16 +615,16 @@ static short current_picture_clut_depth;
 static struct color_table *animated_color_table= NULL;
 static struct color_table *current_picture_clut= NULL;
 
-/* -------------- externs */
+//  -------------- externs 
 extern short interface_bit_depth;
 extern short bit_depth;
 extern bool shapes_file_is_m1();
 
-/* ----------- prototypes/PREPROCESS_MAP_MAC.C */
+//  ----------- prototypes/PREPROCESS_MAP_MAC.C 
 extern bool load_game_from_file(FileSpecifier& File, bool run_scripts);
 extern bool choose_saved_game_to_load(FileSpecifier& File);
 
-/* ---------------------- prototypes */
+//  ---------------------- prototypes 
 static void display_credits(void);
 static void draw_button(short index, bool pressed);
 static void draw_powered_by_aleph_one(bool pressed);
@@ -680,7 +661,7 @@ static void try_and_display_chapter_screen(short level, bool interface_table_is_
 static screen_data *get_screen_data(
 	short index);
 
-/* ---------------------- code begins */
+//  ---------------------- code begins 
 
 screen_data *get_screen_data(
 	short index)
@@ -765,15 +746,15 @@ void set_game_state(
 					break;
 					
 				case _switch_demo:
-					/* Because Alain's code calls us at interrupt level 1, */
-					/*  we must defer processing of this message until idle */
+					//  Because Alain's code calls us at interrupt level 1, 
+					//   we must defer processing of this message until idle 
 					game_state.state= _switch_demo;
 					game_state.phase= 0;
 					break;
 					
 				case _revert_game:
-					/* Because reverting a game in the middle of the update_world loop sounds */
-					/*  sketchy, this is not done until idle time.. */
+					//  Because reverting a game in the middle of the update_world loop sounds 
+					//   sketchy, this is not done until idle time.. 
 					game_state.state= new_state;
 					game_state.phase= 0;
 					break;
@@ -971,11 +952,11 @@ static bool make_restored_game_relevant(bool inNetgame, const player_start_data*
 
         synchronize_players_with_starts(inStartArray, inStartCount, theLocalPlayerIndex);
         
-        bool success = entering_map(true /*restoring game*/);
+        bool success = entering_map(true); // restoring game
 
         reset_motion_sensor(theLocalPlayerIndex);
 
-        if(!success) clean_up_after_failed_game(inNetgame, false /*recording*/, true /*full cleanup*/);
+        if(!success) clean_up_after_failed_game(inNetgame, false, true);
 
         return success;
 }
@@ -989,7 +970,7 @@ bool join_networked_resume_game()
         bool success = true;
         
         // Get the saved-game data
-        byte* theSavedGameFlatData = NetReceiveGameData(false /* do_physics */);
+        byte* theSavedGameFlatData = NetReceiveGameData(false);
         if(theSavedGameFlatData == NULL)
         {
                 success = false;
@@ -1022,8 +1003,8 @@ bool join_networked_resume_game()
 						RunLevelScript(dynamic_data_wad.current_level_number);
 					}
 
-                    success = process_map_wad(theWad, true /* resuming */, theWadHeader.data_version);
-                    free_wad(theWad); /* Note that the flat data points into the wad. */
+                    success = process_map_wad(theWad, true, theWadHeader.data_version);
+                    free_wad(theWad); //  Note that the flat data points into the wad. 
                     // ZZZ: maybe this is what the Bungie comment meant, but apparently
                     // free_wad() somehow (voodoo) frees theSavedGameFlatData as well.
                 }
@@ -1050,14 +1031,14 @@ bool join_networked_resume_game()
                         }
                         else
                         {
-                                /* Tell the user they’re screwed when they try to leave this level. */
+                                //  Tell the user they’re screwed when they try to leave this level. 
                                 // ZZZ: should really issue a different warning since the ramifications are different
                                 alert_user(infoError, strERRORS, cantFindMap, 0);
         
                                 // LP addition: makes the game look normal
                                 hide_cursor();
                         
-                                /* Set to the default map. */
+                                //  Set to the default map. 
                                 set_to_default_map();
 
 								LoadAchievementsLua();
@@ -1072,13 +1053,13 @@ bool join_networked_resume_game()
                         construct_multiplayer_starts(theStarts, &theStartCount);
                         
 			RunLuaScript();
-                        success = make_restored_game_relevant(true /* multiplayer */, theStarts, theStartCount);
+                        success = make_restored_game_relevant(true, theStarts, theStartCount);
                 }
         }
         
         if(success)
 	{
-		start_game(_network_player, false /*changing level?*/);
+		start_game(_network_player, false);
 	}
         
         return success;
@@ -1105,7 +1086,7 @@ bool load_and_start_game(FileSpecifier& File)
 
 	if (!success)
 	{
-		/* Reset the system colors, since the screen clut is all black.. */
+		//  Reset the system colors, since the screen clut is all black.. 
 		force_system_colors(false);
 		show_cursor(); // JTP: Was hidden by force system colors
 		display_loading_map_error();
@@ -1138,7 +1119,7 @@ bool load_and_start_game(FileSpecifier& File)
 #if !defined(DISABLE_NETWORKING)
 		if (userWantsMultiplayer)
 		{
-			theSavedGameFlatData.reset((byte*)get_flat_data(File, false /* union wad? */, 0 /* level # */));
+			theSavedGameFlatData.reset((byte*)get_flat_data(File, false, 0));
 			success = theSavedGameFlatData != nullptr;
 
 			if (success)
@@ -1150,7 +1131,7 @@ bool load_and_start_game(FileSpecifier& File)
 				NetSetResumedGameWadForRemoteHub(theSavedGameFlatData.get(), theSavedGameFlatDataLength);
 
 				bool use_remote_hub;
-				success = network_gather(true /*resuming*/, use_remote_hub);
+				success = network_gather(true, use_remote_hub);
 				if (success && use_remote_hub) return join_networked_resume_game();
 			}
 		}
@@ -1195,7 +1176,7 @@ bool load_and_start_game(FileSpecifier& File)
 				success = NetStart();
 				if (success)
 				{
-					OSErr theError = NetDistributeGameDataToAllPlayers(theSavedGameFlatData.get(), theSavedGameFlatDataLength, false /* do_physics? */);
+					OSErr theError = NetDistributeGameDataToAllPlayers(theSavedGameFlatData.get(), theSavedGameFlatDataLength, false);
 					if (theError != noErr)
 					{
 						success = false;
@@ -1217,8 +1198,8 @@ bool load_and_start_game(FileSpecifier& File)
 	}
         
 	if (!success) {
-		/* We failed.  Balance the cursor */
-		/* Should this also force the system colors or something? */
+		//  We failed.  Balance the cursor 
+		//  Should this also force the system colors or something? 
 		show_cursor();
 	}
 
@@ -1292,7 +1273,7 @@ void draw_menu_button_for_command(
 
 	assert(get_game_state()==_display_main_menu);
 	
-	/* Draw it initially depressed.. */
+	//  Draw it initially depressed.. 
 	draw_button(rectangle_index, true);
 	draw_intro_screen();
 	sleep_for_machine_ticks(MACHINE_TICKS_PER_SECOND / 12);
@@ -1307,7 +1288,7 @@ void update_interface_display(
 
 	data= get_screen_data(game_state.state);
 	
-	/* Use this to avoid the fade.. */
+	//  Use this to avoid the fade.. 
 	draw_full_screen_pict_resource_from_images(data->screen_base+game_state.current_screen);
 
 	if (game_state.state == _display_main_menu)
@@ -1337,7 +1318,7 @@ bool idle_game_state(uint32 time)
 			game_state.phase-= machine_ticks_elapsed;
 		}
 		
-		/* Note that we still go through this if we have an indefinate phase.. */
+		//  Note that we still go through this if we have an indefinate phase.. 
 		if(game_state.phase<=0)
 		{
 			switch(get_game_state())
@@ -1352,11 +1333,11 @@ bool idle_game_state(uint32 time)
 
 				case _display_intro_screens_for_demo:
 				case _display_main_menu:
-					/* Start the demo.. */
+					//  Start the demo.. 
 					if(!environment_preferences->auto_play_demos ||
 					   !begin_game(_demo, false))
 					{
-						/* This means that there was not a valid demo to play */
+						//  This means that there was not a valid demo to play 
 						game_state.phase= TICKS_UNTIL_DEMO_STARTS;
 					}
 					break;
@@ -1366,8 +1347,8 @@ bool idle_game_state(uint32 time)
 					break;
 
 				case _switch_demo:
-					/* This is deferred to the idle task because it */
-					/*  occurs at interrupt time.. */
+					//  This is deferred to the idle task because it 
+					//   occurs at interrupt time.. 
 					switch(game_state.user)
 					{
 						case _replay:
@@ -1390,11 +1371,11 @@ bool idle_game_state(uint32 time)
 					break;
 
 				case _quit_game:
-					/* About to quit, but can still hit this through order of ops.. */
+					//  About to quit, but can still hit this through order of ops.. 
 					break;
 
 				case _revert_game:
-					/* Reverting while in the update loop sounds sketchy.. */
+					//  Reverting while in the update loop sounds sketchy.. 
 					if(revert_game())
 					{
 						game_state.state= _game_in_progress;
@@ -1403,10 +1384,10 @@ bool idle_game_state(uint32 time)
 						SoundManager::instance()->UpdateListener();
 						update_interface(NONE);
 					} else {
-						/* Give them the error... */
+						//  Give them the error... 
 						display_loading_map_error();
 						
-						/* And finish their current game.. */
+						//  And finish their current game.. 
 						finish_game(true);
 					}
 					break;
@@ -1432,8 +1413,7 @@ bool idle_game_state(uint32 time)
 		game_state.last_ticks_on_idle= machine_tick_count();
 	}
 
-	/* if we’re not paused and there’s something to draw (i.e., anything different from
-		last time), render a frame */
+	// if we’re not paused and there’s something to draw (i.e., anything different from last time), render a frame
 	if(game_state.state==_game_in_progress)
 	{
 		// ZZZ change: update_world() whether or not get_keyboard_controller_status() is true
@@ -1473,7 +1453,7 @@ bool idle_game_state(uint32 time)
 		
 		return theUpdateResult.first;
 	} else {
-		/* Update the fade ins, etc.. */
+		//  Update the fade ins, etc.. 
 		update_interface_fades();
 		return false;
 	}
@@ -1555,7 +1535,7 @@ void display_main_menu(
 	change_screen_mode(_screentype_menu);
 	display_screen(MAIN_MENU_BASE);
 	
-	/* Start up the song! */
+	//  Start up the song! 
 	if(!Music::instance()->Playing() && game_state.main_menu_display_count==0)
 	{
 		Music::instance()->RestartIntroMusic();
@@ -1637,7 +1617,7 @@ void do_menu_item_command(
 					break;
 					
 				case iRevert:
-					/* Not implemented.. */
+					//  Not implemented.. 
 					break;
 					
 				case iCloseGame:
@@ -1674,9 +1654,6 @@ void do_menu_item_command(
 	
 						if(really_wants_to_quit)
 						{
-							// Rhys Hill fix for crash when quitting OpenGL
-// 							if (!OGL_IsActive())
-//								render_screen(0); /* Get rid of hole.. */
 							set_game_state(_close_game);
 						}
 					}
@@ -1774,7 +1751,7 @@ void portable_process_screen_click(
 			break;
 
 		case _display_intro_screens_for_demo:
-			/* Get out of user mode. */
+			//  Get out of user mode. 
 			display_main_menu();
 			break;
 
@@ -1784,7 +1761,7 @@ void portable_process_screen_click(
 		case _display_prologue:
 		case _display_epilogue:
 		case _display_credits:
-			/* Force the state change next time through.. */
+			//  Force the state change next time through.. 
 			force_game_state_change();
 			break;
 
@@ -1940,7 +1917,7 @@ void paint_window_black(
 
 static LoadedResource SoundRsrc;
 
-/* --------------------- static code */
+//  --------------------- static code 
 
 static void display_introduction(
 	void)
@@ -2610,7 +2587,7 @@ static void display_quit_screens(
 		display_screen(screen_data->screen_base);
 	} else {
 		StatsManager::instance()->Finish();
-		/* No screens. */
+		//  No screens. 
 		game_state.state= _quit_game;
 		game_state.phase= 0;
 	}
@@ -2625,7 +2602,7 @@ static void transfer_to_new_level(
 	entry.level_number= level_number;
 
 #if !defined(DISABLE_NETWORKING)
-	/* Only can transfer if NetUnSync returns true */
+	//  Only can transfer if NetUnSync returns true 
 	if(game_is_networked) 
 	{
 		if(NetUnSync()) 
@@ -2680,7 +2657,7 @@ static void transfer_to_new_level(
 	}
 }
 
-/* The port is set.. */
+//  The port is set.. 
 static void draw_button(
 	short index, 
 	bool pressed)
@@ -2696,13 +2673,13 @@ static void draw_button(
 
 	set_drawing_clip_rectangle(screen_rect->top, screen_rect->left, screen_rect->bottom, screen_rect->right);
 	
-	/* Use this to avoid the fade.. */
+	//  Use this to avoid the fade.. 
 	draw_full_screen_pict_resource_from_images(pict_resource_number);
 
 	set_drawing_clip_rectangle(SHRT_MIN, SHRT_MIN, SHRT_MAX, SHRT_MAX);
 }
 					
-static void handle_replay( /* This is gross. */
+static void handle_replay( //  This is gross. 
 	bool last_replay)
 {
 	bool success;
@@ -2882,7 +2859,7 @@ static bool begin_game(
 			if(cheat)
 			{
 				entry.level_number= get_level_number_from_user();
-				if(entry.level_number==NONE) success= false; /* Cancelled */
+				if(entry.level_number==NONE) success= false; //  Cancelled 
 			} else {
 				entry.level_number= 0;
 			}
@@ -2952,13 +2929,13 @@ static bool begin_game(
 	if(success)
 	{
 		hide_cursor();
-		/* This has already been done to get to gather/join */
+		//  This has already been done to get to gather/join 
 		if(can_interface_fade_out()) 
 		{
 			interface_fade_out(MAIN_MENU_BASE, true);
 		}
 
-		/* Try to display the first chapter screen.. */
+		//  Try to display the first chapter screen.. 
 		if (user != _network_player && user != _demo)
 		{
 			FindLevelMovie(entry.level_number);
@@ -2971,7 +2948,7 @@ static bool begin_game(
 		LoadHUDLua();
 		RunLuaHUDScript();
 		
-		/* Begin the game! */
+		//  Begin the game! 
 		success= new_game(number_of_players, is_networked, &game_information, starts, &entry);
 		if(success)
 		{
@@ -2980,11 +2957,11 @@ static bool begin_game(
 			clean_up_after_failed_game(user == _network_player, record_game, clean_up_on_failure);
 		}
 	} else {
-		/* This means that some weird replay problem happened: */
-		/*  1) User cancelled */
-		/*  2) Demos not present */
-		/*  3) Error... */
-		/* Either way, we eat them.. */
+		//  This means that some weird replay problem happened: 
+		//   1) User cancelled 
+		//   2) Demos not present 
+		//   3) Error... 
+		//  Either way, we eat them.. 
 	}
 	
 	return success;
@@ -2994,7 +2971,7 @@ static void start_game(
 	short user,
 	bool changing_level)
 {
-	/* Change our menus.. */
+	//  Change our menus.. 
 	toggle_menus(true);
 	
 	// LP change: reset screen so that extravision will not be persistent
@@ -3073,8 +3050,8 @@ static void finish_game(
 #ifdef PERFORMANCE	
 	PerfControl(perf_globals, false);
 #endif
-	/* Note that we have to deal with the switch demo state later because */
-	/* Alain's code calls us at interrupt level 1. (so we defer it) */
+	//  Note that we have to deal with the switch demo state later because 
+	//  Alain's code calls us at interrupt level 1. (so we defer it) 
 	assert(game_state.state==_game_in_progress || game_state.state==_switch_demo || game_state.state==_revert_game || game_state.state==_change_level || game_state.state==_begin_display_of_epilogue);
 	toggle_menus(false);
 
@@ -3083,7 +3060,7 @@ static void finish_game(
 	L_Call_HUDCleanup();
 	exit_screen();
 
-	/* Stop the replay */
+	//  Stop the replay 
 	switch(game_state.user)
 	{
 		case _single_player:
@@ -3116,7 +3093,7 @@ static void finish_game(
 		}
 	}
 
-	/* Fade out! (Pray) */ // should be interface_color_table for valkyrie, but doesn't work.
+	//  Fade out! (Pray)  // should be interface_color_table for valkyrie, but doesn't work.
 	Music::instance()->ClearLevelMusic();
 	Music::instance()->Fade(0, MACHINE_TICKS_PER_SECOND / 2);
 	full_fade(_cinematic_fade_out, interface_color_table);
@@ -3128,7 +3105,7 @@ static void finish_game(
 	leaving_map();
 	CloseLuaHUDScript();
 	
-	/* Get as much memory back as we can. */
+	//  Get as much memory back as we can. 
 	unload_all_collections();
 	SoundManager::instance()->UnloadAllSounds();
 	
@@ -3137,7 +3114,7 @@ static void finish_game(
 	{
 		NetUnSync(); // gracefully exit from the game
 
-		/* Don't update the screen, etc.. */
+		//  Don't update the screen, etc.. 
 		game_state.state= _displaying_network_game_dialogs;
 
 		change_screen_mode(_screentype_menu);
@@ -3177,7 +3154,7 @@ static void finish_game(
 
 static void clean_up_after_failed_game(bool inNetgame, bool inRecording, bool inFullCleanup)
 {
-        /* Stop recording.. */
+        //  Stop recording.. 
         if(inRecording)
         {
                 stop_recording();
@@ -3186,10 +3163,10 @@ static void clean_up_after_failed_game(bool inNetgame, bool inRecording, bool in
         set_local_player_index(NONE);
         set_current_player_index(NONE);
 
-        /* Show the cursor here on failure. */
+        //  Show the cursor here on failure. 
         show_cursor();
         
-        /* The only time we don't clean up is on the replays.. */
+        //  The only time we don't clean up is on the replays.. 
         if(inFullCleanup)
         {
                 if (inNetgame)
@@ -3198,12 +3175,12 @@ static void clean_up_after_failed_game(bool inNetgame, bool inRecording, bool in
                         exit_networking();
 #endif // !defined(DISABLE_NETWORKING)
                 } else {
-/* NOTE: The network code is now responsible for displaying its own errors!!!! */
-                        /* Give them the error... */
+//  NOTE: The network code is now responsible for displaying its own errors!!!! 
+                        //  Give them the error... 
                         display_loading_map_error();
                 }
 
-                /* Display the main menu on failure.... */
+                //  Display the main menu on failure.... 
                 display_main_menu();
         }
         set_game_error(systemError, errNone);
@@ -3218,7 +3195,7 @@ static void handle_network_game(
 
 	force_system_colors(true);
 
-	/* Don't update the screen, etc.. */
+	//  Don't update the screen, etc.. 
 	game_state.state= _displaying_network_game_dialogs;
 	game_state.user = _network_player;
 	
@@ -3237,14 +3214,14 @@ static void handle_network_game(
 	{
 		if (joined_resume_game)
 		{
-			if (join_networked_resume_game() == false) clean_up_after_failed_game(true /*netgame*/, false /*recording*/, true /*full cleanup*/);
+			if (join_networked_resume_game() == false) clean_up_after_failed_game(true, false, true);
 		}
 		else
 		{
 			begin_game(_network_player, false);
 		}
 	} else {
-		/* We must restore the colors on cancel. */
+		//  We must restore the colors on cancel. 
 		display_main_menu();
 	}
 #else // !defined(DISABLE_NETWORKING)
@@ -3273,14 +3250,14 @@ static void next_game_screen(
 		switch(game_state.state)
 		{
 			case _display_main_menu:
-				/* Whoops.  didn't get it. */
+				//  Whoops.  didn't get it. 
 				alert_out_of_memory();
 				break;
 				
 			case _display_quit_screens:
 				StatsManager::instance()->Finish();
 
-				/* Fade out.. */
+				//  Fade out.. 
 				interface_fade_out(data->screen_base+game_state.current_screen, true);
 				game_state.state= _quit_game;
 				break;
@@ -3332,7 +3309,7 @@ static void display_loading_map_error(
 {
 	short error, type;
 	
-	/* Give them the error... */
+	//  Give them the error... 
 	error= get_game_error(&type);
 	if(type==gameError)
 	{
@@ -3403,7 +3380,7 @@ static void display_screen(
 
 		if(current_picture_clut)
 		{
-			/* slam the entire clut to black, now. */
+			//  slam the entire clut to black, now. 
 			if (interface_bit_depth==8) 
 			{
 				assert_world_color_table(current_picture_clut, (struct color_table *) NULL);
@@ -3423,7 +3400,7 @@ static void display_screen(
 	if(!picture_drawn)
 	{
 dprintf("Didn't draw: %d;g", pict_resource_number);
-		/* Go for the next one.. */
+		//  Go for the next one.. 
 		next_game_screen();
 	}
 }
@@ -3452,7 +3429,7 @@ static void handle_interface_menu_screen_click(
 	screen_rectangle *screen_rect;
 	short xoffset = 0, yoffset = 0;
 
-	/* find it.. */
+	//  find it.. 
 	for(index= START_OF_MENU_INTERFACE_RECTS; index<END_OF_MENU_INTERFACE_RECTS; ++index)
 	{
 		screen_rect= get_interface_rectangle(index);
@@ -3460,7 +3437,7 @@ static void handle_interface_menu_screen_click(
 			break;
 	}
 	
-	/* we found one.. */
+	//  we found one.. 
 	if(index!=END_OF_MENU_INTERFACE_RECTS)
 	{
 		if(enabled_item(index-START_OF_MENU_INTERFACE_RECTS+1))
@@ -3471,7 +3448,7 @@ static void handle_interface_menu_screen_click(
 
 			screen_rect= get_interface_rectangle(index);
 
-			/* Draw it initially depressed.. */
+			//  Draw it initially depressed.. 
 			draw_button(index, last_state);
 			draw_intro_screen();
 		
@@ -3525,7 +3502,7 @@ static void handle_interface_menu_screen_click(
 				}
 			}
 
-			/* Draw it unpressed.. */
+			//  Draw it unpressed.. 
 			draw_button(index, false);
 			draw_intro_screen();
 			
@@ -3537,7 +3514,7 @@ static void handle_interface_menu_screen_click(
 	}
 }
 
-/* Note that this is modal. This sucks... */
+//  Note that this is modal. This sucks... 
 static void try_and_display_chapter_screen(
 	short level,
 	bool interface_table_is_valid,
@@ -3547,7 +3524,7 @@ static void try_and_display_chapter_screen(
 		return;
 	
 	short pict_resource_number = get_screen_data(_display_chapter_heading)->screen_base + level;
-	/* If the picture exists... */
+	//  If the picture exists... 
 	if (scenario_picture_exists(pict_resource_number))
 	{
 		short existing_state= game_state.state;
@@ -3556,8 +3533,8 @@ static void try_and_display_chapter_screen(
 		Music::instance()->StopInGameMusic();
 		SoundManager::instance()->StopAllSounds();
 		
-		/* This will NOT work if the initial level entered has a chapter screen, which is why */
-		/*  we perform this check. (The interface_color_table is not valid...) */
+		//  This will NOT work if the initial level entered has a chapter screen, which is why 
+		//   we perform this check. (The interface_color_table is not valid...) 
 		if(interface_table_is_valid)
 		{
 			full_fade(_cinematic_fade_out, interface_color_table);
@@ -3566,7 +3543,7 @@ static void try_and_display_chapter_screen(
 
 		change_screen_mode(_screentype_chapter);
 		
-		/* Fade the screen to black.. */
+		//  Fade the screen to black.. 
 		assert(!current_picture_clut);
 		current_picture_clut= calculate_picture_clut(CLUTSource_Scenario,pict_resource_number);
 		current_picture_clut_depth= interface_bit_depth;
@@ -3575,14 +3552,14 @@ static void try_and_display_chapter_screen(
 		{
 			LoadedResource SoundRsrc;
 
-			/* slam the entire clut to black, now. */
+			//  slam the entire clut to black, now. 
 			if (interface_bit_depth==8) 
 			{
 				assert_world_color_table(current_picture_clut, (struct color_table *) NULL);
 			}
 			full_fade(_start_cinematic_fade_in, current_picture_clut);
 
-			/* Draw the picture */
+			//  Draw the picture 
 			draw_full_screen_pict_resource_from_scenario(pict_resource_number);
 			draw_intro_screen();
 
@@ -3595,7 +3572,7 @@ static void try_and_display_chapter_screen(
 				soundPlayer = SoundManager::instance()->PlaySound(SoundRsrc, parameters);
 			}
 			
-			/* Fade in.... */
+			//  Fade in.... 
 			assert(current_picture_clut);	
 			full_fade(_long_cinematic_fade_in, current_picture_clut);
 			
@@ -3603,7 +3580,7 @@ static void try_and_display_chapter_screen(
 
 			wait_for_click_or_keypress(text_block ? -1 : 10*MACHINE_TICKS_PER_SECOND);
 			
-			/* Fade out! (Pray) */
+			//  Fade out! (Pray) 
 			interface_fade_out(pict_resource_number, false);
 			
 			if (soundPlayer) soundPlayer->AskStop();
@@ -3612,8 +3589,8 @@ static void try_and_display_chapter_screen(
 	}
 }
 
-/* ------------ interface fade code */
-/* Be aware that we could try to change bit depths before a fade is completed. */
+//  ------------ interface fade code 
+//  Be aware that we could try to change bit depths before a fade is completed. 
 static void start_interface_fade(
 	short type,
 	struct color_table *original_color_table)
@@ -3664,13 +3641,13 @@ void stop_interface_fade(
 
 		if(game_state.state==_display_main_menu)
 		{
-			/* This isn't a showcursor because of balancing problems (first time through..) */
+			//  This isn't a showcursor because of balancing problems (first time through..) 
 			show_cursor();
 		}
 	}
 }
 
-/* Called right before we start a game.. */
+//  Called right before we start a game.. 
 void interface_fade_out(
 	short pict_resource_number,
 	bool fade_music)
@@ -3678,8 +3655,8 @@ void interface_fade_out(
 	assert(current_picture_clut);
 	if(current_picture_clut)
 	{
-		/* We have to check this because they could go into preferences and change on us, */
-		/*  the evil swine. */
+		//  We have to check this because they could go into preferences and change on us, 
+		//   the evil swine. 
 		if(current_picture_clut_depth != interface_bit_depth)
 		{
 			delete current_picture_clut;
@@ -3699,14 +3676,14 @@ void interface_fade_out(
 			while(Music::instance()->Playing()) 
 				Music::instance()->Idle();
 
-			/* and give up the memory */
+			//  and give up the memory 
 			Music::instance()->Pause();
 		}
 
 		paint_window_black();
 		full_fade(_end_cinematic_fade_out, current_picture_clut);
 
-		/* Hopefully we can do this here.. */
+		//  Hopefully we can do this here.. 
 		delete current_picture_clut;
 		current_picture_clut= NULL;
 	}
@@ -3736,16 +3713,14 @@ void do_preferences(void)
 		paint_window_black();
 		Screen::instance()->Initialize(&graphics_preferences->screen_mode);
 
-		/* Re fade in, so that we get the proper colortable loaded.. */
+		//  Re fade in, so that we get the proper colortable loaded.. 
 		display_main_menu();
 	} else if (memcmp(&mode, &graphics_preferences->screen_mode, sizeof(struct screen_mode_data)))
 		change_screen_mode(&graphics_preferences->screen_mode, false);
 }
 
 
-/*
- *  Toggle system hotkeys
- */
+//Toggle system hotkeys
 
 void toggle_menus(bool game_started)
 {
@@ -3753,9 +3728,7 @@ void toggle_menus(bool game_started)
 }
 
 
-/*
- *  Update game window
- */
+//  Update game window
 
 void update_game_window(void)
 {
@@ -3781,9 +3754,7 @@ void update_game_window(void)
 }
 
 
-/*
- *  Exit networking
- */
+//  Exit networking
 
 void exit_networking(void)
 {
@@ -3793,9 +3764,7 @@ void exit_networking(void)
 }
 
 
-/*
- *  Show movie
- */
+//  Show movie
 
 static void audio_samples_decoder_callback(plm_t* mpeg, plm_samples_t* samples, void* userdata)
 {
@@ -4046,3 +4015,4 @@ size_t should_restore_game_networked(FileSpecifier& file)
 
         return theResult;
 }
+*/
