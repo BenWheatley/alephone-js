@@ -170,14 +170,16 @@ function joystick_buttons_become_keypresses(ioKeyMap) {
 	}
 }
 function process_joystick_axes(flags) {
+	if (!joystick_active) {
+		return flags;
+	}
+	if (navigator.getGamepads.length==0) {
+		return flags;
+	}
+	if (!input_preferences.controller_analog) {
+		return flags;
+	}
 /*
-    if (!joystick_active)
-        return flags;
-	if (navigator.getGamepads.length==0)
-		return flags;
-	if (!input_preferences->controller_analog)
-		return flags;
-	
 	float angular_deltas[NUMBER_OF_ABSOLUTE_POSITION_VALUES] = { 0, 0 };
 	for (auto it = axis_mappings.begin(); it != axis_mappings.end(); ++it) {
 		const AxisInfo info = *it;
