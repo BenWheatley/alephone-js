@@ -25,19 +25,17 @@
 /*
 #include    "cseries.h"
 #include    "TextStrings.h"
+*/
 
-
-static inline void BuildStringSet(short inStringSetID,
-                                  const char** inStrings,
-                                  short inNumStrings) {
-	for (int i = 0; i < inNumStrings; i++)
-		TS_PutCString(inStringSetID, i, inStrings[i]);
+function BuildStringSet(inStringSetID, inStrings) {
+    for (let i = 0; i < inStrings.length; i++) {
+        TS_PutCString(inStringSetID, i, inStrings[i]);
+    }
 }
 
-#define NUMBER_OF_STRINGS(sa)   (sizeof(sa) / sizeof((sa)[0]))
-
-#define BUILD_STRINGSET(id, strs)   BuildStringSet(id, strs, NUMBER_OF_STRINGS(strs))
-
+function BUILD_STRINGSET(id, strs) {
+    BuildStringSet(id, strs);
+}
 
 
 // StringSets from original Bungie resources
