@@ -124,13 +124,13 @@ static void process_event(const SDL_Event &event);
 // cross-platform static variables
 short vidmasterStringSetID = -1; // can be set with MML
 short vidmasterLevelOffset = 1; // can be set with MML
-
-static std::string a1_getenv(const char* name)
-{
-	char* str = getenv(name);
-	return str ? str : std::string{};
+*/
+function a1_getenv(name) {
+	// Return the base URL of the hosting index page plus the supplied folder name
+	const base = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+	return base + name + '/';
 }
-
+/*
 extern bool handle_open_replay(FileSpecifier& File);
 extern bool load_and_start_game(FileSpecifier& file);
 extern bool handle_edit_map();
