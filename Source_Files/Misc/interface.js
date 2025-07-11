@@ -21,9 +21,6 @@ INTERFACE.H
 
 #include "cseries.h"
 
-class FileSpecifier;
-class OpenedResourceFile;
-
 /* ---------- constants */
 
 #define strFILENAMES 129
