@@ -149,39 +149,41 @@ struct shape_animation_data // Also used in high_level_shape_definition
 	// N = 8 if number_of_views = _animated2to8/_animated5to8/_animated8
 	int16 low_level_shape_indexes[1];
 };
-
+*/
 //  ---------- prototypes/SHELL.C 
 
-enum { //  controllers 
-	_single_player,
-	_network_player,
-	_demo,
-	_replay,
-	_replay_from_file,
-	NUMBER_OF_PSEUDO_PLAYERS
-};
+const PseudoPlayers = Object.freeze({
+	_single_player: 0,
+	_network_player: 1,
+	_demo: 2,
+	_replay: 3,
+	_replay_from_file: 4,
+	NUMBER_OF_PSEUDO_PLAYERS: 5
+});
 
-enum { //  states. 
-	_display_intro_screens,
-	_display_main_menu,
-	_display_chapter_heading,
-	_display_prologue,
-	_display_epilogue,
-	_display_credits,
-	_display_intro_screens_for_demo,
-	_display_quit_screens,
-	NUMBER_OF_SCREENS,
-	_game_in_progress= NUMBER_OF_SCREENS,
-	_quit_game,
-	_close_game,
-	_switch_demo,
-	_revert_game,
-	_change_level,
-	_begin_display_of_epilogue,
-	_displaying_network_game_dialogs,
-	NUMBER_OF_GAME_STATES
-};
+const GameStates = Object.freeze({
+	_display_intro_screens: 0,
+	_display_main_menu: 1,
+	_display_chapter_heading: 2,
+	_display_prologue: 3,
+	_display_epilogue: 4,
+	_display_credits: 5,
+	_display_intro_screens_for_demo: 6,
+	_display_quit_screens: 7,
+	NUMBER_OF_SCREENS: 8,
+	
+	_game_in_progress: 8, // same as NUMBER_OF_SCREENS
+	_quit_game: 9,
+	_close_game: 10,
+	_switch_demo: 11,
+	_revert_game: 12,
+	_change_level: 13,
+	_begin_display_of_epilogue: 14,
+	_displaying_network_game_dialogs: 15,
 
+	NUMBER_OF_GAME_STATES: 16
+});
+/*
 bool game_window_is_full_screen(void);
 void set_change_level_destination(short level_number);
 bool networking_available(void);
