@@ -22,14 +22,20 @@
 
     June 3, 2002: captured text_strings.mml into C++ form for this file.
 */
-/*
-#include    "cseries.h"
-#include    "TextStrings.h"
-*/
+
+import * as TextStrings from '../RenderOther/TextStrings.js';
+
+const kDifficultyLevelsStringSetID	= 145;
+const kNetworkGameTypesStringSetID	= 146;
+const kEndConditionTypeStringSetID	= 147;
+const kScoreLimitTypeStringSetID	= 148;
+const kSingleOrNetworkStringSetID	= 149;
+const kTeamColorsStringSetID	= 152;
+
 
 function BuildStringSet(inStringSetID, inStrings) {
     for (let i = 0; i < inStrings.length; i++) {
-        TS_PutCString(inStringSetID, i, inStrings[i]);
+        TextStrings.TS_PutCString(inStringSetID, i, inStrings[i]);
     }
 }
 
@@ -41,7 +47,7 @@ function BUILD_STRINGSET(id, strs) {
 // StringSets from original Bungie resources
 // -----------------------------------------------------------------------------------------
 // <!-- STR# Resource: "Errors" -->
-*/
+
 const sStringSetNumber128 = [
     "Sorry, $appName$ requires a 68040 processor or higher.",
     "Sorry, $appName$ requires Color QuickDraw.",
@@ -421,20 +427,18 @@ const sStringSetNumber143[] = [
     "Connecting to a remote hub server..."
 ];
 
-/*
 // Stringsets for SDL w_select widgets.
 // -----------------------------------------------------------------------------------------
-#include    "network_dialogs.h"  // for stringset ID's
 
-static const char*    sDifficultyLevelsStrings[] = {
+const sDifficultyLevelsStrings[] = [
     "Kindergarten",
     "Easy",
     "Normal",
     "Major Damage",
     "Total Carnage"
-};
+];
 
-static const char*    sNetworkGameTypesStrings[] = {
+const sNetworkGameTypesStrings[] = [
     "Every Man for Himself",
     "Cooperative Play",
     "Capture the Flag",
@@ -443,20 +447,20 @@ static const char*    sNetworkGameTypesStrings[] = {
     "Rugby",
     "Tag",
     "Netscript",
-};
+];
 
-static const char*    sEndConditionTypeStrings[] = {
+const sEndConditionTypeStrings[] = [
 //    "No Limit (Alt+Q to quit)",
 	"Unlimited",
     "Time Limit",
     "Score Limit",
-};
+];
 
-static const char*	sSingleOrNetworkStrings[] = {
+const sSingleOrNetworkStrings[] = [
     "Single-player game",
     "Network game"
-};
-*/
+];
+
 // More Mac OS string-resource stringsets.
 // -----------------------------------------------------------------------------------------
 // STR# Resource: "Item names"
@@ -554,9 +558,7 @@ const sStringSetNumber200[] = [
     "What space sky color?",
     "What fog color?",
 ];
-/*
-#include "player.h" // for kTeamColorsStringSetID
-*/
+
 const sTeamColorNamesStrings[] = [
     "Slate",
     "Red",
@@ -568,7 +570,6 @@ const sTeamColorNamesStrings[] = [
     "Green",
 ];
 
-/*
 void InitDefaultStringSets() {
 	BUILD_STRINGSET(128, sStringSetNumber128);
 	BUILD_STRINGSET(129, sStringSetNumber129);
@@ -596,4 +597,3 @@ void InitDefaultStringSets() {
 	BUILD_STRINGSET(200, sStringSetNumber200);
 	BUILD_STRINGSET(kTeamColorsStringSetID, sTeamColorNamesStrings);
 }
-*/
