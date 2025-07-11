@@ -185,11 +185,6 @@ const GameStates = Object.freeze({
 });
 /*
 
-// Should return NONE if user cancels, 0 for single player, or 1 for multiplayer.
-// Game has been loaded from file before this is called so elements like
-// dynamic_world->player_count are available.  Cursor has been hidden when called.
-size_t should_restore_game_networked(FileSpecifier& file);
-
 #define get_shape_bitmap_and_shading_table(shape, bitmap, shading_table, shading_mode) extended_get_shape_bitmap_and_shading_table(GET_DESCRIPTOR_COLLECTION(shape), \
 	GET_DESCRIPTOR_SHAPE(shape), (bitmap), (shading_table), (shading_mode))
 
