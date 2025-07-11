@@ -207,69 +207,6 @@ enum {	// Results for network_join
         kNetworkJoinedResumeGame
 };
 
-bool network_gather(bool inResumingGame, bool& outUseRemoteHub);
-int network_join(void);
-
-//  ---------- prototypes/PHYSICS.C 
-
-void reset_absolute_positioning_device(_fixed yaw, _fixed pitch, _fixed velocity);
-
-//  ---------- prototypes/IMPORT_DEFINITIONS.C 
-
-void init_physics_wad_data();
-void import_definition_structures(void);
-
-//  ---------- prototypes/KEYBOARD_DIALOG.C 
-bool configure_key_setup(short *keycodes);
-
-//  --------- from PREPROCESS_MAP_MAC.C 
-bool have_default_files(void);
-void get_default_external_resources_spec(FileSpecifier& File);
-void get_default_map_spec(FileSpecifier& File);
-void get_default_physics_spec(FileSpecifier& File);
-void get_default_sounds_spec(FileSpecifier& File);
-void get_default_shapes_spec(FileSpecifier& File);
-bool get_default_theme_spec(FileSpecifier& File);
-// ZZZ addition: since Mac versions now search for any candidate files instead of picking
-// by name, new interface to search for all simultaneously instead of duplicating effort.
-void get_default_file_specs(FileSpecifier* outMapSpec, FileSpecifier* outShapesSpec, FileSpecifier* outSoundsSpec, FileSpecifier* outPhysicsSpec);
-
-// LP change: resets field of view to whatever the player had had when reviving
-void ResetFieldOfView();
-
-// LP change: modification of Josh Elsasser's dont-switch-weapons patch
-bool dont_switch_to_new_weapon();
-
-bool dont_auto_recenter();
-
-// ZZZ: let code disable (standardize)/enable behavior modifiers like
-// dont_switch
-void standardize_player_behavior_modifiers();
-void restore_custom_player_behavior_modifiers();
-
-// ZZZ: return whether the user's behavior matches standard behavior
-// (either by being forced so or by chosen that way)
-bool is_player_behavior_standard();
-
-// LP change: force reload of view context
-void ReloadViewContext();
-
-class InfoTree;
-void parse_mml_infravision(const InfoTree& root);
-void reset_mml_infravision();
-void parse_mml_control_panels(const InfoTree& root);
-void reset_mml_control_panels();
-
-#endif
-
-#include "cseries.h" // sorry ryan, nov. 4
-#include <array>
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-#include <algorithm>
-#include <sstream>
-
 #ifdef HAVE_LIBYUV
 #include <libyuv/convert.h>
 #include <libyuv/scale.h>
