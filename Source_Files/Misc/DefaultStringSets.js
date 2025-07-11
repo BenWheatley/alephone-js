@@ -24,7 +24,6 @@
 */
 /*
 #include    "cseries.h"
-#include    "DefaultStringSets.h"
 #include    "TextStrings.h"
 
 
@@ -44,7 +43,8 @@ static inline void BuildStringSet(short inStringSetID,
 // StringSets from original Bungie resources
 // -----------------------------------------------------------------------------------------
 // <!-- STR# Resource: "Errors" -->
-static const char* sStringSetNumber128[] = {
+*/
+const sStringSetNumber128 = [
     "Sorry, $appName$ requires a 68040 processor or higher.",
     "Sorry, $appName$ requires Color QuickDraw.",
     "Sorry, $appName$ requires System Software 7.0 or higher.",
@@ -80,10 +80,10 @@ static const char* sStringSetNumber128[] = {
     "There appears to be a script conflict.  Perhaps mml and netscript are having differences over who gets to control lua.  Don't be surprised if you get unexpected script behavior or out of sync.",
     "This replay was created with a newer version of $appName$ and cannot be played with this version. Upgrade $appName$ and try again.",
     "Sorry, the scroll wheel can only be used for switching weapons.",
-};
+];
 
 // STR# Resource: "Filenames"
-static const char* sStringSetNumber129[] = {
+const sStringSetNumber129[] = [
     "Shapes",
     "Shapes.16",
     "Sounds",
@@ -99,10 +99,10 @@ static const char* sStringSetNumber129[] = {
     "Movie",
     "Default",
     "Marathon.appl",
-};
+];
 
 // STR# Resource: "Top-Level Interface Items"
-static const char* sStringSetNumber130[] = {
+const sStringSetNumber130[] = [
     "BEGIN GAME",
     "OPEN SAVED GAME",
     "",
@@ -116,18 +116,18 @@ static const char* sStringSetNumber130[] = {
     "PREFERENCES",
     "START DEMO",
     "QUIT",
-};
+];
 
 // STR# Resource: "Prompts"
-static const char* sStringSetNumber131[] = {
+const sStringSetNumber131[] = [
     "SAVE GAME",
     "SAVE RECORDING",
     "Select recording as:",
     "Default",
-};
+];
 
 // STR# Resource: "Network Errors"
-static const char* sStringSetNumber132[] = {
+const sStringSetNumber132[] = [
     "Sorry, that player could not be found on the network.  He may have cancelled his Join Game dialog.",
 
     "One or more of the players in the game could not be found to receive the "
@@ -170,10 +170,10 @@ static const char* sStringSetNumber132[] = {
 
     "Impossible to establish a connection with an available remote server. "
 	"Please try again later, or try to increase your latency tolerance, or try to gather yourself."
-};
+];
 
 // STR# Resource: "Key Codes To Names"
-static const char* sStringSetNumber133[] = {
+const sStringSetNumber133[] = [
     "A",
     "S",
     "D",
@@ -302,17 +302,17 @@ static const char* sStringSetNumber133[] = {
     "Down Arrow",
     "Up Arrow",
     "Power",
-};
+];
 
 // STR# Resource: "Preferences Advice"
-static const char* sStringSetNumber134[] = {
+const sStringSetNumber134[] = [
     "Be sure your external speakers or headphones are connected properly, and that you have enabled stereo output from the Sound Control Panel.",
     "Be sure that your Cybermaxx helmet is properly hooked up to the serial port and turned on.",
     "Please check to be sure you have the file \"QuickTime[TM] Musical Instruments\" in your \"Extensions\" folder, because $appName$'s background music will sound really, really stupid without it.",
-};
+];
 
 // STR# Resource: "Computer Interface"
-static const char* sStringSetNumber135[] = {
+const sStringSetNumber135[] = [
     "U.E.S.C. Marathon",
     "Opening Connection to b.4.5-23",
     "CAS.qterm//CyberAcme Systems Inc.",
@@ -323,17 +323,17 @@ static const char* sStringSetNumber135[] = {
     "Disconnecting...",
     "Connection Terminated.",
     "%H%M %m.%d.%Y",
-};
+];
 
 // STR# Resource: "Join Dialog Messages"
-static const char* sStringSetNumber136[] = {
+const sStringSetNumber136[] = [
     "Click 'Join' to wait for an invitation into a network game of $appName$.",
     "Now waiting to be gathered into a network game by a server.  Click 'Cancel' to give up.",
     "You have been accepted into a game.  Now waiting for the server to add the remaining players... ",
-};
+];
 
 // STR# Resource: "Weapon Names"
-static const char* sStringSetNumber137[] = {
+const sStringSetNumber137[] = [
     "FISTS",
     ".44 MAGNUM MEGA CLASS A1",
     "ZEUS-CLASS FUSION PISTOL",
@@ -344,24 +344,24 @@ static const char* sStringSetNumber137[] = {
     "WSTE-M COMBAT SHOTGUN",
     "(somehow related to time of applicability)",
     "KKV-7 10MM FLECHETTE SMG",
-};
+];
 
 // STR# Resource: "file search path"
-static const char* sStringSetNumber138[] = {
+const sStringSetNumber138[] = [
     "Marathon Trilogy:Marathon Infinity \xc4:Marathon Infinity:",
-};
+];
 
 // STR# Resource: "Preferences Groupings"
-static const char* sStringSetNumber139[] = {
+const sStringSetNumber139[] = [
     "Graphics",
     "Player",
     "Sound",
     "Controls",
     "Environment",
-};
+];
 
 // STR# Resource: "Postgame network game stats"
-static const char* sStringSetNumber140[] = {
+const sStringSetNumber140[] = [
     "%d flags",
     "%d:%02d",
     "%d points",
@@ -374,10 +374,10 @@ static const char* sStringSetNumber140[] = {
     "Time On Hill",
     "Points",
     "Time",
-};
+];
 
 // STR# Resource: "Net Game Setup"
-static const char* sStringSetNumber141[] = {
+const sStringSetNumber141[] = [
     "Kill Limit",
     "kills",
     "Capture Limit",
@@ -388,10 +388,10 @@ static const char* sStringSetNumber141[] = {
     "minutes",
     "Points",
     "Time",
-};
+];
 
 // STR# Resource: "New Join Dialog Messages"
-static const char* sStringSetNumber142[] = {
+const sStringSetNumber142[] = [
     "You have been accepted into a game of '%s'.  Now waiting for the server to add the remaining players...",
     "Every Man For Himself",
     "You have been accepted into a cooperative game.  Now waiting for the server to add the remaining players...",
@@ -402,10 +402,10 @@ static const char* sStringSetNumber142[] = {
     "Rugby",
     "Tag",
     "You have been accepted into a custom game. Now waiting for the server to add the remaining players...",
-};
+];
 
 // STR# Resource: "Progress strings for networking"
-static const char* sStringSetNumber143[] = {
+const sStringSetNumber143[] = [
     "Sending map to remote player.",
     "Sending map to remote players.",
     "Receiving map from server.",
@@ -421,9 +421,9 @@ static const char* sStringSetNumber143[] = {
     "Closing router ports...",
     "Checking for updates...",
     "Connecting to a remote hub server..."
-};
+];
 
-
+/*
 // Stringsets for SDL w_select widgets.
 // -----------------------------------------------------------------------------------------
 #include    "network_dialogs.h"  // for stringset ID's
@@ -458,11 +458,11 @@ static const char*	sSingleOrNetworkStrings[] = {
     "Single-player game",
     "Network game"
 };
-
+*/
 // More Mac OS string-resource stringsets.
 // -----------------------------------------------------------------------------------------
 // STR# Resource: "Item names"
-static const char* sStringSetNumber150[] = {
+const sStringSetNumber150[] = [
     "FISTS",
     ".44 MAGNUM MEGA CLASS",
     ".44 MAGNUM MEGA CLASS",
@@ -507,10 +507,10 @@ static const char* sStringSetNumber150[] = {
     "KKV-7 10MM FLECHETTE SMG",
     "10MM FLECHETTE MAGAZINE",
     "10MM FLECHETTE MAGAZINES",
-};
+];
 
 // STR# Resource: "Item types"
-static const char* sStringSetNumber151[] = {
+const sStringSetNumber151[] = [
     "WEAPONS",
     "AMMUNITION",
     "POWERUPS",
@@ -518,10 +518,10 @@ static const char* sStringSetNumber151[] = {
     "WEAPON POWERUPS",
     "BALLS",
     "NETWORK STATISTICS",
-};
+];
 
 // STR# Resource: "Net Statistics Strings"
-static const char* sStringSetNumber153[] = {
+const sStringSetNumber153[] = [
     "%d kills",
     "%d deaths",
     "%d suicides",
@@ -541,10 +541,10 @@ static const char* sStringSetNumber153[] = {
     "deaths",
     "suicides",
     "friendly-fire kills",
-};
+];
 
 // STR# Resource: "OpenGL-Option Color-Picker Prompts"
-static const char* sStringSetNumber200[] = {
+const sStringSetNumber200[] = [
     "What color for the Void?",
     "What day ground color?",
     "What day sky color?",
@@ -555,11 +555,11 @@ static const char* sStringSetNumber200[] = {
     "What space ground color?",
     "What space sky color?",
     "What fog color?",
-};
-
+];
+/*
 #include "player.h" // for kTeamColorsStringSetID
-
-static const char* sTeamColorNamesStrings[] = {
+*/
+const sTeamColorNamesStrings[] = [
     "Slate",
     "Red",
     "Violet",
@@ -568,9 +568,9 @@ static const char* sTeamColorNamesStrings[] = {
     "Orange",
     "Blue",
     "Green",
-};
+];
 
-
+/*
 void InitDefaultStringSets() {
 	BUILD_STRINGSET(128, sStringSetNumber128);
 	BUILD_STRINGSET(129, sStringSetNumber129);
