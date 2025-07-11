@@ -282,7 +282,7 @@ export function initialize_application()
 	}
 
 	initialize_fonts(true);
-	Plugins::instance()->enumerate();			
+	Plugins::instance()->enumerate();
 	
 	// Load preferences
 	initialize_preferences();
