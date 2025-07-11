@@ -1285,9 +1285,6 @@ bool expand_symbolic_paths_helper(char *dest, const char *src, int maxlen, const
 char *expand_symbolic_paths(char *dest, const char *src, int maxlen)
 {
 	bool expanded =
-#if defined(HAVE_BUNDLE_NAME)
-		expand_symbolic_paths_helper(dest, src, maxlen, "$bundle$", bundle_data_dir) ||
-#endif
 		expand_symbolic_paths_helper(dest, src, maxlen, "$local$", local_data_dir) ||
 		expand_symbolic_paths_helper(dest, src, maxlen, "$default$", default_data_dir);
 	if (!expanded)
@@ -1315,9 +1312,6 @@ bool contract_symbolic_paths_helper(char *dest, const char *src, int maxlen, con
 char *contract_symbolic_paths(char *dest, const char *src, int maxlen)
 {
 	bool contracted =
-#if defined(HAVE_BUNDLE_NAME)
-		contract_symbolic_paths_helper(dest, src, maxlen, "$bundle$", bundle_data_dir) ||
-#endif
 		contract_symbolic_paths_helper(dest, src, maxlen, "$default$", default_data_dir) || //default first in case user installed his game in his local data dir
 		contract_symbolic_paths_helper(dest, src, maxlen, "$local$", local_data_dir);
 	if (!contracted)
