@@ -30,7 +30,6 @@
 #include "monsters.h"
 #include "player.h"
 #include "render.h"
-#include "shell.h"
 #include "interface.h"
 #include "SoundManager.h"
 #include "fades.h"
