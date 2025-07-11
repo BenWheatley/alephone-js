@@ -1,1 +1,1 @@
-This folder is where your scenarios should go. This file exists so the folder shows up in git, as the actual contents on my dev machine is a folder calle `Marathon 2` with that game's data files, and I don't want to include that in this project.
+This folder is where your scenarios should go. This file exists so the folder shows up in git, as the actual contents on my dev machine is a folder called `Marathon 2` with that game's data files, and I don't want to include that in this project.
