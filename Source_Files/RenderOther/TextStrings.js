@@ -24,85 +24,59 @@
 	This is the implementation of my replacement for MacOS STR# resources
 */
 
-#include "cseries.h"
-#include "InfoTree.h"
+import * as Logging from '../Misc/Logging.js';
 
-typedef std::map<short, std::string> StringSet;
-typedef std::map<short, StringSet> StringSetMap;
-
-static StringSetMap StringSetRoot;
-
-
-// Public routines:
-
+const StringSetRoot = new Map(); // {int: {int: string}}
 
 // Set up a string in the repository; a repeated call will replace an old string
-void TS_PutCString(short ID, short Index, const char *String)
-{
-	if (Index >= 0)
-	{
-		StringSetRoot[ID][Index] = String;
+function TS_PutCString(ID, Index, String) {
+	if (Index >= 0) {
+		if (!StringSetRoot.has(ID)) {
+			StringSetRoot.set(ID, new Map());
+		}
+		StringSetRoot.get(ID).set(Index, String);
 	}
 }
 
-
-// Returns a pointer to a string; if the ID and the index do not point to a valid string,
-// this function will then return NULL
-const char *TS_GetCString(short ID, short Index)
-{
-	StringSetMap::const_iterator setIter = StringSetRoot.find(ID);
-	if (setIter == StringSetRoot.end())
-		return NULL;
-	StringSet::const_iterator strIter = setIter->second.find(Index);
-	if (strIter == setIter->second.end())
-		return NULL;
-	return strIter->second.c_str();
+// Returns a pointer to a string; if the ID and the index do not point to a valid string,  this function will then return null
+function TS_GetCString(ID, Index) {
+	const set = StringSetRoot.get(ID);
+	if (!set) return null;
+	return set.get(Index) || null;
 }
-
 
 // Checks on the presence of a string set
-bool TS_IsPresent(short ID)
-{
-	return StringSetRoot.count(ID);
+function TS_IsPresent(ID) {
+	return StringSetRoot.has(ID);
 }
-
 
 // Count the strings (contiguous from index zero)
-size_t TS_CountStrings(short ID)
-{
-	StringSetMap::const_iterator setIter = StringSetRoot.find(ID);
-	if (setIter == StringSetRoot.end())
-		return 0;
-	return setIter->second.size();
+// TODO: refactor this away, it ought to be redundant in JS-land. Actually, the entire concept of a string set is redundant…
+function TS_CountStrings(ID) {
+	const set = StringSetRoot.get(ID);
+	if (!set) return 0;
+	return set.size;
 }
-
 
 // Deletes a string, should one ever want to do that
-void TS_DeleteString(short ID, short Index)
-{
-	StringSetMap::iterator setIter = StringSetRoot.find(ID);
-	if (setIter == StringSetRoot.end())
-		return;
-	setIter->second.erase(Index);
+function TS_DeleteString(ID, Index) {
+	const set = StringSetRoot.get(ID);
+	if (set) {
+		set.delete(Index);
+	}
 }
-
 
 // Deletes the stringset with some ID
-void TS_DeleteStringSet(short ID)
-{
-	StringSetRoot.erase(ID);
+function TS_DeleteStringSet(ID) {
+	StringSetRoot.delete(ID);
 }
 
-
 // Deletes all of the stringsets
-void TS_DeleteAllStrings()
-{
+function TS_DeleteAllStrings() {
 	StringSetRoot.clear();
 }
 
-
-void reset_mml_stringset()
-{
+function reset_mml_stringset() {
 	// no reset
 }
 
