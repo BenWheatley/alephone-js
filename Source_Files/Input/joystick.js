@@ -152,13 +152,14 @@ function joystick_buttons_become_keypresses(ioKeyMap) {
 	if (input_preferences.controller_analog) {  // TODO: needs preferences.h stubbed out at least
 		// avoid setting buttons mapped to analog aiming
 		for (const info of axis_mappings) {
-/*
-			bool negative = false;
-			int axis = axis_mapped_to_action(info.key_binding_index, &negative);
+			const negative_out = { value: false };
+			const axis = axis_mapped_to_action(info.key_binding_index, negative_out);
 			if (axis >= 0) {
-				buttons_to_avoid.insert(axis + (negative ? AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE : AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE));
+				const code = axis + (negative_out.value
+					? AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE
+					: AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE);
+				buttons_to_avoid.add(code);
 			}
-*/
 		}
 	}
 	for (let i = 0; i < NUM_SDL_JOYSTICK_BUTTONS; ++i) {
