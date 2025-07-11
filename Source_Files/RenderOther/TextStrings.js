@@ -80,7 +80,7 @@ function reset_mml_stringset() {
 	// no reset
 }
 
-void parse_mml_stringset(const InfoTree& root)
+function parse_mml_stringset()
 {
 	Logging.logMessage(Logging.Level.error, 0, 0, "parse_mml_stringset is stupid but was called anyway. I suggest replacing this whole thing with a more sensible JSON thing once the app actually runs.");
 }

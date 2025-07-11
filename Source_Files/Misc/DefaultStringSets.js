@@ -134,11 +134,9 @@ const sStringSetNumber131 = [
 const sStringSetNumber132 = [
     "Sorry, that player could not be found on the network.  He may have cancelled his Join Game dialog.",
 
-    "One or more of the players in the game could not be found to receive the "
-    "map.  The game has been canceled.",
+    "One or more of the players in the game could not be found to receive the map.  The game has been canceled.",
 
-    "The gatherering computer is not responding."
-    " It may be behind a firewall, or you may have mistyped the address.",
+    "The gatherering computer is not responding. It may be behind a firewall, or you may have mistyped the address.",
 
     "Sorry, the gathering computer has cancelled the game (you should all gang up on him next game).",
 
@@ -172,8 +170,7 @@ const sStringSetNumber132 = [
 	
 	"$appName$ failed to configure the firewall/router. You may be unable to gather.",
 
-    "Impossible to establish a connection with an available remote server. "
-	"Please try again later, or try to increase your latency tolerance, or try to gather yourself."
+    "Impossible to establish a connection with an available remote server. Please try again later, or try to increase your latency tolerance, or try to gather yourself."
 ];
 
 // STR# Resource: "Key Codes To Names"
@@ -570,7 +567,7 @@ const sTeamColorNamesStrings = [
     "Green",
 ];
 
-void InitDefaultStringSets() {
+function InitDefaultStringSets() {
 	BUILD_STRINGSET(128, sStringSetNumber128);
 	BUILD_STRINGSET(129, sStringSetNumber129);
 	BUILD_STRINGSET(130, sStringSetNumber130);
