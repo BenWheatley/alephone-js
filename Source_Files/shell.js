@@ -67,8 +67,9 @@ import * as joystick from './Input/joystick.js';
 #include "sdl_dialogs.h"
 #include "sdl_fonts.h"
 #include "sdl_widgets.h"
-
-#include "DefaultStringSets.h"
+*/
+import * as DefaultStringSets from './Misc/DefaultStringSets.js';
+/*
 #include "TextStrings.h"
 
 #include "OGL_Headers.h"
@@ -193,9 +194,9 @@ export function initialize_application()
 	const scenarioName = urlParams.get("scenario_name") || "Marathon 2";
 	const scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + scenarioName;
 
+	DefaultStringSets.InitDefaultStringSets();
 /*
 	// Find data directories, construct search path
-	InitDefaultStringSets();
 	
 	default_data_dir = get_data_path(kPathDefaultData);
 	
