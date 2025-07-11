@@ -32,7 +32,9 @@ import * as cspaths from './CSeries/cspaths.js';
 #include "monsters.h"
 #include "player.h"
 #include "render.h"
-#include "interface.h"
+*/
+import * as interface from './Misc/interface.js';
+/*
 #include "SoundManager.h"
 #include "fades.h"
 #include "screen.h"
