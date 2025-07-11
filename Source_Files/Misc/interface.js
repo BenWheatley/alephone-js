@@ -112,10 +112,6 @@ const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
 
 // ---------- structures
 
-#define _X_MIRRORED_BIT 0x8000
-#define _Y_MIRRORED_BIT 0x4000
-#define _KEYPOINT_OBSCURED_BIT 0x2000
-
 struct shape_information_data
 {
 	uint16 flags; // [x-mirror.1] [y-mirror.1] [keypoint_obscured.1] [unused.13]
