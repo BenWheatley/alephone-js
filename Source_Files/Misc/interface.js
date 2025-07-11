@@ -184,159 +184,19 @@ const GameStates = Object.freeze({
 	NUMBER_OF_GAME_STATES: 16
 });
 /*
-bool game_window_is_full_screen(void);
-void set_change_level_destination(short level_number);
-bool networking_available(void);
-
-//  ---------- prototypes/INTERFACE.C 
-
-void initialize_game_state(void);
-void force_game_state_change(void);
-bool player_controlling_game(void);
-
-void toggle_suppression_of_background_tasks(void);
-bool suppress_background_events(void);
-
-void set_game_state(short new_state);
-short get_game_state(void);
-short get_game_controller(void);
-void set_change_level_destination(short level_number);
-bool check_level_change(void);
-void pause_game(void);
-void resume_game(void);
-void portable_process_screen_click(short x, short y, bool cheatkeys_down);
-void process_main_menu_highlight_advance(bool reverse);
-void process_main_menu_highlight_select(bool cheatkeys_down);
-void draw_menu_button_for_command(short index);
-void update_interface_display(void);
-bool idle_game_state(uint32 ticks);
-void display_main_menu(void);
-void do_menu_item_command(short menu_id, short menu_item, bool cheat);
-bool interface_fade_finished(void);
-void stop_interface_fade(void);
-bool enabled_item(short item);
-void paint_window_black(void);
-
-void set_game_focus_lost();
-void set_game_focus_gained();
-
-//  ---------- prototypes/INTERFACE_MACINTOSH.C 
-void do_preferences(void);
-short get_level_number_from_user(void);
-void toggle_menus(bool game_started);
 
 // Should return NONE if user cancels, 0 for single player, or 1 for multiplayer.
 // Game has been loaded from file before this is called so elements like
 // dynamic_world->player_count are available.  Cursor has been hidden when called.
 size_t should_restore_game_networked(FileSpecifier& file);
 
-void show_movie(short index);
-
-void exit_networking(void);
-
-void load_main_menu_buffers(short base_id);
-bool main_menu_buffers_loaded(void);
-void main_menu_bit_depth_changed(short base_id);
-void free_main_menu_buffers(void);
-void draw_main_menu(void);
-void draw_menu_button(short index, bool pressed);
-
-//  ---------- prototypes/INTERFACE_MACINTOSH.C- couldn't think of a better place... 
-void hide_cursor(void);
-void show_cursor(void);
-void set_drawing_clip_rectangle(short top, short left, short bottom, short right);
-
-//  ---------- prototypes/SHAPES.C 
-void *get_global_shading_table(void);
-
-short get_shape_descriptors(short shape_type, shape_descriptor *buffer);
-
 #define get_shape_bitmap_and_shading_table(shape, bitmap, shading_table, shading_mode) extended_get_shape_bitmap_and_shading_table(GET_DESCRIPTOR_COLLECTION(shape), \
 	GET_DESCRIPTOR_SHAPE(shape), (bitmap), (shading_table), (shading_mode))
-void extended_get_shape_bitmap_and_shading_table(short collection_code, short low_level_shape_index,
-	struct bitmap_definition **bitmap, void **shading_tables, short shading_mode);
 
 #define get_shape_information(shape) extended_get_shape_information(GET_DESCRIPTOR_COLLECTION(shape), GET_DESCRIPTOR_SHAPE(shape))
-struct shape_information_data *extended_get_shape_information(short collection_code, short low_level_shape_index);
-
-void get_shape_hotpoint(shape_descriptor texture, short *x0, short *y0);
-struct shape_animation_data *get_shape_animation_data(shape_descriptor texture);
-void process_collection_sounds(short colleciton_code, void (*process_sound)(short sound_index));
 
 #define mark_collection_for_loading(c) mark_collection((c), true)
 #define mark_collection_for_unloading(c) mark_collection((c), false)
-void mark_collection(short collection_code, bool loading);
-void strip_collection(short collection_code);
-void load_collections(bool with_progress_bar, bool is_opengl);
-int count_replacement_collections();
-void load_replacement_collections();
-void unload_all_collections(void);
-
-void set_shapes_patch_data(uint8 *data, size_t length);
-uint8* get_shapes_patch_data(size_t &length);
-
-// LP additions:
-// Whether or not collection is present
-bool is_collection_present(short collection_index);
-// Number of texture frames in a collection (good for wall-texture error checking)
-short get_number_of_collection_frames(short collection_index);
-// Number of bitmaps in a collection (good for allocating texture information for OpenGL)
-short get_number_of_collection_bitmaps(short collection_index);
-// Which bitmap index for a frame (good for OpenGL texture rendering)
-short get_bitmap_index(short collection_index, short low_level_shape_index);
-// Get CLUT for collection
-struct rgb_color_value *get_collection_colors(short collection_index, short clut_number, int &num_colors);
-
-// ZZZ: made these visible
-struct low_level_shape_definition *get_low_level_shape_definition(short collection_index, short low_level_shape_index);
-
-
-//  ---------- prototypes/PREPROCESS_MAP_MAC.C 
-void setup_revert_game_info(struct game_data *game_info, struct player_start_data *start, struct entry_point *entry);
-bool revert_game(void);
-bool load_game(bool use_last_load);
-bool save_game(void);
-bool save_game_full_auto(bool inOverwriteRecent);
-void restart_game(void);
-
-//  ---------- prototypes/GAME_WAD.C 
-//  Map transferring fuctions 
-int32 get_net_map_data_length(void *data);
-bool process_net_map_data(void *data); //  Note that this frees it as well 
-void *get_map_for_net_transfer(struct entry_point *entry);
-
-//  ---------- prototypes/VBL.C 
-
-void set_keyboard_controller_status(bool active);
-bool get_keyboard_controller_status(void);
-void pause_keyboard_controller(bool active);
-int32 get_heartbeat_count(void);
-float get_heartbeat_fraction(void);
-void wait_until_next_frame(void);
-void sync_heartbeat_count(void);
-void process_action_flags(short player_identifier, const uint32 *action_flags, short count);
-void rewind_recording(void);
-void stop_recording(void);
-void stop_replay(void);
-void move_replay(void);
-void check_recording_replaying(void);
-bool has_recording_file(void);
-void increment_replay_speed(void);
-void decrement_replay_speed(void);
-void set_replay_speed(short);
-void reset_recording_and_playback_queues(void);
-uint32 parse_keymap(void);
-
-//  ---------- prototypes/GAME_DIALOGS.C 
-
-bool handle_preferences_dialog(void);
-void handle_load_game(void);
-void handle_save_game(void);
-bool handle_start_game(void);
-bool quit_without_saving(void);
-
-//  ---------- prototypes/GAME_WINDOW.C 
-void scroll_inventory(short dy);
 
 //  ---------- prototypes/NETWORK.C 
 
