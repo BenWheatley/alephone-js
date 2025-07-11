@@ -169,8 +169,8 @@ function joystick_buttons_become_keypresses(ioKeyMap) {
 		}
 	}
 }
+function process_joystick_axes(flags) {
 /*
-int process_joystick_axes(int flags) {
     if (!joystick_active)
         return flags;
 	if (navigator.getGamepads.length==0)
@@ -215,5 +215,5 @@ int process_joystick_axes(int flags) {
 	if (dyaw != 0 || dpitch != 0)
 		flags = process_aim_input(flags, {dyaw, dpitch});
 	return flags;
-}
 */
+}
