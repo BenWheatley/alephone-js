@@ -68,11 +68,11 @@ export function exit_mouse(type) {
 	}
 }
 
-/*
-static inline float MIX(float start, float end, float factor)
-{
-	return (start * (1.f - factor)) + (end * factor);
+function MIX(start, end, factor) {
+	return (start * (1.0 - factor)) + (end * factor);
 }
+
+/*
 
 // Take a snapshot of the current mouse state
 
