@@ -105,11 +105,10 @@ const ShapeTypes = Object.freeze({
 
 const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
 
-/*
 // ---------- shape descriptors
 
-#include "shape_descriptors.h"
-
+import * as shape_descriptors from '../RenderMain/shape_descriptors.js';
+/*
 // ---------- structures
 
 struct shape_information_data
