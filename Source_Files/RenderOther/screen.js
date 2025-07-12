@@ -2304,9 +2304,6 @@ void MainScreenUpdateRects(size_t count, const SDL_Rect *rects)
 	SDL_UpdateTexture(main_texture, NULL, main_surface->pixels, main_surface->pitch);
 	SDL_RenderClear(main_render);
 	SDL_RenderCopy(main_render, main_texture, NULL, NULL);
-//	for (size_t i = 0; i < count; ++i) {
-//		SDL_RenderCopy(main_render, main_texture, &rects[i], &rects[i]);
-//	}
 	SDL_RenderPresent(main_render);
 }
 */
