@@ -1,6 +1,4 @@
 /*
-	EDITOR.H
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -17,19 +15,9 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
-	Sunday, April 17, 1994 10:50:25 PM
-
-Feb 12, 2000 (Loren Petrich):
-	Added MARATHON_INFINITY_DATA_VERSION and set EDITOR_MAP_VERSION to it
 */
 
-#ifndef __EDITOR_H_
-#define __EDITOR_H_
-
-#define MARATHON_ONE_DATA_VERSION 0
-#define MARATHON_TWO_DATA_VERSION 1
-#define MARATHON_INFINITY_DATA_VERSION 2
-#define EDITOR_MAP_VERSION (MARATHON_INFINITY_DATA_VERSION)
-
-#endif
+export const MARATHON_ONE_DATA_VERSION = 0;
+export const MARATHON_TWO_DATA_VERSION = 1;
+export const MARATHON_INFINITY_DATA_VERSION = 2;
+export const EDITOR_MAP_VERSION = MARATHON_INFINITY_DATA_VERSION;
