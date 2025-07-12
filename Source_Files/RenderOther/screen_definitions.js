@@ -1,9 +1,4 @@
-#ifndef __SCREEN_DEFINITIONS_H
-#define __SCREEN_DEFINITIONS_H
-
 /*
-	screen_definitions.h
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -20,25 +15,17 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
-	Tuesday, July 11, 1995 5:32:20 PM- rdm created.
-
 */
 
 /* -------- this contains the ids for the 8 bit picts */
 /* the 16 bit versions are these ids + 10000 */
 /* the 32 bit versions are these ids + 20000 */
-enum {
-	INTRO_SCREEN_BASE= 1000,
-	MAIN_MENU_BASE= 1100,
-	PROLOGUE_SCREEN_BASE= 1200,
-	EPILOGUE_SCREEN_BASE= 1300,
-	CREDIT_SCREEN_BASE= 1400,
-	CHAPTER_SCREEN_BASE= 1500,
-	COMPUTER_INTERFACE_BASE= 1600,
-	INTERFACE_PANEL_BASE= 1700,
-	FINAL_SCREEN_BASE= 1800
-};
-
-#endif
-
+export const INTRO_SCREEN_BASE = 1000;
+export const MAIN_MENU_BASE = 1100;
+export const PROLOGUE_SCREEN_BASE = 1200;
+export const EPILOGUE_SCREEN_BASE = 1300;
+export const CREDIT_SCREEN_BASE = 1400;
+export const CHAPTER_SCREEN_BASE = 1500;
+export const COMPUTER_INTERFACE_BASE = 1600;
+export const INTERFACE_PANEL_BASE = 1700;
+export const FINAL_SCREEN_BASE = 1800;
