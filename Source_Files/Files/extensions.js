@@ -1,9 +1,4 @@
-#ifndef __EXTENSIONS_H
-#define __EXTENSIONS_H
-
 /*
-	extensions.h
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -20,32 +15,9 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
-	Tuesday, October 31, 1995 11:42:19 AM- rdm created.
-
-Aug 12, 2000 (Loren Petrich):
-	Using object-oriented file handler
 */
 
-#include "cstypes.h"
+export const BUNGIE_PHYSICS_DATA_VERSION = 0;
+export const PHYSICS_DATA_VERSION = 1;
 
-class FileSpecifier;
-
-#define BUNGIE_PHYSICS_DATA_VERSION 0
-#define PHYSICS_DATA_VERSION 1
-
-/* ------------- prototypes */
-
-/* Set the physics file to read from.. */
-void set_physics_file(FileSpecifier& File);
-
-void set_to_default_physics_file(void);
-
-/* Proceses the entire physics file.. */
-void import_definition_structures(void);
-
-void *get_network_physics_buffer(int32 *physics_length);
-void process_network_physics_model(void *data);
-
-uint32_t get_physics_file_checksum();
-#endif
+export * from './cstypes.js';
