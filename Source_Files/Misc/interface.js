@@ -21,6 +21,7 @@ INTERFACE.H
 /*
 #include "cseries.h"
 */
+import * as cseries from '../CSeries/cseries.js';
 
 const strFILENAMES = 129;
 const Filenames = Object.freeze({
@@ -289,27 +290,27 @@ using alephone::Screen;
 const CLOSE_WITHOUT_WARNING_DELAY = (5 * TICKS_PER_SECOND);
 
 const NUMBER_OF_INTRO_SCREENS = (3);
-const INTRO_SCREEN_DURATION = (215 * MACHINE_TICKS_PER_SECOND / TICKS_PER_SECOND); // fudge to align with sound
+const INTRO_SCREEN_DURATION = (215 * cseries.MACHINE_TICKS_PER_SECOND / map.TICKS_PER_SECOND); // fudge to align with sound
 
 const INTRO_SCREEN_TO_START_SONG_ON = (0);
 
 const INTRO_SCREEN_BETWEEN_DEMO_BASE = (screen_definitions.INTRO_SCREEN_BASE + 1); // +1 to get past the powercomputing
 const NUMBER_OF_INTRO_SCREENS_BETWEEN_DEMOS = (1);
-const DEMO_INTRO_SCREEN_DURATION = (10 * MACHINE_TICKS_PER_SECOND);
+const DEMO_INTRO_SCREEN_DURATION = (10 * cseries.MACHINE_TICKS_PER_SECOND);
 
-const TICKS_UNTIL_DEMO_STARTS = (30 * MACHINE_TICKS_PER_SECOND);
+const TICKS_UNTIL_DEMO_STARTS = (30 * cseries.MACHINE_TICKS_PER_SECOND);
 
 const NUMBER_OF_PROLOGUE_SCREENS = 0;
-const PROLOGUE_DURATION = (10 * MACHINE_TICKS_PER_SECOND);
+const PROLOGUE_DURATION = (10 * cseries.MACHINE_TICKS_PER_SECOND);
 
 const NUMBER_OF_EPILOGUE_SCREENS = 1;
 const EPILOGUE_DURATION = (INDEFINATE_TIME_DELAY);
 
 const NUMBER_OF_CREDIT_SCREENS = 7;
-const CREDIT_SCREEN_DURATION = (15 * 60 * MACHINE_TICKS_PER_SECOND);
+const CREDIT_SCREEN_DURATION = (15 * 60 * cseries.MACHINE_TICKS_PER_SECOND);
 
 const NUMBER_OF_CHAPTER_HEADINGS = 0;
-const CHAPTER_HEADING_DURATION = (7 * MACHINE_TICKS_PER_SECOND);
+const CHAPTER_HEADING_DURATION = (7 * cseries.MACHINE_TICKS_PER_SECOND);
 
 // For exiting the Marathon app
 const NUMBER_OF_FINAL_SCREENS = 0;
@@ -991,7 +992,7 @@ void draw_menu_button_for_command(
 	//  Draw it initially depressed.. 
 	draw_button(rectangle_index, true);
 	draw_intro_screen();
-	sleep_for_machine_ticks(MACHINE_TICKS_PER_SECOND / 12);
+	sleep_for_machine_ticks(cseries.MACHINE_TICKS_PER_SECOND / 12);
 	draw_button(rectangle_index, false);
 	draw_intro_screen();
 }
@@ -1094,7 +1095,7 @@ bool idle_game_state(uint32 time)
 					if(revert_game())
 					{
 						game_state.state= _game_in_progress;
-						game_state.phase = 15 * MACHINE_TICKS_PER_SECOND;
+						game_state.phase = 15 * cseries.MACHINE_TICKS_PER_SECOND;
 						game_state.last_ticks_on_idle= machine_tick_count();
 						SoundManager::instance()->UpdateListener();
 						update_interface(NONE);
@@ -1112,7 +1113,7 @@ bool idle_game_state(uint32 time)
 					break;
 
 				case _game_in_progress:
-					game_state.phase = 15 * MACHINE_TICKS_PER_SECOND;
+					game_state.phase = 15 * cseries.MACHINE_TICKS_PER_SECOND;
 					//game_state.last_ticks_on_idle= machine_tick_count();
 					break;
 
@@ -1158,7 +1159,7 @@ bool idle_game_state(uint32 time)
 		if (redraw)
 		{
 			static auto last_redraw = 0;
-			if (current_player && machine_tick_count() > last_redraw + MACHINE_TICKS_PER_SECOND / 30)
+			if (current_player && machine_tick_count() > last_redraw + cseries.MACHINE_TICKS_PER_SECOND / 30)
 			{
 				last_redraw = machine_tick_count();
 				render_screen(ticks_elapsed);
@@ -2305,7 +2306,7 @@ static void start_game(
 
 	game_state.state= _game_in_progress;
 	game_state.current_screen= 0;
-	game_state.phase = MACHINE_TICKS_PER_SECOND;
+	game_state.phase = cseries.MACHINE_TICKS_PER_SECOND;
 	game_state.last_ticks_on_idle= machine_tick_count();
 	game_state.user= user;
 	game_state.flags= 0;
@@ -2395,7 +2396,7 @@ static void finish_game(
 
 	//  Fade out! (Pray)  // should be interface_color_table for valkyrie, but doesn't work.
 	Music::instance()->ClearLevelMusic();
-	Music::instance()->Fade(0, MACHINE_TICKS_PER_SECOND / 2);
+	Music::instance()->Fade(0, cseries.MACHINE_TICKS_PER_SECOND / 2);
 	full_fade(_cinematic_fade_out, interface_color_table);
 	paint_window_black();
 	full_fade(_end_cinematic_fade_out, interface_color_table);
@@ -2878,7 +2879,7 @@ static void try_and_display_chapter_screen(
 			
 			scroll_full_screen_pict_resource_from_scenario(pict_resource_number, text_block);
 
-			wait_for_click_or_keypress(text_block ? -1 : 10*MACHINE_TICKS_PER_SECOND);
+			wait_for_click_or_keypress(text_block ? -1 : 10*cseries.MACHINE_TICKS_PER_SECOND);
 			
 			//  Fade out! (Pray) 
 			interface_fade_out(pict_resource_number, false);
@@ -2967,7 +2968,7 @@ void interface_fade_out(
 		hide_cursor();
 
 		if(fade_music) 
-			Music::instance()->Fade(0, MACHINE_TICKS_PER_SECOND/2);
+			Music::instance()->Fade(0, cseries.MACHINE_TICKS_PER_SECOND/2);
 
 		full_fade(_cinematic_fade_out, current_picture_clut);
 		
@@ -3245,7 +3246,7 @@ void show_movie(short index)
 	if (audio_playback)
 	{
 		while (movie_audio_player && movie_audio_player->IsActive()) {
-			sleep_for_machine_ticks(MACHINE_TICKS_PER_SECOND / 100);
+			sleep_for_machine_ticks(cseries.MACHINE_TICKS_PER_SECOND / 100);
 		}
 
 		OpenALManager::Get()->Stop();
