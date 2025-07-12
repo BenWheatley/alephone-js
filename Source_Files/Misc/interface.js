@@ -206,8 +206,8 @@ const NetworkJoinResult = Object.freeze({
 	kNetworkJoinedResumeGame: 3
 });
 
+import * as map from '../GameWorld/map.js';
 /*
-#include "map.h"
 #include "shell.h"
 #include "interface.h"
 #include "player.h"
@@ -287,7 +287,7 @@ using alephone::Screen;
 
 //  ------------- constants 
 */
-const CLOSE_WITHOUT_WARNING_DELAY = (5 * TICKS_PER_SECOND);
+const CLOSE_WITHOUT_WARNING_DELAY = (5 * map.TICKS_PER_SECOND);
 
 const NUMBER_OF_INTRO_SCREENS = (3);
 const INTRO_SCREEN_DURATION = (215 * cseries.MACHINE_TICKS_PER_SECOND / map.TICKS_PER_SECOND); // fudge to align with sound
@@ -2293,7 +2293,7 @@ static void start_game(
 	if (!OGL_IsActive() || !(TEST_FLAG(Get_OGL_ConfigureData().Flags,OGL_Flag_Fader)))
 	{
 		set_fade_effect(NONE);
-		SetFadeEffectDelay(TICKS_PER_SECOND/2);
+		SetFadeEffectDelay(map.TICKS_PER_SECOND/2);
 	}
 
 	// Screen should already be black! 
@@ -2795,7 +2795,7 @@ static void handle_interface_menu_screen_click(
 				else
 				{
 					static auto last_redraw = 0;
-					if (machine_tick_count() > last_redraw + TICKS_PER_SECOND / 30)
+					if (machine_tick_count() > last_redraw + map.TICKS_PER_SECOND / 30)
 					{
 						draw_intro_screen();
 						last_redraw = machine_tick_count();
