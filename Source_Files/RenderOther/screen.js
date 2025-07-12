@@ -2247,12 +2247,6 @@ void MainScreenSwap()
 {
 	SDL_GL_SwapWindow(main_screen);
 }
-void MainScreenCenterMouse()
-{
-	int w, h;
-	SDL_GetWindowSize(main_screen, &w, &h);
-	SDL_WarpMouseInWindow(main_screen, w/2, h/2);
-}
 SDL_Surface *MainScreenSurface()
 {
 	return main_surface;
