@@ -512,12 +512,6 @@ bool current_netgame_allows_microphone()
 	return game_state.current_netgame_allows_microphone;
 }
 
-bool suppress_background_events(
-	void)
-{
-	return game_state.suppress_background_tasks;
-}
-
 short get_game_controller(
 	void)
 {
