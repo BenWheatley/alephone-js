@@ -253,10 +253,9 @@ const RECORDING_VERSION_ALEPH_ONE_1_3 = 10;
 const RECORDING_VERSION_ALEPH_ONE_1_4 = 11;
 const RECORDING_VERSION_ALEPH_ONE_1_7 = 12;
 
-/*
-const short default_recording_version = RECORDING_VERSION_ALEPH_ONE_1_7;
-const short max_handled_recording= RECORDING_VERSION_ALEPH_ONE_1_7;
-*/
+const default_recording_version = RECORDING_VERSION_ALEPH_ONE_1_7;
+const max_handled_recording= RECORDING_VERSION_ALEPH_ONE_1_7;
+
 import * as screen_definitions from '../RenderOther/screen_definitions.js';
 /*
 #include "interface_menus.h"
