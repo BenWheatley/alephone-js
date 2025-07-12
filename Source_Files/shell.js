@@ -47,8 +47,8 @@ const PREFERENCES_NAME_LENGTH = 32;
 
 import * as cseries from './CSeries/cseries.js';
 import * as cspaths from './CSeries/cspaths.js';
+import * as map from './GameWorld/map.js';
 /*
-#include "map.h"
 #include "monsters.h"
 #include "player.h"
 #include "render.h"
