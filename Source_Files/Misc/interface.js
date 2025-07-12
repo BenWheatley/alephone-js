@@ -401,16 +401,16 @@ extern short interface_bit_depth;
 extern short bit_depth;
 
 //  ---------------------- code begins 
+*/
 
-screen_data *get_screen_data(
-	short index)
-{
-	assert(index>=0 && index<NUMBER_OF_SCREENS);
-	if (shapes_file_is_m1())
-		return m1_display_screens+index;
-	return display_screens+index;
+function get_screen_data(index) {
+	if (index < 0 || index >= NUMBER_OF_SCREENS) {
+		throw new Error(`Invalid screen index: ${index}`);
+	}
+	return shapes_file_is_m1() ? m1_display_screens[index] : display_screens[index];
 }
 
+/*
 void initialize_game_state(
 	void)
 {
