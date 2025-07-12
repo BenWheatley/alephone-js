@@ -257,8 +257,9 @@ enum recording_version {
 };
 const short default_recording_version = RECORDING_VERSION_ALEPH_ONE_1_7;
 const short max_handled_recording= RECORDING_VERSION_ALEPH_ONE_1_7;
-
-#include "screen_definitions.h"
+*/
+import * as screen_definitions from '../RenderOther/screen_definitions.js';
+/*
 #include "interface_menus.h"
 
 // LP addition: getting OpenGL rendering stuff
@@ -292,7 +293,7 @@ const INTRO_SCREEN_DURATION = (215 * MACHINE_TICKS_PER_SECOND / TICKS_PER_SECOND
 
 const INTRO_SCREEN_TO_START_SONG_ON = (0);
 
-const INTRO_SCREEN_BETWEEN_DEMO_BASE = (INTRO_SCREEN_BASE + 1); // +1 to get past the powercomputing
+const INTRO_SCREEN_BETWEEN_DEMO_BASE = (screen_definitions.INTRO_SCREEN_BASE + 1); // +1 to get past the powercomputing
 const NUMBER_OF_INTRO_SCREENS_BETWEEN_DEMOS = (1);
 const DEMO_INTRO_SCREEN_DURATION = (10 * MACHINE_TICKS_PER_SECOND);
 
