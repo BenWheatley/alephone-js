@@ -29,7 +29,9 @@ import * as cseries from '../CSeries/cseries.js';
 
 /*
 #include "player.h"
-#include "shell.h"
+*/
+import * as shell from '../shell.js';
+/*
 #include "preferences.h"
 #include "screen.h"
 */
@@ -43,23 +45,21 @@ let snapshot_delta_x = 0.0;
 let snapshot_delta_y = 0.0;
 
 // Initialize in-game mouse handling
-/*
-void enter_mouse(short type)
-{
-	if (type != _keyboard_or_game_pad) {
-		screen.MainScreenCenterMouse();
-		
-		SDL_SetHint(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, input_preferences->raw_mouse_input ? "0" : "1");
-		SDL_SetRelativeMouseMode(SDL_TRUE);
+
+export function enter_mouse(type) {
+	if (type !== shell._keyboard_or_game_pad) {
+		const canvas = document.getElementById("glCanvas");
+		canvas.requestPointerLock(); // Will fail if this wasn't invoked by user action
 		mouse_active = true;
-		mouselook_delta = {0, 0};
+		mouselook_delta = { yaw: 0, pitch: 0 };
 		snapshot_delta_scrollwheel = 0;
-		snapshot_delta_x = snapshot_delta_y = 0;
-		button_mask = 0;	// Disable all buttons (so a shot won't be fired if we enter the game with a mouse button down from clicking a GUI widget)
+		snapshot_delta_x = 0;
+		snapshot_delta_y = 0;
+		button_mask = 0;
 	}
 }
 
-
+/*
 // Shutdown in-game mouse handling
 
 void exit_mouse(short type)

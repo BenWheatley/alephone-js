@@ -36,8 +36,8 @@ const NUMBER_OF_KEYS = 21;
 const NUMBER_UNUSED_KEYS = 10;
 
 // Input device identifiers
-const _keyboard_or_game_pad = 0;
-const _mouse_yaw_pitch = 1;
+export const _keyboard_or_game_pad = 0;
+export const _mouse_yaw_pitch = 1;
 
 const PREFERENCES_NAME_LENGTH = 32;
 
