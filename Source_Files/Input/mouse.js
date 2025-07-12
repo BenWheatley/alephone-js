@@ -158,18 +158,16 @@ mouse_buttons_become_keypresses(Uint8* ioKeyMap)
 }
 
 // Hide/show mouse pointer
-
-void hide_cursor(void)
-{
-	SDL_ShowCursor(0);
+*/
+export function hide_cursor() {
+	document.body.style.cursor = 'none';
 }
 
-void show_cursor(void)
-{
-	SDL_ShowCursor(1);
+export function show_cursor() {
+	document.body.style.cursor = 'default';
 }
 
-
+/*
 void mouse_scroll(bool up)
 {
 	if (up)
