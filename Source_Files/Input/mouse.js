@@ -148,7 +148,6 @@ mouse_buttons_become_keypresses(Uint8* ioKeyMap)
         button_mask |= ~orig_buttons;		// A button must be released at least once to become enabled
 }
 
-// Hide/show mouse pointer
 */
 export function hide_cursor() {
 	document.body.style.cursor = 'none';
