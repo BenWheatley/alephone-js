@@ -322,8 +322,8 @@ export function initialize_application()
 	initialize_fades();
 	initialize_images_manager();
 	load_environment_from_preferences();
-	initialize_game_state();
 */
+	_interface.initialize_game_state();
 }
 
 export function shutdown_application()
@@ -467,7 +467,7 @@ export function main_event_loop()
 			  }
 				break;
 
-			case _display_intro_screens:
+			case GameStates._display_intro_screens:
 			case _display_main_menu:
 			case _display_chapter_heading:
 			case _display_prologue:
@@ -944,7 +944,7 @@ static void process_game_key(const SDL_Event &event)
 		} else
 			handle_game_key(event);
 		break;
-	case _display_intro_screens:
+	case GameStates._display_intro_screens:
 	case _display_chapter_heading:
 	case _display_prologue:
 	case _display_epilogue:

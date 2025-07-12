@@ -20,3 +20,21 @@
 */
 
 export const MACHINE_TICKS_PER_SECOND = 1000;
+
+let epoch = performance.now(); // initial reference time
+
+/* a knob to play the game in "slow motion" to debug timing sensitive features.
+   this is not a preferences option because of the cheating potential, and
+   because of the awesome breakage that will occur at very large values */
+const TIME_SKEW = 1;
+
+export function machine_tick_count() {
+	const now = performance.now(); // high-res time in milliseconds (float)
+
+	if (now < epoch) {
+		console.warn("Time went backwards!");
+		epoch = now;
+	}
+
+	return Math.floor((now - epoch) / TIME_SKEW);
+}

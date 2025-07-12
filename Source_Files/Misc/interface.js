@@ -409,16 +409,15 @@ function get_screen_data(index) {
 	return shapes_file_is_m1() ? m1_display_screens[index] : display_screens[index];
 }
 
-function initialize_game_state() {
-	game_state.state = _display_intro_screens;
-	game_state.user = _single_player;
+export function initialize_game_state() {
+	game_state.state = GameStates._display_intro_screens;
+	game_state.user = PseudoPlayers._single_player;
 	game_state.flags = 0;
 	game_state.current_screen = 0;
 	game_state.suppress_background_tasks = true;
 	game_state.main_menu_display_count = 0;
 
-	toggle_menus(false);
-
+/* TODO: shell options. Until then, I'm *forcing* display_main_menu();
 	if (!shell_options.editor && shell_options.replay_directory.length === 0) {
 		if (shell_options.skip_intro) {
 			display_main_menu();
@@ -426,6 +425,8 @@ function initialize_game_state() {
 			display_introduction();
 		}
 	}
+	*/
+	display_main_menu(); // TODO: if shell options work in web, this line has to go
 }
 
 /*
@@ -440,7 +441,7 @@ bool player_controlling_game(
 {
 	bool player_in_control= false;
 
-	if( (game_state.user==_single_player || game_state.user==_network_player) && (game_state.state==_game_in_progress || game_state.state==_switch_demo) )
+	if( (game_state.user==PseudoPlayers._single_player || game_state.user==_network_player) && (game_state.state==_game_in_progress || game_state.state==_switch_demo) )
 	{
 		player_in_control= true;
 	}
@@ -840,7 +841,7 @@ bool load_and_start_game(FileSpecifier& File)
 
 	if (success)
 	{
-		game_state.user = userWantsMultiplayer ? _network_player : _single_player;
+		game_state.user = userWantsMultiplayer ? _network_player : PseudoPlayers._single_player;
 		int theSavedGameFlatDataLength = 0;
 		auto theSavedGameFlatData = std::unique_ptr<byte, decltype(&free)>(nullptr, free);
 
@@ -953,7 +954,7 @@ bool handle_edit_map()
 	bool success;
 
 	force_system_colors(true);
-	success = begin_game(_single_player, false);
+	success = begin_game(PseudoPlayers._single_player, false);
 	if (!success) display_main_menu();
 	return success;
 }
@@ -1052,7 +1053,7 @@ bool idle_game_state(uint32 time)
 			switch(get_game_state())
 			{
 				case _display_quit_screens:
-				case _display_intro_screens:
+				case GameStates_display_intro_screens:
 				case _display_prologue:
 				case _display_epilogue:
 				case _display_credits:
@@ -1108,7 +1109,7 @@ bool idle_game_state(uint32 time)
 					{
 						game_state.state= _game_in_progress;
 						game_state.phase = 15 * cseries.MACHINE_TICKS_PER_SECOND;
-						game_state.last_ticks_on_idle= machine_tick_count();
+						game_state.last_ticks_on_idle= cseries.machine_tick_count();
 						SoundManager::instance()->UpdateListener();
 						update_interface(NONE);
 					} else {
@@ -1126,7 +1127,7 @@ bool idle_game_state(uint32 time)
 
 				case _game_in_progress:
 					game_state.phase = 15 * cseries.MACHINE_TICKS_PER_SECOND;
-					//game_state.last_ticks_on_idle= machine_tick_count();
+					//game_state.last_ticks_on_idle= cseries.machine_tick_count();
 					break;
 
 				case _change_level:
@@ -1138,7 +1139,7 @@ bool idle_game_state(uint32 time)
 					break;
 			}
 		}
-		game_state.last_ticks_on_idle= machine_tick_count();
+		game_state.last_ticks_on_idle= cseries.machine_tick_count();
 	}
 
 	// if we’re not paused and there’s something to draw (i.e., anything different from last time), render a frame
@@ -1171,9 +1172,9 @@ bool idle_game_state(uint32 time)
 		if (redraw)
 		{
 			static auto last_redraw = 0;
-			if (current_player && machine_tick_count() > last_redraw + cseries.MACHINE_TICKS_PER_SECOND / 30)
+			if (current_player && cseries.machine_tick_count() > last_redraw + cseries.MACHINE_TICKS_PER_SECOND / 30)
 			{
-				last_redraw = machine_tick_count();
+				last_redraw = cseries.machine_tick_count();
 				render_screen(ticks_elapsed);
 				if (ticks_elapsed) is_network_pregame = false;
 			}
@@ -1247,34 +1248,34 @@ static void draw_powered_by_aleph_one(bool pressed)
 	SDL_BlitSurface(powered_by_alephone_surface[i], NULL, draw_surface, &rect);
 	_restore_port();
 }
+*/
 
-void display_main_menu(
-	void)
-{
-	game_state.state= _display_main_menu;
-	game_state.current_screen= 0;
-	game_state.phase= TICKS_UNTIL_DEMO_STARTS;
-	game_state.last_ticks_on_idle= machine_tick_count();
-	game_state.user= _single_player;
-	game_state.flags= 0;
-	game_state.highlighted_main_menu_item= -1;
+function display_main_menu() {
+	game_state.state = GameStates._display_main_menu;
+	game_state.current_screen = 0;
+	game_state.phase = TICKS_UNTIL_DEMO_STARTS;
+	game_state.last_ticks_on_idle = cseries.machine_tick_count();
+	game_state.user = PseudoPlayers._single_player;
+	game_state.flags = 0;
+	game_state.highlighted_main_menu_item = -1;
 	
-	Plugins::instance()->set_mode(Plugins::kMode_Menu);
+	/* TODO: this block
+	Plugins.instance().set_mode(Plugins.kMode_Menu);
 	change_screen_mode(_screentype_menu);
 	display_screen(MAIN_MENU_BASE);
 	
 	//  Start up the song! 
-	if(!Music::instance()->Playing() && game_state.main_menu_display_count==0)
-	{
-		Music::instance()->RestartIntroMusic();
+	if (!Music.instance().Playing() && game_state.main_menu_display_count == 0) {
+		Music.instance().RestartIntroMusic();
 	}
 
 	draw_powered_by_aleph_one(false);
-
+*/
 	game_state.main_menu_display_count++;
 }
 
 
+/*
 // Kludge for Carbon/Classic -- when exiting a main-menu dialog box, redisplay 
 static void ForceRepaintMenuDisplay()
 {
@@ -1295,7 +1296,7 @@ void do_menu_item_command(
 				case iPause:
 					switch(game_state.user)
 					{
-						case _single_player:
+						case PseudoPlayers._single_player:
 						case _replay:
 							if (get_keyboard_controller_status())
 							{
@@ -1323,7 +1324,7 @@ void do_menu_item_command(
 				case iSave:
 					switch(game_state.user)
 					{
-						case _single_player:
+						case PseudoPlayers._single_player:
 #if 0
 							save_game();
 							validate_world_window();
@@ -1355,7 +1356,7 @@ void do_menu_item_command(
 					
 						switch(game_state.user)
 						{
-							case _single_player:
+							case PseudoPlayers._single_player:
 								if(PLAYER_IS_DEAD(local_player) || 
 								   dynamic_world->tick_count-local_player->ticks_at_last_successful_save<CLOSE_WITHOUT_WARNING_DELAY || shell_options.output.size())
 								{
@@ -1397,11 +1398,11 @@ void do_menu_item_command(
 			switch(menu_item)
 			{
 				case iNewGame:
-					begin_game(_single_player, cheat);
+					begin_game(PseudoPlayers._single_player, cheat);
 					ForceRepaintMenuDisplay();
 					break;
 				case iPlaySingletonLevel:
-					begin_game(_single_player,2);
+					begin_game(PseudoPlayers._single_player,2);
 					break;
 
 				case iJoinGame:
@@ -1428,7 +1429,7 @@ void do_menu_item_command(
 				case iPreferences:
 					do_preferences();
 					game_state.phase= TICKS_UNTIL_DEMO_STARTS;
-					game_state.last_ticks_on_idle= machine_tick_count();
+					game_state.last_ticks_on_idle= cseries.machine_tick_count();
 					ForceRepaintMenuDisplay();
 					break;
 					
@@ -1446,7 +1447,7 @@ void do_menu_item_command(
 				case iAbout:
 					display_about_dialog();
 					game_state.phase= TICKS_UNTIL_DEMO_STARTS;
-					game_state.last_ticks_on_idle= machine_tick_count();
+					game_state.last_ticks_on_idle= cseries.machine_tick_count();
 					break;
 		
 				default:
@@ -1484,7 +1485,7 @@ void portable_process_screen_click(
 			break;
 
 		case _display_quit_screens:
-		case _display_intro_screens:
+		case GameStates._display_intro_screens:
 		case _display_chapter_heading:
 		case _display_prologue:
 		case _display_epilogue:
@@ -1650,20 +1651,20 @@ static LoadedResource SoundRsrc;
 static void display_introduction(
 	void)
 {
-	struct screen_data *screen_data= get_screen_data(_display_intro_screens);
+	struct screen_data *screen_data= get_screen_data(GameStates._display_intro_screens);
 
 	paint_window_black();
-	game_state.state= _display_intro_screens;
+	game_state.state= GameStates._display_intro_screens;
 	game_state.current_screen= 0;
 	if (screen_data->screen_count)
 	{
-		if (game_state.state==_display_intro_screens && game_state.current_screen==INTRO_SCREEN_TO_START_SONG_ON)
+		if (game_state.state==GameStates._display_intro_screens && game_state.current_screen==INTRO_SCREEN_TO_START_SONG_ON)
 		{
 			Music::instance()->RestartIntroMusic();
 		}
 
 		game_state.phase= screen_data->duration;
-		game_state.last_ticks_on_idle= machine_tick_count();
+		game_state.last_ticks_on_idle= cseries.machine_tick_count();
 		display_screen(screen_data->screen_base);
 
 		if (introduction_sound) {
@@ -1693,7 +1694,7 @@ static void display_introduction_screen_for_demo(
 	if(screen_data->screen_count)
 	{
 		game_state.phase= screen_data->duration;
-		game_state.last_ticks_on_idle= machine_tick_count();
+		game_state.last_ticks_on_idle= cseries.machine_tick_count();
 		display_screen(screen_data->screen_base);
 	} else {
 		display_main_menu();
@@ -1706,19 +1707,19 @@ static void display_epilogue(
 	Music::instance()->RestartIntroMusic();
 	
 	{
-		int32 ticks= machine_tick_count();
+		int32 ticks= cseries.machine_tick_count();
 		
 		do
 		{
 			Music::instance()->Idle();
 		}
-		while (machine_tick_count()-ticks<10);
+		while (cseries.machine_tick_count()-ticks<10);
 	}
 
 	game_state.state= _display_epilogue;
 	game_state.phase= 0;
 	game_state.current_screen= 0;
-	game_state.last_ticks_on_idle= machine_tick_count();
+	game_state.last_ticks_on_idle= cseries.machine_tick_count();
 	
 	hide_cursor();
 	// Setting of the end-screen parameters has been moved to XML_LevelScript.cpp
@@ -1881,11 +1882,11 @@ static void display_credits(
 		
 		game_state.state= _display_credits;
 		game_state.current_screen= 0;
-		game_state.user= _single_player;
+		game_state.user= PseudoPlayers._single_player;
 		game_state.flags= 0;
 
 		game_state.phase= screen_data->duration;
-		game_state.last_ticks_on_idle= machine_tick_count();
+		game_state.last_ticks_on_idle= cseries.machine_tick_count();
 		display_screen(screen_data->screen_base);
 	}
 }
@@ -1899,10 +1900,10 @@ static void display_quit_screens(
 	{
 		game_state.state= _display_quit_screens;
 		game_state.current_screen= 0;
-		game_state.user= _single_player;
+		game_state.user= PseudoPlayers._single_player;
 		game_state.flags= 0;
 		game_state.phase= screen_data->duration;
-		game_state.last_ticks_on_idle= machine_tick_count();
+		game_state.last_ticks_on_idle= cseries.machine_tick_count();
 		
 		display_screen(screen_data->screen_base);
 	} else {
@@ -2175,7 +2176,7 @@ static bool begin_game(
 			}
 			break;
 			
-		case _single_player:
+		case PseudoPlayers._single_player:
 			if(cheat)
 			{
 				entry.level_number= get_level_number_from_user();
@@ -2198,7 +2199,7 @@ static bool begin_game(
 			game_information.kill_limit = 0;
 			game_information.game_type= _game_of_kill_monsters;
 			game_information.game_options= _burn_items_on_death|_ammo_replenishes|_weapons_replenish|_monsters_replenish;
-			game_information.initial_random_seed= machine_tick_count();
+			game_information.initial_random_seed= cseries.machine_tick_count();
 			game_information.difficulty_level= get_difficulty_level();
 			std::fill_n(game_information.parameters, 2, 0);
 				
@@ -2291,8 +2292,6 @@ static void start_game(
 	short user,
 	bool changing_level)
 {
-	//  Change our menus.. 
-	toggle_menus(true);
 	
 	// LP change: reset screen so that extravision will not be persistent
 	reset_screen();
@@ -2319,7 +2318,7 @@ static void start_game(
 	game_state.state= _game_in_progress;
 	game_state.current_screen= 0;
 	game_state.phase = cseries.MACHINE_TICKS_PER_SECOND;
-	game_state.last_ticks_on_idle= machine_tick_count();
+	game_state.last_ticks_on_idle= cseries.machine_tick_count();
 	game_state.user= user;
 	game_state.flags= 0;
 
@@ -2366,7 +2365,6 @@ static void finish_game(
 	//  Note that we have to deal with the switch demo state later because 
 	//  Alain's code calls us at interrupt level 1. (so we defer it) 
 	assert(game_state.state==_game_in_progress || game_state.state==_switch_demo || game_state.state==_revert_game || game_state.state==_change_level || game_state.state==_begin_display_of_epilogue);
-	toggle_menus(false);
 
 	stop_fade();
 	set_fade_effect(NONE);
@@ -2376,7 +2374,7 @@ static void finish_game(
 	//  Stop the replay 
 	switch(game_state.user)
 	{
-		case _single_player:
+		case PseudoPlayers._single_player:
 		case _network_player:
 			stop_recording();
 			break;
@@ -2580,7 +2578,7 @@ static void next_game_screen(
 				break;
 		}
 	} else {
-		if(game_state.state==_display_intro_screens && 
+		if(game_state.state==GameStates._display_intro_screens && 
 			game_state.current_screen==INTRO_SCREEN_TO_START_SONG_ON)
 		{
 			Music::instance()->RestartIntroMusic();
@@ -2591,9 +2589,9 @@ static void next_game_screen(
 		if (images_picture_exists(pict_resource_number))
 		{
 			game_state.phase= data->duration;
-			game_state.last_ticks_on_idle= machine_tick_count();
+			game_state.last_ticks_on_idle= cseries.machine_tick_count();
 			display_screen(data->screen_base);
-			if (game_state.state == _display_intro_screens)
+			if (game_state.state == GameStates._display_intro_screens)
 			{
 				if (introduction_sound) {
 					introduction_sound->AskStop();
@@ -2602,7 +2600,7 @@ static void next_game_screen(
 				SoundRsrc.Unload();
 				if (get_sound_resource_from_images(pict_resource_number, SoundRsrc))
 				{
-					_fixed pitch = (shapes_file_is_m1() && game_state.state==_display_intro_screens) ? _m1_high_frequency : _normal_frequency;
+					_fixed pitch = (shapes_file_is_m1() && game_state.state==GameStates._display_intro_screens) ? _m1_high_frequency : _normal_frequency;
 					SoundParameters parameters;
 					parameters.pitch = pitch * 1.f / _normal_frequency;
 					introduction_sound = SoundManager::instance()->PlaySound(SoundRsrc, parameters);
@@ -2612,7 +2610,7 @@ static void next_game_screen(
 		else
 		{
 			game_state.phase= 0;
-			game_state.last_ticks_on_idle= machine_tick_count();
+			game_state.last_ticks_on_idle= cseries.machine_tick_count();
 		}
 	}
 }
@@ -2807,10 +2805,10 @@ static void handle_interface_menu_screen_click(
 				else
 				{
 					static auto last_redraw = 0;
-					if (machine_tick_count() > last_redraw + map.TICKS_PER_SECOND / 30)
+					if (cseries.machine_tick_count() > last_redraw + map.TICKS_PER_SECOND / 30)
 					{
 						draw_intro_screen();
-						last_redraw = machine_tick_count();
+						last_redraw = cseries.machine_tick_count();
 					}
 				}
 			}
@@ -3032,15 +3030,6 @@ void do_preferences(void)
 		change_screen_mode(&graphics_preferences->screen_mode, false);
 }
 
-
-//Toggle system hotkeys
-
-void toggle_menus(bool game_started)
-{
-	// nothing to do
-}
-
-
 //  Update game window
 
 void update_game_window(void)
@@ -3052,7 +3041,7 @@ void update_game_window(void)
 			
 		case _display_quit_screens:
 		case _display_intro_screens_for_demo:
-		case _display_intro_screens:
+		case GameStates._display_intro_screens:
 		case _display_chapter_heading:
 		case _display_prologue:
 		case _display_epilogue:
@@ -3199,7 +3188,7 @@ void show_movie(short index)
 	if (audio_playback) OpenALManager::Get()->Start();
 
 	bool done = false;
-	auto last_rendered_time = machine_tick_count();
+	auto last_rendered_time = cseries.machine_tick_count();
 	std::shared_ptr<StreamPlayer> movie_audio_player;
 	const auto framerate = plm_get_framerate(plm_context);
 
@@ -3219,7 +3208,7 @@ void show_movie(short index)
 			}
 		}
 
-		auto current_time = machine_tick_count();
+		auto current_time = cseries.machine_tick_count();
 		auto elapsed_time = current_time - last_rendered_time;
 		last_rendered_time = current_time;
 		plm_decode(plm_context, std::min(elapsed_time / 1000.0, 1.0 / framerate));
