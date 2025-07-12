@@ -315,21 +315,20 @@ const FINAL_SCREEN_DURATION = (INDEFINATE_TIME_DELAY);
 
 //  For teleportation, end movie, etc. 
 const EPILOGUE_LEVEL_NUMBER = 256;
-/*
-//  ------------- structures 
-struct game_state {
-	short state;
-	short flags;
-	short user;
-	int32 phase;
-	int32 last_ticks_on_idle;
-	short current_screen;
-	bool suppress_background_tasks;
-	bool current_netgame_allows_microphone;
-	short main_menu_display_count; // how many times have we shown the main menu?
-	short highlighted_main_menu_item;
+
+const game_state = {
+	state: 0,
+	flags: 0,
+	user: 0,
+	phase: 0,
+	last_ticks_on_idle: 0,
+	current_screen: 0,
+	suppress_background_tasks: false,
+	current_netgame_allows_microphone: false,
+	main_menu_display_count: 0,
+	highlighted_main_menu_item: 0
 };
-*/
+
 //  -------------- constants 
 
 // `display_screens` and `m1_display_screens` use struct screen_data from original
@@ -410,36 +409,33 @@ function get_screen_data(index) {
 	return shapes_file_is_m1() ? m1_display_screens[index] : display_screens[index];
 }
 
-/*
-void initialize_game_state(
-	void)
-{
-	game_state.state= _display_intro_screens;
-	game_state.user= _single_player;
-	game_state.flags= 0;
-	game_state.current_screen= 0;
-	game_state.suppress_background_tasks= true;
-	game_state.main_menu_display_count= 0;
+function initialize_game_state() {
+	game_state.state = _display_intro_screens;
+	game_state.user = _single_player;
+	game_state.flags = 0;
+	game_state.current_screen = 0;
+	game_state.suppress_background_tasks = true;
+	game_state.main_menu_display_count = 0;
 
 	toggle_menus(false);
 
-	if(shell_options.insecure_lua) {
-	  alert_user(expand_app_variables("Insecure Lua has been manually enabled. Malicious Lua scripts can use Insecure Lua to take over your computer. Unless you specifically trust every single Lua script that will be running, you should quit $appName$ IMMEDIATELY.").c_str());
+	if (shell_options.insecure_lua) {
+		alert_user(expand_app_variables(
+			"Insecure Lua has been manually enabled. Malicious Lua scripts can use Insecure Lua to take over your computer. " +
+			"Unless you specifically trust every single Lua script that will be running, you should quit $appName$ IMMEDIATELY."
+		));
 	}
 
-	if (!shell_options.editor && shell_options.replay_directory.empty())
-	{
-		if (shell_options.skip_intro)
-		{
+	if (!shell_options.editor && shell_options.replay_directory.length === 0) {
+		if (shell_options.skip_intro) {
 			display_main_menu();
-		}
-		else
-		{
+		} else {
 			display_introduction();
 		}
 	}
 }
 
+/*
 void force_game_state_change(
 	void)
 {
