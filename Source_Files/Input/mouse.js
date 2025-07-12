@@ -59,17 +59,16 @@ export function enter_mouse(type) {
 	}
 }
 
-/*
 // Shutdown in-game mouse handling
 
-void exit_mouse(short type)
-{
-	if (type != _keyboard_or_game_pad) {
-		SDL_SetRelativeMouseMode(SDL_FALSE);
+export function exit_mouse(type) {
+	if (type !== shell._keyboard_or_game_pad) {
+		document.exitPointerLock();
 		mouse_active = false;
 	}
 }
 
+/*
 static inline float MIX(float start, float end, float factor)
 {
 	return (start * (1.f - factor)) + (end * factor);
