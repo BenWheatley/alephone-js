@@ -445,12 +445,6 @@ function player_controlling_game() {
 }
 
 /*
-void toggle_suppression_of_background_tasks(
-	void)
-{
-	game_state.suppress_background_tasks= !game_state.suppress_background_tasks;
-}
-
 void set_game_state(
 	short new_state)
 {
