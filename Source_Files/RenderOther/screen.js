@@ -83,15 +83,6 @@ namespace alephone
 	};
 }
 
-// Original screen-size definitions
-enum // screen sizes
-{
-	_50_percent,
-	_75_percent,
-	_100_percent,
-	_full_screen,
-};
-
 enum // hardware acceleration codes
 {
 	_no_acceleration,
@@ -104,11 +95,6 @@ enum // screen selection based on game state
 	_screentype_menu,
 	_screentype_chapter
 };
-
-// ---------- missing from QUICKDRAW.H
-
-#define deviceIsGrayscale 0x0000
-#define deviceIsColor 0x0001
 
 // ---------- globals
 
