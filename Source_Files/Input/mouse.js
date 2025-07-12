@@ -72,54 +72,36 @@ function MIX(start, end, factor) {
 	return (start * (1.0 - factor)) + (end * factor);
 }
 
-/*
-
 // Take a snapshot of the current mouse state
+export function mouse_idle(type) {
+	if (!mouse_active) return;
 
-void mouse_idle(short type)
-{
-	if (mouse_active) {
-		static uint32 last_tick_count = 0;
-		uint32 tick_count = machine_tick_count();
-		int32 ticks_elapsed = tick_count - last_tick_count;
+	let dx = snapshot_delta_x;
+	let dy = -snapshot_delta_y;
 
-		if (ticks_elapsed < 1)
-			return;
+	snapshot_delta_x = 0;
+	snapshot_delta_y = 0;
 
-		// Calculate axis deltas
-		float dx = snapshot_delta_x;
-		float dy = -snapshot_delta_y;
-		snapshot_delta_x = 0;
-		snapshot_delta_y = 0;
-		
-		// Mouse inversion
-		if (TEST_FLAG(input_preferences->modifiers, _inputmod_invert_mouse))
-			dy = -dy;
-		
-		// Delta sensitivities
-		const float angle_per_scaled_delta = 128/66.f; // assuming _mouse_accel_none
-		float sx = angle_per_scaled_delta * (input_preferences->sens_horizontal / float{FIXED_ONE});
-		float sy = angle_per_scaled_delta * (input_preferences->sens_vertical / float{FIXED_ONE}) * (input_preferences->classic_vertical_aim ? 0.25f : 1.f);
-		switch (input_preferences->mouse_accel_type)
-		{
-			case _mouse_accel_classic:
-				sx *= MIX(1.f, (1/32.f) * fabs(dx * sx), input_preferences->mouse_accel_scale);
-				sy *= MIX(1.f, (1/(input_preferences->classic_vertical_aim ? 8.f : 32.f)) * fabs(dy * sy), input_preferences->mouse_accel_scale);
-				break;
-			case _mouse_accel_none:
-			default:
-				break;
-		}
-		
-		// Angular deltas
-		const fixed_angle dyaw = static_cast<fixed_angle>(sx * dx * FIXED_ONE);
-		const fixed_angle dpitch = static_cast<fixed_angle>(sy * dy * FIXED_ONE);
-		
-		// Push mouselook delta
-		mouselook_delta = {dyaw, dpitch};
+	if (TEST_FLAG(input_preferences.modifiers, 'invert_mouse'))
+		dy = -dy;
+
+	const angle_per_scaled_delta = 128 / 66;
+
+	let sx = angle_per_scaled_delta * input_preferences.sens_horizontal;
+	let sy = angle_per_scaled_delta * input_preferences.sens_vertical * (input_preferences.classic_vertical_aim ? 0.25 : 1.0);
+
+	if (input_preferences.mouse_accel_type == _mouse_accel_classic) {
+		sx *= MIX(1.0, (1 / 32.0) * Math.abs(dx * sx), input_preferences.mouse_accel_scale);
+		sy *= MIX(1.0, (1 / (input_preferences.classic_vertical_aim ? 8.0 : 32.0)) * Math.abs(dy * sy), input_preferences.mouse_accel_scale);
 	}
+
+	const dyaw = sx * x;
+	const dpitch = sy * y;
+
+	mouselook_delta = { yaw: dyaw, pitch: dpitch };
 }
 
+/*
 fixed_yaw_pitch pull_mouselook_delta()
 {
 	auto delta = mouselook_delta;
