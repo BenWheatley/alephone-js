@@ -1307,7 +1307,6 @@ void toggle_fullscreen()
 //  Render game screen
 
 static bool clear_next_screen = false;
-static void darken_world_window(void);
 
 void update_world_view_camera()
 {
