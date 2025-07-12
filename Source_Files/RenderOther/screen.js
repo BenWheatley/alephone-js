@@ -1221,7 +1221,6 @@ void change_screen_mode(struct screen_mode_data *mode, bool redraw, bool resize_
 			get_auto_resolution_size(&w, &h, mode);
 		change_screen_mode(w, h, mode->bit_depth, false, !in_game, resize_hud);
 		clear_screen();
-		recenter_mouse();
 	}
 
 	fps_counter.reset();
@@ -1244,7 +1243,6 @@ void change_screen_mode(short screentype)
 	bool force_menu_size = (screentype == _screentype_menu || screentype == _screentype_chapter);
 	change_screen_mode(w, h, mode->bit_depth, false, force_menu_size);
 	clear_screen();
-	recenter_mouse();
 
 	fps_counter.reset();
 }

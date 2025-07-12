@@ -70,16 +70,6 @@ void exit_mouse(short type)
 	}
 }
 
-
-// Calculate new center mouse position when screen size has changed
-
-void recenter_mouse(void)
-{
-	if (mouse_active) {
-		screen.MainScreenCenterMouse();
-	}
-}
-
 static inline float MIX(float start, float end, float factor)
 {
 	return (start * (1.f - factor)) + (end * factor);
