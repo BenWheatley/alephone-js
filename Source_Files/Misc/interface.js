@@ -206,12 +206,6 @@ const NetworkJoinResult = Object.freeze({
 });
 
 /*
-#ifdef PERFORMANCE
-#include <perf.h>
-
-extern TP2PerfGlobals perf_globals;
-#endif
-
 #include "map.h"
 #include "shell.h"
 #include "interface.h"
@@ -2306,10 +2300,6 @@ static void start_game(
 	
 	draw_interface();
 
-#ifdef PERFORMANCE	
-	PerfControl(perf_globals, true);
-#endif
-
 	// ZZZ: If it's a netgame, we want prediction; else no.
 	set_prediction_wanted(user == _network_player);
 
@@ -2360,9 +2350,6 @@ static void finish_game(
 {
 	set_keyboard_controller_status(false);
 
-#ifdef PERFORMANCE	
-	PerfControl(perf_globals, false);
-#endif
 	//  Note that we have to deal with the switch demo state later because 
 	//  Alain's code calls us at interrupt level 1. (so we defer it) 
 	assert(game_state.state==_game_in_progress || game_state.state==_switch_demo || game_state.state==_revert_game || game_state.state==_change_level || game_state.state==_begin_display_of_epilogue);
