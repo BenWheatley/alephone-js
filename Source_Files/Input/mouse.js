@@ -168,22 +168,27 @@ export function show_cursor() {
 	document.body.style.cursor = 'default';
 }
 
-/*
-void mouse_scroll(bool up)
-{
-	if (up)
-		snapshot_delta_scrollwheel += 1;
-	else
-		snapshot_delta_scrollwheel -= 1;
+export function mouse_scroll(up) {
+	snapshot_delta_scrollwheel += up ? 1 : -1;
+	console.log(snapshot_delta_scrollwheel);
 }
 
-void mouse_moved(int delta_x, int delta_y)
-{
+export function mouse_moved(delta_x, delta_y) {
 	snapshot_delta_x += delta_x;
 	snapshot_delta_y += delta_y;
+	console.log(snapshot_delta_x + ", "+ snapshot_delta_y);
 }
-*/
+
 // === DOM Event Bindings ===
+
+window.addEventListener("mousemove", (e) => {
+	if (!mouse_active || document.pointerLockElement !== document.body) return;
+	mouse_moved(e.movementX, e.movementY);
+});
+
+window.addEventListener("wheel", (e) => {
+	mouse_scroll(e.deltaY < 0);
+});
 
 window.addEventListener("mousedown", e => {
 	currentMouseButtons |= (1 << e.button);
