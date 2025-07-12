@@ -47,25 +47,6 @@ struct RGBColor;
 struct SDL_Color;
 struct SDL_Surface;
 
-/* ---------- constants */
-
-/* ---------- resources */
-
-enum {
-	strPROMPTS= 131,
-	_save_game_prompt= 0,
-	_save_replay_prompt,
-	_select_replay_prompt,
-	_default_prompt
-};
-
-enum class BobbingType
-{
-	none,
-	camera_and_weapon,
-	weapon_only
-};
-
 /* ---------- structures */
 
 struct screen_mode_data
@@ -92,17 +73,6 @@ struct screen_mode_data
 
 	int fov; // 0 = use default (or MML/plugin)
 };
-
-#define NUMBER_OF_KEYS 21
-#define NUMBER_UNUSED_KEYS 10
-
-enum // input devices
-{
-	_keyboard_or_game_pad,
-	_mouse_yaw_pitch
-};
-
-#define PREFERENCES_NAME_LENGTH 32
 
 /* ---------- prototypes/SHELL.C [now shell_misc.cpp, shell_macintosh.cpp, shell_sdl.cpp] */
 

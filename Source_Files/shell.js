@@ -19,6 +19,28 @@
 
 */
 
+const strPROMPTS = 131;
+const _save_game_prompt = 0;
+const _save_replay_prompt = 1;
+const _select_replay_prompt = 2;
+const _default_prompt = 3;
+
+// BobbingType equivalent
+const BobbingType = Object.freeze({
+	none: 0,
+	camera_and_weapon: 1,
+	weapon_only: 2
+});
+
+const NUMBER_OF_KEYS = 21;
+const NUMBER_UNUSED_KEYS = 10;
+
+// Input device identifiers
+const _keyboard_or_game_pad = 0;
+const _mouse_yaw_pitch = 1;
+
+const PREFERENCES_NAME_LENGTH = 32;
+
 /*
  *  shell.cpp - Main game loop and input handling
  */
