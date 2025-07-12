@@ -429,13 +429,11 @@ export function initialize_game_state() {
 	display_main_menu(); // TODO: if shell options work in web, this line has to go
 }
 
-/*
-void force_game_state_change(
-	void)
-{
-	game_state.phase= 0;
+function force_game_state_change() {
+	game_state.phase = 0;
 }
 
+/*
 bool player_controlling_game(
 	void)
 {
