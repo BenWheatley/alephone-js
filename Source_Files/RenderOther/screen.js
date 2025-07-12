@@ -1,5 +1,4 @@
 /*
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -16,16 +15,108 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
 */
-
 /*
- *  screen_sdl.cpp - Screen management, SDL implementation
- *
- *  Written in 2000 by Christian Bauer
- * 
- *  Loren Petrich, Dec 23, 2000; moved shared content into screen_shared.cpp
- */
+namespace alephone
+{
+	class Screen
+	{
+	public:
+		static inline Screen* instance() {
+			return &m_instance;
+		}
+
+		void Initialize(screen_mode_data* mode);
+		const std::vector<std::pair<int, int> >& GetModes() { return m_modes; };
+		int FindMode(int width, int height) {
+			for (int i = 0; i < m_modes.size(); ++i)
+			{
+				if (m_modes[i].first == width &&
+				    m_modes[i].second == height)
+				{
+					return i;
+				}
+			}
+			return -1;
+		}
+		int ModeHeight(int mode) { return m_modes[mode].second; }
+		int ModeWidth(int mode) { return m_modes[mode].first; }
+
+		int height();
+		int width();
+		float pixel_scale();
+		int window_height();
+		int window_width();
+		bool hud();
+		bool lua_hud();
+		bool openGL();
+		bool fifty_percent();
+		bool seventyfive_percent();
+		SDL_Rect window_rect(); // 3D view + interface
+		SDL_Rect view_rect(); // main 3D view
+		SDL_Rect map_rect();
+		SDL_Rect term_rect();
+		SDL_Rect hud_rect();
+		SDL_Rect OpenGLViewPort();
+
+		void bound_screen(bool in_game = true);
+		void bound_screen_to_rect(SDL_Rect &r, bool in_game = true);
+		void scissor_screen_to_rect(SDL_Rect &r);
+		void window_to_screen(int &x, int &y);
+		
+		SDL_Rect lua_clip_rect;
+		SDL_Rect lua_view_rect;
+		SDL_Rect lua_map_rect;
+		SDL_Rect lua_term_rect;
+
+		// TODO: the HUD should really draw messages / fps / input line itself
+		Rect lua_text_margins;
+
+	private:
+		Screen() : m_initialized(false) { }
+		static Screen m_instance;
+		bool m_initialized;
+		SDL_Rect m_viewport_rect;
+		SDL_Rect m_ortho_rect;
+
+		std::vector<std::pair<int, int> > m_modes;
+	};
+}
+
+// Original screen-size definitions
+enum // screen sizes
+{
+	_50_percent,
+	_75_percent,
+	_100_percent,
+	_full_screen,
+};
+
+enum // hardware acceleration codes
+{
+	_no_acceleration,
+	_opengl_acceleration
+};
+
+enum // screen selection based on game state
+{
+	_screentype_level,
+	_screentype_menu,
+	_screentype_chapter
+};
+
+// ---------- missing from QUICKDRAW.H
+
+#define deviceIsGrayscale 0x0000
+#define deviceIsColor 0x0001
+
+// ---------- globals
+
+extern struct color_table *world_color_table, *visible_color_table, *interface_color_table;
+
+// SB: Custom Blizzard-style overlays
+#define MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS 6
+
 #include "cseries.h"
 
 #include <math.h>
@@ -70,8 +161,6 @@
 #include "HUDRenderer_Lua.h"
 #include "Movie.h"
 #include "shell_options.h"
-
-#include <algorithm>
 
 #if defined(__WIN32__) || (defined(__MACH__) && defined(__APPLE__))
 #define MUST_RELOAD_VIEW_CONTEXT
@@ -149,7 +238,7 @@ SDL_PixelFormat pixel_format_16, pixel_format_32;
 static bitmap_definition_buffer bitmap_definition_of_sdl_surface(const SDL_Surface* surface)
 {
 	assert(surface);
-	bitmap_definition_buffer buf(/*row_count:*/ surface->h);
+	bitmap_definition_buffer buf(surface->h);
 	auto& def = *buf.get();
 	def.width = surface->w;
 	def.height = surface->h;
@@ -170,9 +259,7 @@ void start_tunnel_vision_effect(
 		((current_player->extravision_duration) ? EXTRAVISION_FIELD_OF_VIEW : NORMAL_FIELD_OF_VIEW);
 }
 
-/*
- *  Initialize screen management
- */
+//  Initialize screen management
 
 void Screen::Initialize(screen_mode_data* mode)
 //void initialize_screen(struct screen_mode_data *mode, bool ShowFreqDialog)
@@ -585,9 +672,7 @@ void Screen::window_to_screen(int &x, int &y)
 #endif
 }
 
-/*
- *  (Re)allocate off-screen buffer
- */
+//  (Re)allocate off-screen buffer
 
 static void reallocate_world_pixels(int width, int height)
 {
@@ -641,9 +726,7 @@ static void reallocate_map_pixels(int width, int height)
 }
 
 
-/*
- *  Force reload of view context
- */
+//  Force reload of view context
 
 void ReloadViewContext(void)
 {
@@ -653,19 +736,14 @@ void ReloadViewContext(void)
 #endif
 }
 
-/*
- *  Determine if the transparent map is in use
- *  (may be disallowed for network games)
- */
+//  Determine if the transparent map is in use   (may be disallowed for network games)
 
 bool map_is_translucent(void)
 {
 	return (screen_mode.translucent_map && NetAllowOverlayMap());
 }
 
-/*
- *  Enter game screen
- */
+//  Enter game screen
 
 void enter_screen(void)
 {
@@ -723,9 +801,7 @@ void enter_screen(void)
 }
 
 
-/*
- *  Exit game screen
- */
+//  Exit game screen
 
 void exit_screen(void)
 {
@@ -736,9 +812,7 @@ void exit_screen(void)
 }
 
 
-/*
- *  Change screen mode
- */
+//  Change screen mode
 
 static bool need_mode_change(int window_width, int window_height,
 							 int log_width, int log_height,
@@ -1230,9 +1304,7 @@ void toggle_fullscreen()
 }
 
 
-/*
- *  Render game screen
- */
+//  Render game screen
 
 static bool clear_next_screen = false;
 static void darken_world_window(void);
@@ -1597,9 +1669,7 @@ void render_screen(short ticks_elapsed)
 	Movie::instance()->AddFrame(Movie::FRAME_NORMAL);
 }
 
-/*
- *  Blit world view to screen
- */
+//  Blit world view to screen
 
 template <class T>
 static inline void quadruple_surface(
@@ -1764,9 +1834,7 @@ static void update_screen(SDL_Rect &source, SDL_Rect &destination, bool hi_rez, 
 }
 
 
-/*
- *  Update game display if it was overdrawn
- */
+//  Update game display if it was overdrawn
 
 void update_screen_window(void)
 {
@@ -1775,9 +1843,7 @@ void update_screen_window(void)
 }
 
 
-/*
- *  Color table handling
- */
+//  Color table handling
 
 static void build_sdl_color_table(const color_table *color_table, SDL_Color *colors)
 {
@@ -1875,9 +1941,7 @@ void assert_world_color_table(struct color_table *interface_color_table, struct 
 }
 
 
-/*
- *  Render terminal
- */
+// Render terminal
 
 void render_computer_interface(struct view_data *view)
 {
@@ -1887,9 +1951,7 @@ void render_computer_interface(struct view_data *view)
 }
 
 
-/*
- *  Render overhead map
- */
+//  Render overhead map
 
 void render_overhead_map(struct view_data *view)
 {
@@ -1924,9 +1986,7 @@ void render_overhead_map(struct view_data *view)
 }
 
 
-/*
- *  Get world view destination frame for given screen size
- */
+//  Get world view destination frame for given screen size
 
 void calculate_destination_frame(short size, bool high_resolution, Rect *frame)
 {
@@ -1963,9 +2023,7 @@ void calculate_destination_frame(short size, bool high_resolution, Rect *frame)
 }
 
 
-/*
- *  Draw dithered black pattern over world window
- */
+//  Draw dithered black pattern over world window
 
 template <class T>
 static inline void draw_pattern_rect(T *p, int pitch, uint32 pixel, const SDL_Rect &r)
@@ -2052,9 +2110,7 @@ static void darken_world_window(void)
 }
 
 
-/*
- *  Validate world window
- */
+//  Validate world window
 
 void validate_world_window(void)
 {
@@ -2062,9 +2118,7 @@ void validate_world_window(void)
 }
 
 
-/*
- *  Draw the HUD or terminal (non-OpenGL)
- */
+//  Draw the HUD or terminal (non-OpenGL)
 
 void DrawSurface(SDL_Surface *s, SDL_Rect &dest_rect, SDL_Rect &src_rect)
 {
@@ -2128,9 +2182,7 @@ void draw_intro_screen(void)
 	}
 }
 
-/*
- *  Clear screen
- */
+//  Clear screen
 
 void clear_screen(bool update)
 {
@@ -2296,3 +2348,4 @@ void MainScreenUpdateRects(size_t count, const SDL_Rect *rects)
 //	}
 	SDL_RenderPresent(main_render);
 }
+*/
