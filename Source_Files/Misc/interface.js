@@ -21,7 +21,6 @@ INTERFACE.H
 /*
 #include "cseries.h"
 */
-//  ---------- constants 
 
 const strFILENAMES = 129;
 const Filenames = Object.freeze({
@@ -105,8 +104,6 @@ const ShapeTypes = Object.freeze({
 
 const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
 
-// ---------- shape descriptors
-
 import * as shape_descriptors from '../RenderMain/shape_descriptors.js';
 /*
 // ---------- structures
@@ -149,7 +146,6 @@ struct shape_animation_data // Also used in high_level_shape_definition
 	int16 low_level_shape_indexes[1];
 };
 */
-//  ---------- prototypes/SHELL.C 
 
 const PseudoPlayers = Object.freeze({
 	_single_player: 0,
@@ -182,25 +178,34 @@ const GameStates = Object.freeze({
 
 	NUMBER_OF_GAME_STATES: 16
 });
+
+const get_shape_bitmap_and_shading_table = (shape, bitmap, shading_table, shading_mode) =>
+	extended_get_shape_bitmap_and_shading_table(
+		GET_DESCRIPTOR_COLLECTION(shape),
+		GET_DESCRIPTOR_SHAPE(shape),
+		bitmap,
+		shading_table,
+		shading_mode
+	);
+
+const get_shape_information = (shape) =>
+	extended_get_shape_information(
+		GET_DESCRIPTOR_COLLECTION(shape),
+		GET_DESCRIPTOR_SHAPE(shape)
+	);
+
+const mark_collection_for_loading = (c) => mark_collection(c, true);
+const mark_collection_for_unloading = (c) => mark_collection(c, false);
+
+// Results for network_join
+const NetworkJoinResult = Object.freeze({
+	kNetworkJoinFailedUnjoined: 0,
+	kNetworkJoinFailedJoined: 1,
+	kNetworkJoinedNewGame: 2,
+	kNetworkJoinedResumeGame: 3
+});
+
 /*
-
-#define get_shape_bitmap_and_shading_table(shape, bitmap, shading_table, shading_mode) extended_get_shape_bitmap_and_shading_table(GET_DESCRIPTOR_COLLECTION(shape), \
-	GET_DESCRIPTOR_SHAPE(shape), (bitmap), (shading_table), (shading_mode))
-
-#define get_shape_information(shape) extended_get_shape_information(GET_DESCRIPTOR_COLLECTION(shape), GET_DESCRIPTOR_SHAPE(shape))
-
-#define mark_collection_for_loading(c) mark_collection((c), true)
-#define mark_collection_for_unloading(c) mark_collection((c), false)
-
-//  ---------- prototypes/NETWORK.C 
-
-enum {	// Results for network_join
-	kNetworkJoinFailedUnjoined,
-        kNetworkJoinFailedJoined,
-        kNetworkJoinedNewGame,
-        kNetworkJoinedResumeGame
-};
-
 #ifdef HAVE_LIBYUV
 #include <libyuv/convert.h>
 #include <libyuv/scale.h>
