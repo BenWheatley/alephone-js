@@ -191,9 +191,6 @@ bool using_default_gamma = true;
 static bool PrevFullscreen = false;
 static bool in_game = false;	// Flag: menu (fixed 640x480) or in-game (variable size) display
 
-static int desktop_width;
-static int desktop_height;
-
 static int failed_multisamples = 0;		// remember when GL multisample setting didn't succeed
 static bool passed_shader = false;      // remember when we passed Shader tests
 
@@ -202,22 +199,6 @@ static bool passed_shader = false;      // remember when we passed Shader tests
 using namespace alephone;
 
 Screen Screen::m_instance;
-
-
-// Prototypes
-static bool need_mode_change(int window_width, int window_height, int log_width, int log_height, int depth, bool nogl);
-static void change_screen_mode(int width, int height, int depth, bool nogl, bool force_menu, bool force_resize_hud = false);
-static bool get_auto_resolution_size(short *w, short *h, struct screen_mode_data *mode);
-static void build_sdl_color_table(const color_table *color_table, SDL_Color *colors);
-static void reallocate_world_pixels(int width, int height);
-static void reallocate_map_pixels(int width, int height);
-static void apply_gamma(SDL_Surface *src, SDL_Surface *dst);
-static void update_screen(SDL_Rect &source, SDL_Rect &destination, bool hi_rez, bool every_other_line);
-static void update_fps_display(SDL_Surface *s);
-static void DisplayPosition(SDL_Surface *s);
-static void DisplayMessages(SDL_Surface *s);
-static void DrawSurface(SDL_Surface *s, SDL_Rect &dest_rect, SDL_Rect &src_rect);
-static void clear_screen_margin();
 
 SDL_PixelFormat pixel_format_16, pixel_format_32;
 
