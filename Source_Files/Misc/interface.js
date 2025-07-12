@@ -419,13 +419,6 @@ function initialize_game_state() {
 
 	toggle_menus(false);
 
-	if (shell_options.insecure_lua) {
-		alert_user(expand_app_variables(
-			"Insecure Lua has been manually enabled. Malicious Lua scripts can use Insecure Lua to take over your computer. " +
-			"Unless you specifically trust every single Lua script that will be running, you should quit $appName$ IMMEDIATELY."
-		));
-	}
-
 	if (!shell_options.editor && shell_options.replay_directory.length === 0) {
 		if (shell_options.skip_intro) {
 			display_main_menu();
