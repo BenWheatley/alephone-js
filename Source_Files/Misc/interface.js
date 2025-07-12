@@ -329,38 +329,62 @@ struct game_state {
 	short main_menu_display_count; // how many times have we shown the main menu?
 	short highlighted_main_menu_item;
 };
-
-struct screen_data {
-	short screen_base;
-	short screen_count;
-	int32 duration;
-};
-
+*/
 //  -------------- constants 
-struct screen_data display_screens[]= {
-	{ INTRO_SCREEN_BASE, NUMBER_OF_INTRO_SCREENS, INTRO_SCREEN_DURATION },
-	{ MAIN_MENU_BASE, 1, 0 },
-	{ CHAPTER_SCREEN_BASE, NUMBER_OF_CHAPTER_HEADINGS, CHAPTER_HEADING_DURATION },
-	{ PROLOGUE_SCREEN_BASE, NUMBER_OF_PROLOGUE_SCREENS, PROLOGUE_DURATION },
-	{ EPILOGUE_SCREEN_BASE, NUMBER_OF_EPILOGUE_SCREENS, EPILOGUE_DURATION },
-	{ CREDIT_SCREEN_BASE, NUMBER_OF_CREDIT_SCREENS, CREDIT_SCREEN_DURATION},
-	{ INTRO_SCREEN_BETWEEN_DEMO_BASE, NUMBER_OF_INTRO_SCREENS_BETWEEN_DEMOS, DEMO_INTRO_SCREEN_DURATION },
-	{ FINAL_SCREEN_BASE, NUMBER_OF_FINAL_SCREENS, FINAL_SCREEN_DURATION }
-};
 
-struct screen_data m1_display_screens[]= {
-	{ 1111, 4, INTRO_SCREEN_DURATION },
-	{ MAIN_MENU_BASE, 1, 0 },
-	{ 10000, NUMBER_OF_CHAPTER_HEADINGS, CHAPTER_HEADING_DURATION },
-	{ PROLOGUE_SCREEN_BASE, NUMBER_OF_PROLOGUE_SCREENS, PROLOGUE_DURATION },
-	{ EPILOGUE_SCREEN_BASE, NUMBER_OF_EPILOGUE_SCREENS, EPILOGUE_DURATION },
-	{ 1000, 1, CREDIT_SCREEN_DURATION},
-	{ INTRO_SCREEN_BETWEEN_DEMO_BASE, NUMBER_OF_INTRO_SCREENS_BETWEEN_DEMOS, DEMO_INTRO_SCREEN_DURATION },
-	{ FINAL_SCREEN_BASE, NUMBER_OF_FINAL_SCREENS, FINAL_SCREEN_DURATION }
-};
+// `display_screens` and `m1_display_screens` use struct screen_data from original
+const display_screens = [
+	{	screen_base: screen_definitions.INTRO_SCREEN_BASE,
+		screen_count: NUMBER_OF_INTRO_SCREENS,
+		duration: INTRO_SCREEN_DURATION },
+	{	screen_base: screen_definitions.MAIN_MENU_BASE,
+		screen_count: 1,
+		duration: 0 },
+	{	screen_base: screen_definitions.CHAPTER_SCREEN_BASE,
+		screen_count: NUMBER_OF_CHAPTER_HEADINGS,
+		duration: CHAPTER_HEADING_DURATION },
+	{	screen_base: screen_definitions.PROLOGUE_SCREEN_BASE,
+		screen_count: NUMBER_OF_PROLOGUE_SCREENS,
+		duration: PROLOGUE_DURATION },
+	{	screen_base: screen_definitions.EPILOGUE_SCREEN_BASE,
+		screen_count: NUMBER_OF_EPILOGUE_SCREENS,
+		duration: EPILOGUE_DURATION },
+	{	screen_base: screen_definitions.CREDIT_SCREEN_BASE,
+		screen_count: NUMBER_OF_CREDIT_SCREENS,
+		duration: CREDIT_SCREEN_DURATION },
+	{	screen_base: INTRO_SCREEN_BETWEEN_DEMO_BASE,
+		screen_count: NUMBER_OF_INTRO_SCREENS_BETWEEN_DEMOS,
+		duration: DEMO_INTRO_SCREEN_DURATION },
+	{	screen_base: screen_definitions.FINAL_SCREEN_BASE,
+		screen_count: NUMBER_OF_FINAL_SCREENS,
+		duration: FINAL_SCREEN_DURATION }
+];
 
-
-
+const m1_display_screens = [
+	{	screen_base: 1111,
+		screen_count: 4,
+		duration: screen_definitions.INTRO_SCREEN_DURATION },
+	{	screen_base: screen_definitions.MAIN_MENU_BASE,
+		screen_count: 1, duration: 0 },
+	{	screen_base: 10000, screen_count: NUMBER_OF_CHAPTER_HEADINGS,
+		duration: CHAPTER_HEADING_DURATION },
+	{	screen_base: screen_definitions.PROLOGUE_SCREEN_BASE,
+		screen_count: NUMBER_OF_PROLOGUE_SCREENS,
+		duration: PROLOGUE_DURATION },
+	{	screen_base: screen_definitions.EPILOGUE_SCREEN_BASE,
+		screen_count: NUMBER_OF_EPILOGUE_SCREENS,
+		duration: EPILOGUE_DURATION },
+	{	screen_base: 1000,
+		screen_count: 1,
+		duration: CREDIT_SCREEN_DURATION },
+	{	screen_base: INTRO_SCREEN_BETWEEN_DEMO_BASE,
+		screen_count: NUMBER_OF_INTRO_SCREENS_BETWEEN_DEMOS,
+		duration: DEMO_INTRO_SCREEN_DURATION },
+	{	screen_base: screen_definitions.FINAL_SCREEN_BASE,
+		screen_count: NUMBER_OF_FINAL_SCREENS,
+		duration: FINAL_SCREEN_DURATION }
+];
+/*
 //  -------------- local globals 
 static struct game_state game_state;
 static std::shared_ptr<SoundPlayer> introduction_sound = nullptr;
