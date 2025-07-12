@@ -26,23 +26,24 @@
 using std::vector;
 
 // ---------- constants
+*/
+const TICKS_PER_SECOND = 30;
+const TICKS_PER_MINUTE = (60 * TICKS_PER_SECOND);
 
-#define TICKS_PER_SECOND 30
-#define TICKS_PER_MINUTE (60*TICKS_PER_SECOND)
-
-#define MAP_INDEX_BUFFER_SIZE 8192
-#define MINIMUM_SEPARATION_FROM_WALL (WORLD_ONE/4)
-#define MINIMUM_SEPARATION_FROM_PROJECTILE ((3*WORLD_ONE)/4)
-
-#define TELEPORTING_DURATION (2*TELEPORTING_MIDPOINT)
-#define TELEPORTING_MIDPOINT (TICKS_PER_SECOND/2)
+const MAP_INDEX_BUFFER_SIZE = 8192;
+/* TODO: WORLD_ONE is defined in world.h which I've not yet converted to js
+const MINIMUM_SEPARATION_FROM_WALL = (WORLD_ONE / 4);
+const MINIMUM_SEPARATION_FROM_PROJECTILE = ((3 * WORLD_ONE) / 4);
+*/
+const TELEPORTING_MIDPOINT = (TICKS_PER_SECOND / 2);
+const TELEPORTING_DURATION = (2 * TELEPORTING_MIDPOINT);
 
 // These arrays are the absolute limits, and are used only by the small memory allocating
 //  arrays. 
-#define MAXIMUM_LEVELS_PER_MAP (128)
+const MAXIMUM_LEVELS_PER_MAP = 128;
 
-#define LEVEL_NAME_LENGTH (64+2)
-
+const LEVEL_NAME_LENGTH = (64 + 2);
+/*
 // ---------- shape descriptors
 
 #include "shape_descriptors.h"
