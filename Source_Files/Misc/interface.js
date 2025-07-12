@@ -205,8 +205,8 @@ const NetworkJoinResult = Object.freeze({
 });
 
 import * as map from '../GameWorld/map.js';
+import * as shell from '../shell.js';
 /*
-#include "shell.h"
 #include "interface.h"
 #include "player.h"
 #include "network.h"
