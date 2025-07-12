@@ -389,7 +389,9 @@ const m1_display_screens = [
 static struct game_state game_state;
 static std::shared_ptr<SoundPlayer> introduction_sound = nullptr;
 static FileSpecifier DraggedReplayFile;
-static bool interface_fade_in_progress= false;
+*/
+let interface_fade_in_progress = false;
+/*
 static short current_picture_clut_depth;
 static struct color_table *animated_color_table= NULL;
 static struct color_table *current_picture_clut= NULL;
