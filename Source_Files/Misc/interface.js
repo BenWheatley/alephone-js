@@ -323,7 +323,6 @@ const game_state = {
 	phase: 0,
 	last_ticks_on_idle: 0,
 	current_screen: 0,
-	suppress_background_tasks: false,
 	current_netgame_allows_microphone: false,
 	main_menu_display_count: 0,
 	highlighted_main_menu_item: 0
@@ -414,7 +413,6 @@ export function initialize_game_state() {
 	game_state.user = PseudoPlayers._single_player;
 	game_state.flags = 0;
 	game_state.current_screen = 0;
-	game_state.suppress_background_tasks = true;
 	game_state.main_menu_display_count = 0;
 
 /* TODO: shell options. Until then, I'm *forcing* display_main_menu();
