@@ -137,12 +137,13 @@ fixed_yaw_pitch pull_mouselook_delta()
 	mouselook_delta = {0, 0};
 	return delta;
 }
-
-
+*/
+let currentMouseButtons = 0;
+/*
 void
 mouse_buttons_become_keypresses(Uint8* ioKeyMap)
 {
-		uint8 buttons = SDL_GetMouseState(NULL, NULL);
+		uint8 buttons = currentMouseButtons;
 		uint8 orig_buttons = buttons;
 		buttons &= button_mask;				// Mask out disabled buttons
 
@@ -182,3 +183,12 @@ void mouse_moved(int delta_x, int delta_y)
 	snapshot_delta_y += delta_y;
 }
 */
+// === DOM Event Bindings ===
+
+window.addEventListener("mousedown", e => {
+	currentMouseButtons |= (1 << e.button);
+});
+
+window.addEventListener("mouseup", e => {
+	currentMouseButtons &= ~(1 << e.button);
+});
