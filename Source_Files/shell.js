@@ -43,8 +43,8 @@ import * as _interface from './Misc/interface.js';
 #include "vbl.h"
 #include "preferences.h"
 #include "tags.h" // for scenario file type..
-#include "mouse.h"
 */
+import * as mouse from './Input/mouse.js';
 import * as joystick from './Input/joystick.js';
 /*
 #include "screen_drawing.h"
