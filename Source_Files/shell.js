@@ -97,12 +97,6 @@ DirectorySpecifier default_data_dir;  // Default scenario directory
 DirectorySpecifier bundle_data_dir;	  // Data inside Mac OS X app bundle
 */
 /*
-// Command-line options
-bool insecure_lua = false;
-static bool force_fullscreen = false; // Force fullscreen mode
-static bool force_windowed = false;   // Force windowed mode
-*/
-/*
 void PlayInterfaceButtonSound(short SoundID);
 
 // From preprocess_map_sdl.cpp
