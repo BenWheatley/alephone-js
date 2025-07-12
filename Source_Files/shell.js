@@ -45,9 +45,7 @@ const PREFERENCES_NAME_LENGTH = 32;
  *  shell.cpp - Main game loop and input handling
  */
 
-/*
-#include "cseries.h"
-*/
+import * as cseries from './CSeries/cseries.js';
 import * as cspaths from './CSeries/cspaths.js';
 /*
 #include "map.h"
