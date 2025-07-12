@@ -18,9 +18,7 @@ INTERFACE.H
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
 */
-/*
-#include "cseries.h"
-*/
+
 import * as cseries from '../CSeries/cseries.js';
 
 const strFILENAMES = 129;
