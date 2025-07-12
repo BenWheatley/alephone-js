@@ -433,20 +433,18 @@ function force_game_state_change() {
 	game_state.phase = 0;
 }
 
-/*
-bool player_controlling_game(
-	void)
-{
-	bool player_in_control= false;
-
-	if( (game_state.user==PseudoPlayers._single_player || game_state.user==_network_player) && (game_state.state==_game_in_progress || game_state.state==_switch_demo) )
-	{
-		player_in_control= true;
+function player_controlling_game() {
+	let player_in_control = false;
+	
+	if ( (game_state.user==PseudoPlayers._single_player || game_state.user==PseudoPlayers._network_player)
+	  && (game_state.state==GameStates._game_in_progress || game_state.state==GameStates._switch_demo) ) {
+		player_in_control = true;
 	}
 	
 	return player_in_control;
 }
 
+/*
 void toggle_suppression_of_background_tasks(
 	void)
 {
