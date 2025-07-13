@@ -872,8 +872,6 @@ bool goto_level(
 		
 	}
 	
-//	if(!success) alert_user(fatalError, strERRORS, badReadMap, -1);
-	
 	/* We be done.. */
 	return success;
 }
