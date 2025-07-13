@@ -17,9 +17,6 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
-// Need this here
-#include "cstypes.h"
-
 export const PIXEL8_MAXIMUM_COLORS = 256;
 export const PIXEL16_MAXIMUM_COMPONENT = 31;
 export const PIXEL32_MAXIMUM_COMPONENT = 255;
