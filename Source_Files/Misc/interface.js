@@ -216,7 +216,9 @@ import * as shell from '../shell.js';
 #include "game_errors.h"
 #include "Music.h"
 #include "images.h"
-#include "screen.h"
+*/
+import * as screen from '../RenderOther/screen.js';
+/*
 #include "vbl.h"
 #include "preferences.h"
 #include "FileHandler.h"

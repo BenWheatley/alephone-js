@@ -127,7 +127,6 @@ extern struct color_table *world_color_table, *visible_color_table, *interface_c
 #include "overhead_map.h"
 #include "fades.h"
 #include "game_window.h"
-#include "screen.h"
 #include "preferences.h"
 #include "computer_interface.h"
 #include "Crosshairs.h"

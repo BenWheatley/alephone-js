@@ -57,7 +57,9 @@ import * as _interface from './Misc/interface.js';
 /*
 #include "SoundManager.h"
 #include "fades.h"
-#include "screen.h"
+*/
+import * as screen from './RenderOther/screen.js';
+/*
 #include "Music.h"
 #include "images.h"
 #include "vbl.h"

@@ -33,8 +33,8 @@ import * as cseries from '../CSeries/cseries.js';
 import * as shell from '../shell.js';
 /*
 #include "preferences.h"
-#include "screen.h"
 */
+import * as screen from '../RenderOther/screen.js';
 
 // Global variables
 let mouse_active = false;
