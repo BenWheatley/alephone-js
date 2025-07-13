@@ -19,6 +19,8 @@
 
 */
 
+import * as cstrings from './cstrings.js';
+
 export const infoError = 0;
 export const fatalError = 1;
 export const infoNoError = 2;
@@ -221,21 +223,17 @@ export function alert_user(message, severity) {
 	window.alert(`${title}:\n\n${message}`);
 }
 
-/*
-void alert_user(short severity, short resid, short item, int error)
-{
-  char str[256];
-  getcstr(str, resid, item);
-  char msg[300];
-  sprintf(msg, "%s (error %d)", str, error);
-  if (severity == infoError) {
-    logError("alert (ID=%hd): %s", error, str);
-  } else if (severity == fatalError) {
-    logFatal("fatal alert (ID=%hd): %s", error, str);
-  }
-  alert_user(msg, severity);
+export function alert_user(severity, resid, item, error) {
+	let str = cseries.getcstr(resid, item);
+	const msg = `${str} (error ${error})`;
+	if (severity == infoError) {
+		Logging.logError(`alert (ID=${error}): ${str}`);
+	} else if (severity == fatalError) {
+		Logging.logFatal(`fatal alert (ID=${error}): ${str}`);
+	}
+	alert_user(msg, severity);
 }
-
+/*
 bool alert_choose_scenario(char *chosen_dir)
 {
 	return system_alert_choose_scenario(chosen_dir);

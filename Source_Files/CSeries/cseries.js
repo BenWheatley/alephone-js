@@ -59,20 +59,18 @@ TODO: replace each of these #'s with corresponding JS version below, as files be
 
 #include "cstypes.h"
 #include "cscluts.h"
-#include "csstrings.h"
 #include "csfonts.h"
-#include "csalerts.h"
 #include "csdialogs.h"
 #include "cspaths.h"
 
 export * from './cscluts.js';
-export * from './csstrings.js';
 export * from './csfonts.js';
-export * from './csalerts.js';
 export * from './csdialogs.js';
 export * from './cspaths.js';*/
 
 export * from './cstypes.js';
+export * from './csstrings.js';
 export * from './csmacros.js';
 export * from './cspixels.js';
+export * from './csalerts.js';
 export * from './csmisc.js';
