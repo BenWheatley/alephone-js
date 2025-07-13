@@ -20,6 +20,7 @@
 */
 
 import * as cseries from '../CSeries/cseries.js';
+import { audioContext } from './SoundManager.js';
 
 export class Music {
 	static #_instance = null;
@@ -39,30 +40,63 @@ export class Music {
 	}
 	
 	constructor() {
-		this.music_slots = new Array(Music.reserved_music_slots).fill(null);
+		this.music_slots = new Array(Music.reserved_music_slots).fill(null).map(() => new Slot());
 		this.playlist = [];
 		this.song_number = 0;
 		this.random_order = false;
 		this.marathon_1_song_index = cseries.NONE;
+		
+		this.masterGain = audioContext.createGain();
+		this.masterGain.gain.value = 1;
+		this.masterGain.connect(audioContext.destination);
 	}
 	
 	// --- Setup / playback ---
-	SetupIntroMusic(file) {
-		// Stub
-		return true;
+	SetupIntroMusic(url) {
+		const introSlot = this.music_slots[Music.MusicSlot.Intro];
+		
+		fetch(url)
+			.then(response => {
+				if (!response.ok) throw new Error(`Failed to load audio: ${response.statusText}`);
+				return response.arrayBuffer();
+			})
+			.then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+			.then(audioBuffer => {
+				introSlot.setAudioBuffer(audioBuffer);
+			})
+			.catch(err => {
+				console.error("SetupIntroMusic failed:", err);
+			});
+		// Return immediately regardless of load outcome
 	}
 	
 	RestartIntroMusic() {
-		// Stub
+		const introSlot = this.music_slots[Music.MusicSlot.Intro];
+		
+		const waitUntilReady = () => {
+			if (introSlot.isInit()) {
+				if (!introSlot.playing() && introSlot.setParameters(true, 1)) {
+					introSlot.play();
+				}
+			} else {
+				requestAnimationFrame(waitUntilReady); // Try again next frame
+			}
+		};
+		
+		waitUntilReady();
 	}
 	
 	Load(file, loop, volume) {
-		// Stub
-		return cseries.NONE;
+		const slot = new Slot();
+		slot.setRouting(this.masterGain);
+		return slot.load(fileUrl, loop, volume).then(() => {
+			this.music_slots.push(slot);
+			return this.music_slots.length - 1;
+		});
 	}
 	
 	Play(index) {
-		// Stub
+		if (this.music_slots[index]) this.music_slots[index].play();
 	}
 	
 	// --- State queries ---
@@ -77,21 +111,23 @@ export class Music {
 	}
 	
 	GetVolume(index) {
-		// Stub
-		return 1.0;
+		return this.music_slots[index]?.getVolume() ?? 0;
 	}
 	
 	// --- Control ---
 	SetVolume(index, volume) {
-		// Stub
+		this.music_slots[index]?.setVolume(volume);
 	}
 	
 	Pause(index = cseries.NONE) {
-		// Stub
+		if (index == cseries.NONE) this.music_slots.forEach(slot => slot.pause());
+		else this.music_slots[index]?.pause();
 	}
 	
-	Fade(limitVolume, duration, stopOnNoVolume = true, index = cseries.NONE) {
-		// Stub
+	Fade(limitVolume, duration /*seconds*/, stopOnNoVolume = true, index = cseries.NONE) {
+		const fadeFn = slot => slot?.fade(limitVolume, duration, stopOnNoVolume);
+		if (index === -1) this.music_slots.forEach(fadeFn);
+		else fadeFn(this.music_slots[index]);
 	}
 	
 	Idle() {
@@ -134,11 +170,110 @@ export class Music {
 	}
 }
 
+class Slot {
+	constructor() {
+		this.audioBuffer = null;
+		this.source = null;
+		this.gainNode = audioContext.createGain();
+		this.gainNode.gain.value = 1;
+		this.loop = false;
+		this.volume = 1;
+		this.connected = false;
+		this._isPlaying = false;
+	}
+	
+	setAudioBuffer(buffer) {
+		this.audioBuffer = buffer;
+		this._isPlaying = false;
+	}
+	
+	isInit() {
+		return !!this.audioBuffer;
+	}
+	
+	setRouting(parentGain) {
+		if (!this.connected) {
+			this.gainNode.connect(parentGain);
+			this.connected = true;
+		}
+	}
+	
+	async load(url, loop = false, volume = 1.0) {
+		this.loop = loop;
+		this.volume = volume;
+		const response = await fetch(url);
+		const arrayBuffer = await response.arrayBuffer();
+		this.audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+	}
+	
+	play() {
+		if (!this.audioBuffer || this._isPlaying) return;
+		
+		this.source = audioContext.createBufferSource();
+		this.gainNode = audioContext.createGain();
+		this.gainNode.gain.value = this.volume;
+		
+		this.source.buffer = this.audioBuffer;
+		this.source.loop = this.loop;
+		
+		this.source.connect(this.gainNode).connect(audioContext.destination);
+		this.source.start();
+		
+		this._isPlaying = true;
+		
+		this.source.onended = () => {
+			this._isPlaying = false;
+		};
+	}
+	
+	playing() {
+		return this._isPlaying;
+	}
+	
+	pause() {
+		this.stopSource();
+	}
+	
+	stopSource() {
+		if (this.source) {
+			this.source.stop();
+			this.source.disconnect();
+			this.source = null;
+		}
+	}
+	
+	setParameters(loop, volume) {
+		this.loop = loop;
+		this.volume = Math.max(0, Math.min(1, volume));
+		return true; // TODO: consider refactor as it's always true
+	}
+	
+	fade(targetVolume, duration, stopWhenZero = true) {
+		const now = audioContext.currentTime;
+		const current = this.gainNode.gain.value;
+		this.gainNode.gain.cancelScheduledValues(now);
+		this.gainNode.gain.setValueAtTime(current, now);
+		this.gainNode.gain.linearRampToValueAtTime(targetVolume, now + duration);
+		if (stopWhenZero && targetVolume === 0) {
+			setTimeout(() => this.pause(), duration * 1000.0 /* expects ms */);
+		}
+	}
+	
+	getVolume() {
+		return this.gainNode.gain.value;
+	}
+	
+	setVolume(volume) {
+		this.volume = volume;
+		this.gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+	}
+}
+
+
 /*
 #include "Decoder.h"
 #include "FileHandler.h"
 #include "Random.h"
-#include "SoundManager.h"
 #include "MusicPlayer.h"
 
 class Music

@@ -214,7 +214,9 @@ import * as shell from '../shell.js';
 #include "fades.h"
 #include "game_window.h"
 #include "game_errors.h"
-#include "Music.h"
+*/
+import { Music } from '../Sound/Music.js';
+/*
 #include "images.h"
 */
 import * as screen from '../RenderOther/screen.js';
@@ -1214,12 +1216,12 @@ function display_main_menu() {
 	Plugins.instance().set_mode(Plugins.kMode_Menu);
 	change_screen_mode(_screentype_menu);
 	display_screen(MAIN_MENU_BASE);
-	
+	*/
 	//  Start up the song! 
 	if (!Music.instance().Playing() && game_state.main_menu_display_count == 0) {
 		Music.instance().RestartIntroMusic();
 	}
-
+/*
 	draw_powered_by_aleph_one(false);
 */
 	game_state.main_menu_display_count++;

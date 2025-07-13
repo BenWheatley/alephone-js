@@ -35,6 +35,7 @@ import * as shell from '../shell.js';
 #include "preferences.h"
 */
 import * as screen from '../RenderOther/screen.js';
+import { audioContext } from '../Sound/SoundManager.js';
 
 // Global variables
 let mouse_active = false;
@@ -167,3 +168,7 @@ window.addEventListener("mousedown", e => {
 window.addEventListener("mouseup", e => {
 	currentMouseButtons &= ~(1 << e.button);
 });
+
+window.addEventListener('click', () => {
+	audioContext.resume();
+}, { once: true });

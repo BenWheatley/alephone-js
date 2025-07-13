@@ -59,8 +59,8 @@ import * as _interface from './Misc/interface.js';
 #include "fades.h"
 */
 import * as screen from './RenderOther/screen.js';
+import { Music } from './Sound/Music.js';
 /*
-#include "Music.h"
 #include "images.h"
 #include "vbl.h"
 #include "preferences.h"
@@ -319,7 +319,9 @@ export function initialize_application()
 	// Initialize everything
 	mytm_initialize();
 	SoundManager::instance()->Initialize(*sound_preferences);
+	*/
 	initialize_marathon_music_handler();
+	/*
 	initialize_keyboard_controller();
 	initialize_gamma();
 	alephone::Screen::instance()->Initialize(&graphics_preferences->screen_mode);
@@ -350,14 +352,14 @@ function networking_available()
 	return false;
 }
 
-/*
-static void initialize_marathon_music_handler(void)
-{
-	FileSpecifier file;
-	if (get_default_music_spec(file))
-		Music::instance()->SetupIntroMusic(file);
+function initialize_marathon_music_handler() {
+	const url = "http://localhost:8000/ALEPHONE_DEFAULT_DATA/Marathon%202/Music.ogg"; // TODO: replace hard-coded value with `const url = get_default_music_spec();` once I've got get_default_music_spec() into JS-land
+	if (url != null) {
+		Music.instance().SetupIntroMusic(url);
+	}
 }
 
+/*
 bool quit_without_saving(void)
 {
 	dialog d;
