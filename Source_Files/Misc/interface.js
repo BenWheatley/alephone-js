@@ -325,7 +325,6 @@ const game_state = {
 	phase: 0,
 	last_ticks_on_idle: 0,
 	current_screen: 0,
-	current_netgame_allows_microphone: false,
 	main_menu_display_count: 0,
 	highlighted_main_menu_item: 0
 };
@@ -498,11 +497,6 @@ export function get_game_state() {
 	return game_state.state;
 }
 /*
-bool current_netgame_allows_microphone()
-{
-	return game_state.current_netgame_allows_microphone;
-}
-
 short get_game_controller(
 	void)
 {
