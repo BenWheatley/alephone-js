@@ -41,21 +41,21 @@ using namespace std;
 export function getcstr(resid, item) {
 	return expand_app_variables( TextStrings.TS_GetCString(resid, item) );
 }
-/*
-//  Create String Vector
-const vector<string> build_stringvector_from_stringset (int resid)
-{
-	vector<string> result;
-	int index = 0;
-	
-	while (TS_GetCString(resid, index) != NULL) {
-		result.push_back (string (TS_GetCString(resid, index)));
+
+export function build_stringvector_from_stringset(resid) {
+	const result = [];
+	let index = 0;
+
+	while (true) {
+		const str = TextStrings.TS_GetCString(resid, index);
+		if (str == null) break;
+		result.push(expand_app_variables(str));
 		index++;
 	}
-	
+
 	return result;
 }
-
+/*
 //  String format routines
 char *csprintf(
 	       char *buffer,
