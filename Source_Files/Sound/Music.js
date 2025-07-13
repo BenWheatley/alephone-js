@@ -21,6 +21,119 @@
 
 import * as cseries from '../CSeries/cseries.js';
 
+export class Music {
+	static #_instance = null;
+	
+	static reserved_music_slots = 2;
+	
+	static MusicSlot = {
+		Intro: 0,
+		Level: 1
+	};
+	
+	static instance() {
+		if (!Music.#_instance) {
+			Music.#_instance = new Music();
+		}
+		return Music.#_instance;
+	}
+	
+	constructor() {
+		this.music_slots = new Array(Music.reserved_music_slots).fill(null);
+		this.playlist = [];
+		this.song_number = 0;
+		this.random_order = false;
+		this.marathon_1_song_index = cseries.NONE;
+	}
+	
+	// --- Setup / playback ---
+	SetupIntroMusic(file) {
+		// Stub
+		return true;
+	}
+	
+	RestartIntroMusic() {
+		// Stub
+	}
+	
+	Load(file, loop, volume) {
+		// Stub
+		return cseries.NONE;
+	}
+	
+	Play(index) {
+		// Stub
+	}
+	
+	// --- State queries ---
+	Playing(index = cseries.NONE) {
+		// Stub
+		return false;
+	}
+	
+	IsInit(index) {
+		// Stub
+		return false;
+	}
+	
+	GetVolume(index) {
+		// Stub
+		return 1.0;
+	}
+	
+	// --- Control ---
+	SetVolume(index, volume) {
+		// Stub
+	}
+	
+	Pause(index = cseries.NONE) {
+		// Stub
+	}
+	
+	Fade(limitVolume, duration, stopOnNoVolume = true, index = cseries.NONE) {
+		// Stub
+	}
+	
+	Idle() {
+		// Stub
+	}
+	
+	StopInGameMusic() {
+		// Stub
+	}
+	
+	StopLevelMusic() {
+		// Stub
+	}
+	
+	// --- Playlist logic ---
+	ClearLevelMusic() {
+		// Stub
+	}
+	
+	PushBackLevelMusic(file) {
+		// Stub
+	}
+	
+	SeedLevelMusic() {
+		// Stub
+	}
+	
+	SetClassicLevelMusic(song_index) {
+		// Stub
+	}
+	
+	HasClassicLevelMusic() {
+		// Stub
+		return this.marathon_1_song_index >= 0;
+	}
+	
+	// --- Config ---
+	LevelMusicRandom(fRandom) {
+		this.random_order = fRandom;
+	}
+}
+
 /*
 #include "Decoder.h"
 #include "FileHandler.h"
