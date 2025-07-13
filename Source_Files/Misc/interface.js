@@ -221,7 +221,9 @@ import * as shell from '../shell.js';
 #include "preferences.h"
 #include "FileHandler.h"
 #include "lua_script.h" // PostIdle
-#include "interface_menus.h"
+*/
+import * as interface_menus from './interface_menus.js';
+/*
 #include "XML_LevelScript.h"
 #include "Movie.h"
 #include "QuickSave.h"
@@ -258,8 +260,6 @@ const max_handled_recording= RECORDING_VERSION_ALEPH_ONE_1_7;
 
 import * as screen_definitions from '../RenderOther/screen_definitions.js';
 /*
-#include "interface_menus.h"
-
 // LP addition: getting OpenGL rendering stuff
 #include "render.h"
 #include "OGL_Render.h"

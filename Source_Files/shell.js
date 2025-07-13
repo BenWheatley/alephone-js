@@ -73,7 +73,9 @@ import * as joystick from './Input/joystick.js';
 #include "game_window.h" // for draw_interface()
 #include "extensions.h"
 #include "items.h"
-#include "interface_menus.h"
+*/
+import * as interface_menus from './Misc/interface_menus.js';
+/*
 #include "weapons.h"
 #include "lua_script.h"
 

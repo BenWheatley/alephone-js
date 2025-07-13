@@ -1,9 +1,4 @@
-#ifndef __INTERFACE_MENUS_H
-#define __INTERFACE_MENUS_H
-
 /*
-	interface_menus.h
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -20,42 +15,32 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
-	Thursday, September 28, 1995 7:02:23 PM- rdm created.
-
 */
 
-enum { /* Menus available during the game */
-	mGame= 128,
-	iPause= 1,
-	iSave,
-	iRevert,
-	iCloseGame,
-	iQuitGame
-};
+// Menus available during the game
+const mGame = 128;
+const iPause = 1;
+const iSave = 2;
+const iRevert = 3;
+const iCloseGame = 4;
+const iQuitGame = 5;
 
-enum { /* Menu interface... */
-	mInterface= 129,
-	iNewGame= 1,
-	iLoadGame,
-	iGatherGame,
-	iJoinGame,
-	iPreferences,
-	iReplayLastFilm,
-	iSaveLastFilm,
-	iReplaySavedFilm,
-	iCredits,
-	iQuit,
-	iCenterButton,
-	iPlaySingletonLevel,
-	iAbout
-};
+// Menu interface...
+const mInterface = 129;
+const iNewGame = 1;
+const iLoadGame = 2;
+const iGatherGame = 3;
+const iJoinGame = 4;
+const iPreferences = 5;
+const iReplayLastFilm = 6;
+const iSaveLastFilm = 7;
+const iReplaySavedFilm = 8;
+const iCredits = 9;
+const iQuit = 10;
+const iCenterButton = 11;
+const iPlaySingletonLevel = 12;
+const iAbout = 13;
 
 /* This is the menu with nothing in the title, so that it doesn't show up */
 /* when the menu bar is drawn atexit.. */
-enum {
-	mFakeEmptyMenu= 130
-};
-
-#endif
-
+const mFakeEmptyMenu = 130;
