@@ -196,7 +196,15 @@ extern void update_game_window(void);
 extern bool MainScreenVisible(void);
 */
 
-export function alert_user(message, severity) {
+export function alert_user(...args) {
+	if (args.length === 2) {
+		alert_user_2(...args);
+	} else {
+		alert_user_4(...args);
+	}
+}
+
+function alert_user_2(message, severity) {
 	const title = {
 		[fatalError]: "Error",
 		[infoNoError]: "Information",
@@ -205,7 +213,7 @@ export function alert_user(message, severity) {
 	window.alert(`${title}:\n\n${message}`);
 }
 
-export function alert_user(severity, resid, item, error) {
+function alert_user_4(severity, resid, item, error) {
 	let str = cseries.getcstr(resid, item);
 	const msg = `${str} (error ${error})`;
 	if (severity == infoError) {
