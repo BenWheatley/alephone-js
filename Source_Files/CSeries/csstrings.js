@@ -17,6 +17,8 @@
 */
 
 import * as TextStrings from '../RenderOther/TextStrings.js';
+import * as cspaths from './cspaths.js';
+import * as alephversion from '../Misc/alephversion.js';
 
 /*
 #if defined(__clang__)
@@ -29,9 +31,7 @@ import * as TextStrings from '../RenderOther/TextStrings.js';
 
 #include "cstypes.h"
 
-#include "cspaths.h"
 #include "Logging.h"
-#include "alephversion.h"
 #include "Scenario.h"
 
 using namespace std;
@@ -307,13 +307,16 @@ std::string wide_to_utf8(const std::wstring& utf16) { return wide_to_utf8(utf16.
 
 function expand_app_variables(str) {
   return str
-    .replaceAll("$appName$", get_application_name())
-    .replaceAll("$appVersion$", A1_DISPLAY_VERSION)
-    .replaceAll("$appLongVersion$", A1_VERSION_STRING)
-    .replaceAll("$appDate$", A1_DISPLAY_DATE_VERSION)
-    .replaceAll("$appPlatform$", A1_DISPLAY_PLATFORM)
-    .replaceAll("$appURL$", A1_HOMEPAGE_URL)
-    .replaceAll("$appLogFile$", loggingFileName())
+    .replaceAll("$appName$", cspaths.get_application_name())
+    .replaceAll("$appVersion$", alephversion.A1JS_DISPLAY_VERSION)
+    .replaceAll("$appLongVersion$", alephversion.A1JS_VERSION_STRING)
+    .replaceAll("$appDate$", alephversion/A1JS_DISPLAY_DATE_VERSION)
+    .replaceAll("$appPlatform$", alephversion.A1JS_DISPLAY_PLATFORM)
+    .replaceAll("$appURL$", alephversion.A1JS_HOMEPAGE_URL)
+    .replaceAll("$appLogFile$", "{see browser developer console}")
+    /*
     .replaceAll("$scenarioName$", Scenario.instance().GetName())
-    .replaceAll("$scenarioVersion$", Scenario.instance().GetVersion());
+    .replaceAll("$scenarioVersion$", Scenario.instance().GetVersion())
+    */
+    ;
 }
