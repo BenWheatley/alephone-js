@@ -1431,42 +1431,10 @@ struct color_table *calculate_picture_clut(int CLUTSource, int pict_resource_num
 {
 	struct color_table *picture_table = NULL;
 
-#if 1
     // with TRUE_COLOR_ONLY turned on, specific cluts don't matter
     picture_table = build_8bit_system_color_table();
     build_direct_color_table(picture_table, interface_bit_depth);
-#else
-	// Select the source
-	image_file_t *OFilePtr = NULL;
-	switch (CLUTSource) {
-		case CLUTSource_Images:
-			OFilePtr = &ImagesFile;
-			break;
-		
-		case CLUTSource_Scenario:
-			OFilePtr = &ScenarioFile;
-			break;
-	
-		default:
-			vassert(false, csprintf(temporary, "Invalid resource-file selector: %d", CLUTSource));
-			break;
-	}
-	
-	// Load CLUT resource
-	LoadedResource CLUT_Rsrc;
-	if (OFilePtr->get_clut(pict_resource_number, CLUT_Rsrc)) {
-
-		// Allocate color table
-		picture_table = new color_table;
-
-		// Convert MacOS CLUT resource to color table
-		if (interface_bit_depth == 8)
-			build_color_table(picture_table, CLUT_Rsrc);
-		else
-			build_direct_color_table(picture_table, interface_bit_depth);
-	}
-
-#endif
+    
 	return picture_table;
 }
 
