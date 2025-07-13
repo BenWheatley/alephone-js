@@ -1,8 +1,4 @@
-#ifndef __SOUNDMANAGER_H
-#define __SOUNDMANAGER_H
-
 /*
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -19,8 +15,11 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
 */
+
+export const audioContext = new AudioContext();
+
+/*
 
 #include "cseries.h"
 #include "FileHandler.h"
@@ -178,19 +177,18 @@ private:
 	static const int _sound_is_local = 0x0001;
 };
 
-/* ---------- types */
+// ---------- types
 
 typedef void (*add_ambient_sound_source_proc_ptr)(ambient_sound_data *ambient_sounds,
 	world_location3d *source, world_location3d *listener, short sound_index,
 	short absolute_volume);
 
-/* ---------- external prototypes */
+// ---------- external prototypes
 
-/* _sound_listener_proc() gives the location and facing of the listener at any point in time;
-	what are the alternatives to providing this function? */
+// _sound_listener_proc() gives the location and facing of the listener at any point in time; what are the alternatives to providing this function?
 world_location3d *_sound_listener_proc(void);
 
-/* _sound_obstructed_proc() tells whether the given sound is obstructed or not */
+// _sound_obstructed_proc() tells whether the given sound is obstructed or not
 uint16 _sound_obstructed_proc(world_location3d *source);
 
 void _sound_add_ambient_sources_proc(void *data, add_ambient_sound_source_proc_ptr add_one_ambient_sound_source);
@@ -226,5 +224,4 @@ short Sound_Center_Button();
 class InfoTree;
 void parse_mml_sounds(const InfoTree& root);
 void reset_mml_sounds();
-
-#endif
+*/
