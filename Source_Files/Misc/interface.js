@@ -442,57 +442,37 @@ function player_controlling_game() {
 	return player_in_control;
 }
 
-/*
-void set_game_state(
-	short new_state)
-{
-	short old_state= game_state.state;
+export function set_game_state(new_state) {
+	const old_state = game_state.state;
 
-	switch(old_state)
-	{
-		case _game_in_progress:
-			switch(new_state)
-			{
-				case _close_game:
-					finish_game(true);
-					break;
-					
-				case _quit_game:
-					finish_game(false);
-					display_quit_screens();
-					break;
-					
-				case _switch_demo:
-					//  Because Alain's code calls us at interrupt level 1, 
-					//   we must defer processing of this message until idle 
-					game_state.state= _switch_demo;
-					game_state.phase= 0;
-					break;
-					
-				case _revert_game:
-					//  Because reverting a game in the middle of the update_world loop sounds 
-					//   sketchy, this is not done until idle time.. 
-					game_state.state= new_state;
-					game_state.phase= 0;
-					break;
+	if (old_state != GameStates._game_in_progress) {
+		game_state.state = new_state;
+		return;
+	}
 
-				case _change_level:
-					game_state.state= new_state;
-					game_state.phase= 0;
-					break;
-					
-				default: 
-					assert(false);
-					break;
-			}
+	switch (new_state) {
+		case GameStates._close_game:
+			finish_game(true);
+			break;
+
+		case GameStates._quit_game:
+			finish_game(false);
+			display_quit_screens();
+			break;
+
+		case GameStates._switch_demo:
+		case GameStates._revert_game:
+		case GameStates._change_level:
+			game_state.state = new_state;
+			game_state.phase = 0;
 			break;
 
 		default:
-			game_state.state= new_state;
+			Logging.logAnomaly(`unexpected set_game_state(new_state): ${new_state}`);
 			break;
 	}
 }
-*/
+
 export function get_game_state() {
 	return game_state.state;
 }
@@ -1861,7 +1841,12 @@ static void display_credits(
 		display_screen(screen_data->screen_base);
 	}
 }
-
+*/
+function display_quit_screens() {
+	// TODO: convert real method to this
+	console.log("stub method called: display_quit_screens");
+}
+/*
 static void display_quit_screens(
 	void)
 {
@@ -2328,6 +2313,12 @@ void handle_load_game(
 
 extern bool current_net_game_has_scores();
 
+*/
+function finish_game(return_to_main_menu) {
+	// TODO: convert real method to this
+	console.log("Stub method called: finish_game");
+}
+/*
 static void finish_game(
 	bool return_to_main_menu)
 {
