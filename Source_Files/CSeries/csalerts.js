@@ -19,7 +19,7 @@
 
 */
 
-import * as cstrings from './cstrings.js';
+import * as cstrings from './csstrings.js';
 
 export const infoError = 0;
 export const fatalError = 1;
