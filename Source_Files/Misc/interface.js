@@ -386,7 +386,6 @@ const m1_display_screens = [
 ];
 /*
 //  -------------- local globals 
-static struct game_state game_state;
 static std::shared_ptr<SoundPlayer> introduction_sound = nullptr;
 static FileSpecifier DraggedReplayFile;
 */
@@ -494,13 +493,11 @@ void set_game_state(
 			break;
 	}
 }
-
-short get_game_state(
-	void)
-{
+*/
+export function get_game_state() {
 	return game_state.state;
 }
-
+/*
 bool current_netgame_allows_microphone()
 {
 	return game_state.current_netgame_allows_microphone;
