@@ -2640,15 +2640,6 @@ static void force_system_colors(
 	{
 		interface_fade_out(MAIN_MENU_BASE, fade_music);
 	}
-
-	if(interface_bit_depth==8)
-	{
-		struct color_table *system_colors= build_8bit_system_color_table();
-
-		assert_world_color_table(system_colors, (struct color_table *) NULL);
-
-		delete system_colors;
-	}
 }
 
 static void display_screen(
@@ -2672,12 +2663,6 @@ static void display_screen(
 
 		if(current_picture_clut)
 		{
-			//  slam the entire clut to black, now. 
-			if (interface_bit_depth==8) 
-			{
-				assert_world_color_table(current_picture_clut, (struct color_table *) NULL);
-			}
-
 			full_fade(_start_cinematic_fade_in, current_picture_clut);
 
 			draw_full_screen_pict_resource_from_images(pict_resource_number);
@@ -2844,11 +2829,6 @@ static void try_and_display_chapter_screen(
 		{
 			LoadedResource SoundRsrc;
 
-			//  slam the entire clut to black, now. 
-			if (interface_bit_depth==8) 
-			{
-				assert_world_color_table(current_picture_clut, (struct color_table *) NULL);
-			}
 			full_fade(_start_cinematic_fade_in, current_picture_clut);
 
 			//  Draw the picture 
@@ -2925,11 +2905,6 @@ void stop_interface_fade(
 		
 		assert(animated_color_table);
 		delete animated_color_table;
-
-		if (interface_bit_depth==8) 
-		{
-			assert_world_color_table(current_picture_clut, (struct color_table *) NULL);
-		}
 
 		if(game_state.state==_display_main_menu)
 		{
