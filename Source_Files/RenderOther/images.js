@@ -1,6 +1,4 @@
 /*
-	images.c
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -17,61 +15,43 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
+*/
 
-	Thursday, July 20, 1995 3:29:30 PM- rdm created.
-
-Feb. 4, 2000 (Loren Petrich):
-	Changed halt() to assert(false) for better debugging
-
-Feb. 5, 2000 (Loren Petrich):
-	Better handling of case of no scenario-file resource fork
-
-Aug 21, 2000 (Loren Petrich):
-	Added object-oriented file handling
-	
-	LoadedResource handles are assumed to always be locked,
-	and HLock() and HUnlock() have been suppressed for that reason.
-
-Jul 6, 2001 (Loren Petrich):
-	Added Thomas Herzog's changes for loading Win32-version image chunks
-
-Jan 25, 2002 (Br'fin (Jeremy Parsons)):
-	Added TARGET_API_MAC_CARBON for Quicktime.h
-
-Jul 31, 2002 (Loren Petrich)
-	Added text-resource access in analogy with others' image- and sound-resource access;
-	this is for supporting the M2-Win95 file format
- */
-
-#include "cseries.h"
+/*
 #include "FileHandler.h"
+*/
 
-#include <stdlib.h>
-#include <memory>
+// Select what resource file is to be the source of the color table;
+// this is for the benefit of resource-file 
+export const CLUTSource_Images = 0;
+export const CLUTSource_Scenario = 1;
 
-#include "interface.h"
-#include "shell.h"
-#include "images.h"
-#include "screen.h"
+import * as cseries from '../CSeries/cseries.js';
+/*
+#include "FileHandler.h"
+*/
+import * as _interface from '../Misc/interface.js';
+import * as shell from '../shell.js';
+import * as screen from './screen.js';
+/*
 #include "wad.h"
 #include "screen_drawing.h"
-#include "Logging.h"
-
+*/
+import * as Logging from '../Misc/Logging.js';
+/*
 #include "render.h"
 #include "OGL_Render.h"
 #include "OGL_Blitter.h"
-#include "screen_definitions.h"
+*/
+import * as screen_definitions from './screen_definitions.js';
+/*
 #include "Plugins.h"
-
-
-// Constants
-enum {
-	_images_file_delta16= 1000,
-	_images_file_delta32= 2000,
-	_scenario_file_delta16= 10000,
-	_scenario_file_delta32= 20000
-};
-
+*/
+const _images_file_delta16 = 1000;
+const _images_file_delta32 = 2000;
+const _scenario_file_delta16 = 10000;
+const _scenario_file_delta32 = 20000;
+/*
 // Structure for open image file
 class image_file_t {
 public:
@@ -110,21 +90,9 @@ static image_file_t ScenarioFile;
 static image_file_t ExternalResourcesFile;
 static image_file_t ShapesImagesFile;
 static image_file_t SoundsImagesFile;
-
-// Prototypes
-static void shutdown_images_handler(void);
-static void draw_picture(LoadedResource &PictRsrc);
-
-
-#include <SDL2/SDL_endian.h>
-
-#ifdef HAVE_SDL_IMAGE
-#include <SDL2/SDL_image.h>
-#endif
-
+/*
 #include "byte_swapping.h"
 #include "screen_drawing.h"
-
 
 // From screen_sdl.cpp
 extern short interface_bit_depth;
@@ -135,10 +103,7 @@ extern screen_rectangle draw_clip_rect;
 
 extern bool shapes_file_is_m1();
 
-/*
- *  Uncompress picture data, returns size of compressed image data that was read
- */
-
+//  Uncompress picture data, returns size of compressed image data that was read
 // Uncompress (and endian-correct) scan line compressed by PackBits RLE algorithm
 template <class T>
 static const uint8 *unpack_bits(const uint8 *src, int row_bytes, T *dst)
@@ -407,9 +372,7 @@ int get_pict_header_width(LoadedResource &rsrc)
 	return -1;
 }
 
-/*
- *  Convert picture resource to SDL surface
- */
+//  Convert picture resource to SDL surface
 
 std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> picture_to_surface(LoadedResource &rsrc)
 {
@@ -629,7 +592,6 @@ std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> picture_to_surface(Load
 				break;
 			}
 
-#ifdef HAVE_SDL_IMAGE
 			case 0x8200: {	// Compressed QuickTime image (we only handle JPEG compression)
 				// 1. Header
 				uint32 opcode_size = SDL_ReadBE32(p);
@@ -703,7 +665,6 @@ std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> picture_to_surface(Load
 				SDL_RWseek(p, opcode_start + opcode_size, SEEK_SET);
 				break;
 			}
-#endif
 
 			default:
 				if (opcode >= 0x0300 && opcode < 0x8000)
@@ -723,10 +684,7 @@ std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> picture_to_surface(Load
 	return s;
 }
 
-
-/*
- *  Rescale surface to given dimensions
- */
+//  Rescale surface to given dimensions
 
 template <class T>
 static void rescale(T *src_pixels, int src_pitch, T *dst_pixels, int dst_pitch, int width, int height, uint32 dx, uint32 dy)
@@ -775,10 +733,7 @@ SDL_Surface *rescale_surface(SDL_Surface *s, int width, int height)
 	return s2;
 }
 
-
-/*
- *  Tile surface to fill given dimensions
- */
+//  Tile surface to fill given dimensions
 
 template <class T>
 static void tile(T *src_pixels, int src_pitch, T *dst_pixels, int dst_pitch, int src_width, int src_height, int dst_width, int dst_height)
@@ -833,13 +788,7 @@ SDL_Surface *tile_surface(SDL_Surface *s, int width, int height)
 	return s2;
 }
 
-
-/*
- *  Draw picture resource centered on screen
- */
-
-extern SDL_Surface *draw_surface;	// from screen_drawing.cpp
-//void draw_intro_screen(void);		// from screen.cpp
+//  Draw picture resource centered on screen
 
 static void draw_picture_surface(std::shared_ptr<SDL_Surface> s)
 {
@@ -880,10 +829,7 @@ static void draw_picture(LoadedResource &rsrc)
     draw_picture_surface(picture_to_surface(rsrc));
 }
 
-
-/*
- *  Get system color table
- */
+//  Get system color table
 
 struct color_table *build_8bit_system_color_table(void)
 {
@@ -907,12 +853,9 @@ struct color_table *build_8bit_system_color_table(void)
 	return table;
 }
 
+//  Scroll image across screen
 
-/*
- *  Scroll image across screen
- */
-
-#define SCROLLING_SPEED (MACHINE_TICKS_PER_SECOND / 20)
+const SCROLLING_SPEED = (csmisc.MACHINE_TICKS_PER_SECOND / 20);
 
 void scroll_full_screen_pict_resource_from_scenario(int pict_resource_number, bool text_block)
 {
@@ -983,10 +926,7 @@ void scroll_full_screen_pict_resource_from_scenario(int pict_resource_number, bo
 	}
 }
 
-
-/*
- *  Initialize image manager, open Images file
- */
+//  Initialize image manager, open Images file
 
 void initialize_images_manager(void)
 {
@@ -1005,10 +945,7 @@ void initialize_images_manager(void)
 	atexit(shutdown_images_handler);
 }
 
-
-/*
- *  Shutdown image manager
- */
+//  Shutdown image manager
 
 static void shutdown_images_handler(void)
 {
@@ -1019,10 +956,7 @@ static void shutdown_images_handler(void)
 	ImagesFile.close_file();
 }
 
-
-/*
- *  Set map file to load images from
- */
+//  Set map file to load images from
 
 void set_scenario_images_file(FileSpecifier &file)
 {
@@ -1058,10 +992,7 @@ void set_sounds_images_file(FileSpecifier &file)
 	SoundsImagesFile.open_file(file);
 }
 
-
-/*
- *  Open/close image file
- */
+//  Open/close image file
 
 bool image_file_t::open_file(FileSpecifier &file)
 {
@@ -1102,10 +1033,7 @@ bool image_file_t::is_open(void)
 	return rsrc_file.IsOpen() || wad_file.IsOpen();
 }
 
-
-/*
- *  Get resource from file
- */
+//  Get resource from file
 
 bool image_file_t::has_rsrc(uint32 rsrc_type, uint32 wad_type, int id)
 {
@@ -1221,10 +1149,7 @@ bool image_file_t::get_text(int id, LoadedResource &rsrc)
 	return get_rsrc(FOUR_CHARS_TO_INT('T','E','X','T'), FOUR_CHARS_TO_INT('t','e','x','t'), id, rsrc);
 }
 
-
-/*
- *  Get/draw image from Images file
- */
+//  Get/draw image from Images file
 
 bool get_picture_resource_from_images(int base_resource, LoadedResource &PictRsrc)
 {
@@ -1264,7 +1189,6 @@ bool images_picture_exists(int base_resource)
     LoadedResource PictRsrc;
     return get_picture_resource_from_images(base_resource, PictRsrc);
 }
-
 
 // In the first Marathon, the main menu is drawn from multiple
 // shapes in collection 10, instead of a single image. We handle
@@ -1411,10 +1335,7 @@ void draw_full_screen_pict_resource_from_images(int pict_resource_number)
         draw_picture(PictRsrc);
 }
 
-
-/*
- *  Get/draw image from scenario
- */
+//  Get/draw image from scenario
 
 bool get_picture_resource_from_scenario(int base_resource, LoadedResource &PictRsrc)
 {
@@ -1456,10 +1377,7 @@ void draw_full_screen_pict_resource_from_scenario(int pict_resource_number)
         draw_picture(PictRsrc);
 }
 
-
-/*
- *  Get sound resource from scenario
- */
+//  Get sound resource from scenario
 
 bool get_sound_resource_from_scenario(int resource_number, LoadedResource &SoundRsrc)
 {
@@ -1488,7 +1406,6 @@ bool get_sound_resource_from_scenario(int resource_number, LoadedResource &Sound
     return found;
 }
 
-
 // LP: do the same for text resources
 
 bool get_text_resource_from_scenario(int resource_number, LoadedResource &TextRsrc)
@@ -1506,10 +1423,7 @@ bool get_text_resource_from_scenario(int resource_number, LoadedResource &TextRs
 	return success;
 }
 
-
-/*
- *  Calculate color table for image
- */
+//  Calculate color table for image
 
 struct color_table *calculate_picture_clut(int CLUTSource, int pict_resource_number)
 {
@@ -1554,10 +1468,7 @@ struct color_table *calculate_picture_clut(int CLUTSource, int pict_resource_num
 	return picture_table;
 }
 
-
-/*
- *  Determine ID for picture resource
- */
+//  Determine ID for picture resource
 
 int image_file_t::determine_pict_resource_id(int base_id, int delta16, int delta32)
 {
@@ -1604,10 +1515,7 @@ int image_file_t::determine_pict_resource_id(int base_id, int delta16, int delta
 	return actual_id;
 }
 
-
-/*
- *  Convert picture and CLUT data from wad file to PICT resource
- */
+//  Convert picture and CLUT data from wad file to PICT resource
 
 bool image_file_t::make_rsrc_from_pict(void *data, size_t length, LoadedResource &rsrc, void *clut_data, size_t clut_length)
 {
@@ -1806,3 +1714,4 @@ std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)> find_m1_title_screen(Fi
 
 	return std::unique_ptr<SDL_Surface, decltype(&SDL_FreeSurface)>(nullptr, SDL_FreeSurface);
 }
+*/
