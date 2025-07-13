@@ -55,3 +55,12 @@ export function parse_mml_logging()
 {
 	console.log("parse_mml_logging called but stubbed out — should be deleted once app is running"); // TODO: only used by XML parser, so should be deleted eventually
 }
+
+export const logFatal   = (...args) => (logMessage(Level.fatal, 0, 0, ...args));
+export const logError   = (...args) => (logMessage(Level.error, 0, 0, ...args));
+export const logWarning = (...args) => (logMessage(Level.warning, 0, 0, ...args));
+export const logAnomaly = (...args) => (logMessage(Level.anomaly, 0, 0, ...args));
+export const logNote    = (...args) => (logMessage(Level.note, 0, 0, ...args));
+export const logSummary = (...args) => (logMessage(Level.summary, 0, 0, ...args));
+export const logTrace   = (...args) => (logMessage(Level.trace, 0, 0, ...args));
+export const logDump    = (...args) => (logMessage(Level.dump, 0, 0, ...args));
