@@ -66,9 +66,7 @@ char *getcstr(
 	}
 	return string;
 }
-
-
-
+/*
 //  Create String Vector
 const vector<string> build_stringvector_from_stringset (int resid)
 {
@@ -330,45 +328,17 @@ std::string wide_to_utf8(const wchar_t* utf16)      { return wide_to_utf8(utf16,
 std::string wide_to_utf8(const std::wstring& utf16) { return wide_to_utf8(utf16.c_str(), utf16.size()); }
 #endif // __WIN32__
 
-
-//  Substitute special variables like application name or version
-void expand_app_variables_inplace(std::string& str)
-{
-	boost::replace_all(str, "$appName$", get_application_name());
-	boost::replace_all(str, "$appVersion$", A1_DISPLAY_VERSION);
-	boost::replace_all(str, "$appLongVersion$", A1_VERSION_STRING);
-	boost::replace_all(str, "$appDate$", A1_DISPLAY_DATE_VERSION);
-	boost::replace_all(str, "$appPlatform$", A1_DISPLAY_PLATFORM);
-	boost::replace_all(str, "$appURL$", A1_HOMEPAGE_URL);
-	boost::replace_all(str, "$appLogFile$", loggingFileName());
-	boost::replace_all(str, "$scenarioName$", Scenario::instance()->GetName());
-	boost::replace_all(str, "$scenarioVersion$", Scenario::instance()->GetVersion());
-}
-
-std::string expand_app_variables(const std::string& input)
-{
-	std::string output = input;
-	expand_app_variables_inplace(output);
-	return output;
-}
-
-void expand_app_variables(char *dest, const char *src)
-{
-	if (strstr(src, "$appName$") ||
-		strstr(src, "$appVersion$") ||
-		strstr(src, "$appLongVersion$") ||
-		strstr(src, "$appDate$") ||
-		strstr(src, "$appPlatform$") ||
-		strstr(src, "$appURL$") ||
-		strstr(src, "$appLogFile$") ||
-		strstr(src, "$scenarioName$") ||
-		strstr(src, "$scenarioVersion$"))
-	{
-		std::string str(src);
-		expand_app_variables_inplace(str);
-		strcpy(dest, str.c_str());
-	}
-	else
-		strcpy(dest, src);
-}
 */
+
+function expand_app_variables(str) {
+  return str
+    .replaceAll("$appName$", get_application_name())
+    .replaceAll("$appVersion$", A1_DISPLAY_VERSION)
+    .replaceAll("$appLongVersion$", A1_VERSION_STRING)
+    .replaceAll("$appDate$", A1_DISPLAY_DATE_VERSION)
+    .replaceAll("$appPlatform$", A1_DISPLAY_PLATFORM)
+    .replaceAll("$appURL$", A1_HOMEPAGE_URL)
+    .replaceAll("$appLogFile$", loggingFileName())
+    .replaceAll("$scenarioName$", Scenario.instance().GetName())
+    .replaceAll("$scenarioVersion$", Scenario.instance().GetVersion());
+}
