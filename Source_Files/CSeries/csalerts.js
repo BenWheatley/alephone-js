@@ -41,32 +41,8 @@ export function alert_bad_extra_file(error) {
 export function alert_corrupted_map(error) {
 	alert_user_fatal(128, 23, error);
 }
+
 /*
-
-#undef assert
-#ifdef DEBUG
-#define assert(what) ((what) ? (void)0 : _alephone_assert(__FILE__,__LINE__,"Assertion failed: " #what))
-#define vassert(what,message) ((what) ? (void)0 : _alephone_assert(__FILE__,__LINE__,(message)))
-#define warn(what) ((what) ? (void)0 : _alephone_warn(__FILE__,__LINE__,"Assertion failed: " #what))
-#define vwarn(what,message) ((what) ? (void)0 : _alephone_warn(__FILE__,__LINE__,(message)))
-#else
-#define assert(what) ((void) 0)
-#define vassert(what,message) ((void) 0)
-#define warn(what) ((void) 0)
-#define vwarn(what,message) ((void) 0)
-#endif
-
-// "fast code" assert: disabled by default, enabled under DEBUG_FAST_CODE
-#ifdef DEBUG_FAST_CODE
-#define fc_assert(what) assert(what)
-#define fc_vassert(what,message) vassert(what,message)
-#else
-#define fc_assert(what) ((void) 0)
-#define fc_vassert(what,message) ((void) 0)
-#endif
-
-#endif
-
 #import <Cocoa/Cocoa.h>
 #include "cstypes.h"
 
@@ -295,21 +271,6 @@ void vhalt(const char *message)
 	shutdown_application();
 	system_alert_user(message, fatalError);
 	abort();
-}
-
-
-//  Assertion failed
-
-static char assert_text[256];
-
-void _alephone_assert(const char *file, int32 line, const char *what)
-{
-	vhalt(csprintf(assert_text, "%s:%d: %s", file, line, what));
-}
-
-void _alephone_warn(const char *file, int32 line, const char *what)
-{
-	vpause(csprintf(assert_text, "%s:%d: %s", file, line, what));
 }
 
 */
