@@ -496,20 +496,16 @@ void set_game_state(
 export function get_game_state() {
 	return game_state.state;
 }
-/*
-short get_game_controller(
-	void)
-{
+
+export function get_game_controller() {
 	return game_state.user;
 }
 
-void set_change_level_destination(
-	short level_number)
-{
-	assert(game_state.state== _change_level);
-	game_state.current_screen= level_number;
+export function set_change_level_destination(level_number) {
+	game_state.current_screen = level_number;
 }
 
+/*
 static short get_difficulty_level(void)
 {
 	return player_preferences->difficulty_level;
