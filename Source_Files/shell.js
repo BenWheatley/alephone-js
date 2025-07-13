@@ -121,18 +121,6 @@ DirectorySpecifier default_data_dir;  // Default scenario directory
 DirectorySpecifier bundle_data_dir;	  // Data inside Mac OS X app bundle
 */
 /*
-void PlayInterfaceButtonSound(short SoundID);
-
-// From preprocess_map_sdl.cpp
-extern bool get_default_music_spec(FileSpecifier &file);
-extern bool get_default_theme_spec(FileSpecifier& file);
-
-// From vbl_sdl.cpp
-void execute_timer_tasks(uint32 time);
-
-// Prototypes
-static void initialize_marathon_music_handler(void);
-static void process_event(const SDL_Event &event);
 
 // cross-platform static variables
 short vidmasterStringSetID = -1; // can be set with MML
@@ -144,9 +132,6 @@ function a1_getenv(name) {
 	return base + name + '/';
 }
 /*
-extern bool handle_open_replay(FileSpecifier& File);
-extern bool load_and_start_game(FileSpecifier& file);
-extern bool handle_edit_map();
 
 bool handle_open_document(const std::string& filename)
 {
