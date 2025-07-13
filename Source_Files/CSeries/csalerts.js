@@ -25,17 +25,23 @@ export const infoError = 0;
 export const fatalError = 1;
 export const infoNoError = 2;
 
-/*
-void alert_user_fatal(short resid, short item, int error)
-{
+export function alert_user_fatal(resid, item, error) {
 	alert_user(fatalError, resid, item, error);
-	halt();
+	// Original code called halt() here, but that's not sensible in JS
 }
-void alert_out_of_memory(int error) { alert_user_fatal(128, 14, error); }
-void alert_bad_extra_file(int error) { alert_user_fatal(128, 5, error); }
-void alert_corrupted_map(int error) { alert_user_fatal(128, 23, error); }
 
+export function alert_out_of_memory(error) {
+	alert_user_fatal(128, 14, error);
+}
 
+export function alert_bad_extra_file(error) {
+	alert_user_fatal(128, 5, error);
+}
+
+export function alert_corrupted_map(error) {
+	alert_user_fatal(128, 23, error);
+}
+/*
 
 #undef assert
 #ifdef DEBUG
