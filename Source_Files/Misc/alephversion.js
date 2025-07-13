@@ -29,7 +29,7 @@ export const A1JS_VERSION_STRING = A1JS_DISPLAY_PLATFORM + " " + A1JS_DISPLAY_DA
 
 export const A1JS_HOMEPAGE_URL = "https://github.com/BenWheatley/alephone-js";
 
-// TODO: I don't know if I'll be able to make net play work at all, but it's definitely not going to be on *my* hosts if I do, so ref the lhowon ones
+// TODO: I don't know if I'll be able to make net play work at all, but it's definitely not going to be on *my* hosts if I do, so continue to ref the lhowon ones
 export const A1_METASERVER_HOST "metaserver.lhowon.org";
 export const A1_METASERVER_LOGIN_URL "https://metaserver.lhowon.org/metaclient/login";
 export const A1_METASERVER_SIGNUP_URL "https://metaserver.lhowon.org/metaclient/signup";
