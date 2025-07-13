@@ -83,13 +83,15 @@ private:
 	OpenedFile wad_file;
 	wad_header wad_hdr;
 };
+*/
 
-// Global variables
-static image_file_t ImagesFile;
-static image_file_t ScenarioFile;
-static image_file_t ExternalResourcesFile;
-static image_file_t ShapesImagesFile;
-static image_file_t SoundsImagesFile;
+// These (.*)File properties will all be of type image_file_t, but that's not enforceable in JS
+let ImagesFile;
+let ScenarioFile;
+let ExternalResourcesFile;
+let ShapesImagesFile;
+let SoundsImagesFile;
+
 /*
 #include "byte_swapping.h"
 #include "screen_drawing.h"
