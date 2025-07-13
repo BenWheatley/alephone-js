@@ -1878,27 +1878,10 @@ void animate_screen_clut(struct color_table *color_table, bool full_screen)
 		current_gamma_b[i] = color_table->colors[i].blue;
 	}
 	using_default_gamma = !memcmp(color_table, uncorrected_color_table, sizeof(struct color_table));
-	
-	if (interface_bit_depth == 8) {
-		SDL_Color colors[256];
-		build_sdl_color_table(color_table, colors);
-		if (world_pixels)
-			SDL_SetPaletteColors(world_pixels->format->palette, colors, 0, 256);
-		if (HUD_Buffer)
-			SDL_SetPaletteColors(HUD_Buffer->format->palette, colors, 0, 256);
-	}
 }
 
 void assert_world_color_table(struct color_table *interface_color_table, struct color_table *world_color_table)
 {
-	if (interface_bit_depth == 8) {
-		SDL_Color colors[256];
-		build_sdl_color_table(interface_color_table, colors);
-		if (world_pixels)
-			SDL_SetPaletteColors(world_pixels->format->palette, colors, 0, 256);
-		if (HUD_Buffer)
-			SDL_SetPaletteColors(HUD_Buffer->format->palette, colors, 0, 256);
-	}
 	if (world_color_table)
 		animate_screen_clut(world_color_table, false);
 }

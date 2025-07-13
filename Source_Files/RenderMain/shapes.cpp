@@ -1712,11 +1712,8 @@ static void update_color_environment(
 			
 			build_collection_tinting_table(colors, color_count, collection_index, is_opengl);
 			
-			/* 8-bit interface, non-8-bit main window; remember interface CLUT separately */
-			if (collection_index==_collection_interface && interface_bit_depth==8 && bit_depth!=interface_bit_depth) _change_clut(change_interface_clut, colors, color_count);
-			
 			/* if we’re not in 8-bit, we don’t have to carry our colors over into the next collection */
-			if (bit_depth!=8) color_count= 1;
+			color_count= 1;
 		}
 	}
 
