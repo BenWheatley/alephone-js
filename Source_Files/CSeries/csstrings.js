@@ -1,9 +1,6 @@
-/*
-	CSSTRINGS.CPP
-
-	Copyright (C) 1991-2001 and beyond by Bo Lindbergh
+/* Copyright (C) 1991-2001 and beyond by Bo Lindbergh
 	and the "Aleph One" developers.
-
+ 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation; either version 3 of the License, or
@@ -17,62 +14,28 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
+*/
 
- // LP addition: use XML as source of strings (Apr 20, 2000)
+/*
+#if defined(__clang__)
+#define PRINTF_STYLE_ARGS(n,m) __attribute__((__format__(__printf__,n,m)))
+#elif defined(__GNUC__)
+#define PRINTF_STYLE_ARGS(n,m) __attribute__((format(gnu_printf,n,m)))
+#else
+#define PRINTF_STYLE_ARGS(n,m)
+#endif
 
- // LP (Aug 28, 2001): Added "fdprintf" -- used like dprintf, but writes to file AlephOneDebugLog.txt
+#include "cstypes.h"
 
- Sept-Nov 2001 (Woody Zenfell): added a few new pstring-oriented routines
-
- Jan 25, 2002 (Br'fin (Jeremy Parsons)):
-	Added TARGET_API_MAC_CARBON for Carbon.h
-	Carbon logging utilites directly format the pascal string as
- c2pstr is obsolete and I didn't want to allocate the memory
- to use CopyCStringToPascal
-
- May 10, 2005 (Woody Zenfell): merged almost-identical-but-annoyingly-not-quite
-	csstrings.cpp (Macintosh) and csstrings_sdl.cpp into this file.
- */
-
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-
-#include "csstrings.h"
 #include "cspaths.h"
 #include "TextStrings.h"
 #include "Logging.h"
 #include "alephversion.h"
 #include "Scenario.h"
 
-#include <map>
-#include <boost/algorithm/string/replace.hpp>
-
-#ifdef __WIN32__
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <wchar.h>
-#endif
-
 using namespace std;
 
-char temporary[256];
-
-
-/*
- *  Count number of strings with given resid
- */
-size_t countstr(
-		short resid)
-{
-	return TS_CountStrings(resid);
-}
-
-
-
-/*
- *  Get C string
- */
+//  Get C string
 char *getcstr(
 	      char *string,
 	      short resid,
@@ -106,10 +69,7 @@ char *getcstr(
 
 
 
-/*
- *  Create String Vector
- */
-
+//  Create String Vector
 const vector<string> build_stringvector_from_stringset (int resid)
 {
 	vector<string> result;
@@ -123,9 +83,7 @@ const vector<string> build_stringvector_from_stringset (int resid)
 	return result;
 }
 
-/*
- *  String format routines
- */
+//  String format routines
 char *csprintf(
 	       char *buffer,
 	       const char *format,
@@ -373,9 +331,7 @@ std::string wide_to_utf8(const std::wstring& utf16) { return wide_to_utf8(utf16.
 #endif // __WIN32__
 
 
-/*
- *  Substitute special variables like application name or version
- */
+//  Substitute special variables like application name or version
 void expand_app_variables_inplace(std::string& str)
 {
 	boost::replace_all(str, "$appName$", get_application_name());
@@ -415,3 +371,4 @@ void expand_app_variables(char *dest, const char *src)
 	else
 		strcpy(dest, src);
 }
+*/
