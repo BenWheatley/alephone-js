@@ -16,6 +16,8 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
+import * as TextStrings from '../RenderOther/TextStrings.js';
+
 /*
 #if defined(__clang__)
 #define PRINTF_STYLE_ARGS(n,m) __attribute__((__format__(__printf__,n,m)))
@@ -28,7 +30,6 @@
 #include "cstypes.h"
 
 #include "cspaths.h"
-#include "TextStrings.h"
 #include "Logging.h"
 #include "alephversion.h"
 #include "Scenario.h"
@@ -36,35 +37,9 @@
 using namespace std;
 
 //  Get C string
-char *getcstr(
-	      char *string,
-	      short resid,
-	      size_t item)
-{
-	const char *cCollString = TS_GetCString(resid,item);
-	if (cCollString)
-	{
-		// expand app-name placeholder, depending on IDs
-		switch (resid)
-		{
-			case 128:	// strERRORS
-			case 129:	// strFILENAMES
-			case 131:	// strPROMPTS
-			case 132:	// strNETWORK_ERRORS
-			case 134:	// (obsolete)
-			case 136:	// strJOIN_DIALOG_MESSAGES
-			case 138:	// strPATHS
-				expand_app_variables(string, cCollString);
-				break;
-			default:
-				strcpy(string,cCollString);
-		}
-	}
-	else
-	{
-		string[0] = 0;
-	}
-	return string;
+*/
+export function getcstr(resid, item) {
+	return expand_app_variables( TextStrings.TS_GetCString(resid, item) );
 }
 /*
 //  Create String Vector
