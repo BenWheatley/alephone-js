@@ -96,9 +96,6 @@ let SoundsImagesFile;
 #include "byte_swapping.h"
 #include "screen_drawing.h"
 
-// From screen_sdl.cpp
-extern short interface_bit_depth;
-
 // From screen_drawing_sdl.cpp
 extern bool draw_clip_rect_active;
 extern screen_rectangle draw_clip_rect;
@@ -1433,7 +1430,7 @@ struct color_table *calculate_picture_clut(int CLUTSource, int pict_resource_num
 
     // with TRUE_COLOR_ONLY turned on, specific cluts don't matter
     picture_table = build_8bit_system_color_table();
-    build_direct_color_table(picture_table, interface_bit_depth);
+    build_direct_color_table(picture_table, 32);
     
 	return picture_table;
 }
@@ -1444,7 +1441,7 @@ int image_file_t::determine_pict_resource_id(int base_id, int delta16, int delta
 {
 	int actual_id = base_id;
 	bool done = false;
-	int bit_depth = interface_bit_depth;
+	int bit_depth = 32;
 
 	while (!done) {
 		int next_bit_depth;
