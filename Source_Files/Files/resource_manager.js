@@ -18,38 +18,12 @@
 	http://www.gnu.org/licenses/gpl.html
 
 */
-
 /*
- *  resource_manager.cpp - MacOS resource handling for non-Mac platforms
- *
- *  Written in 2000 by Christian Bauer
- *
- *  Jan 16, 2003 (Woody Zenfell):
- *      Reworked stemmed-file opening logic; now using new Logging facility
- */
-
-#include <SDL2/SDL_endian.h>
+#include "cstypes.h"
 
 #include "cseries.h"
-#include "resource_manager.h"
 #include "FileHandler.h"
 #include "Logging.h"
-
-#include <stdio.h>
-#include <vector>
-#include <list>
-#include <map>
-
-#ifndef NO_STD_NAMESPACE
-using std::iostream;
-using std::vector;
-using std::list;
-using std::map;
-#endif
-
-/*
- *  Utility functions
- */
 
 bool is_applesingle(SDL_RWops *f, bool rsrc_fork, int32 &offset, int32 &length)
 {
@@ -149,10 +123,6 @@ static list<res_file_t *> res_file_list;
 static list<res_file_t *>::iterator cur_res_file_t;
 
 
-/*
- *  Find file in list of opened files
- */
-
 static list<res_file_t *>::iterator find_res_file_t(SDL_RWops *f)
 {
 	list<res_file_t *>::iterator i, end = res_file_list.end();
@@ -177,19 +147,11 @@ void close_external_resources()
 	ExternalResources.Close();
 }
 
-/*
- *  Initialize resource management
- */
-
 void initialize_resources(void)
 {
 	atexit(close_external_resources);
 }
 
-
-/*
- *  Read and parse resource map from file
- */
 
 bool res_file_t::read_map(void)
 {
@@ -294,10 +256,6 @@ bool res_file_t::read_map(void)
 	return true;
 }
 
-/*
- *  Open resource file, set current file to the newly opened one
- */
- 
 SDL_RWops*
 open_res_file_from_rwops(SDL_RWops* f) {
     if (f) {
@@ -336,11 +294,6 @@ open_res_file_from_path(const char* inPath)
 SDL_RWops *open_res_file(FileSpecifier &file)
 {
     logContext("opening resource file %s", file.GetPath());
-/*
-    string theContextString("trying to open resource file ");
-    theContextString += file.GetPath();
-    logContext(theContextString.c_str());
-*/
 
     string rsrc_file_name = file.GetPath();
     string resources_file_name = rsrc_file_name;
@@ -366,10 +319,6 @@ SDL_RWops *open_res_file(FileSpecifier &file)
 
 
 
-/*
- *  Close resource file
- */
-
 void close_res_file(SDL_RWops *file)
 {
 	if (file == NULL)
@@ -390,10 +339,6 @@ void close_res_file(SDL_RWops *file)
 }
 
 
-/*
- *  Return current resource file
- */
-
 SDL_RWops *cur_res_file(void)
 {
 	res_file_t *r = *cur_res_file_t;
@@ -402,10 +347,6 @@ SDL_RWops *cur_res_file(void)
 }
 
 
-/*
- *  Set current resource file
- */
-
 void use_res_file(SDL_RWops *file)
 {
 	list<res_file_t *>::iterator i = find_res_file_t(file);
@@ -413,10 +354,6 @@ void use_res_file(SDL_RWops *file)
 	cur_res_file_t = i;
 }
 
-
-/*
- *  Count number of resources of given type
- */
 
 size_t res_file_t::count_resources(uint32 type) const
 {
@@ -447,11 +384,6 @@ size_t count_resources(uint32 type)
 	return count;
 }
 
-
-/*
- *  Get list of id of resources of given type
- */
-
 void res_file_t::get_resource_id_list(uint32 type, vector<int> &ids) const
 {
 	type_map_t::const_iterator i = types.find(type);
@@ -481,11 +413,6 @@ void get_resource_id_list(uint32 type, vector<int> &ids)
 		i--;
 	}
 }
-
-
-/*
- *  Get resource data (must be freed with free())
- */
 
 bool res_file_t::get_resource(uint32 type, int id, LoadedResource &rsrc) const
 {
@@ -536,11 +463,6 @@ bool get_resource(uint32 type, int id, LoadedResource &rsrc)
 	}
 	return false;
 }
-
-
-/*
- *  Get resource data by index (must be freed with free())
- */
 
 bool res_file_t::get_ind_resource(uint32 type, int index, LoadedResource &rsrc) const
 {
@@ -594,11 +516,6 @@ bool get_ind_resource(uint32 type, int index, LoadedResource &rsrc)
 	return false;
 }
 
-
-/*
- *  Check if resource is present
- */
-
 bool res_file_t::has_resource(uint32 type, int id) const
 {
 	type_map_t::const_iterator i = types.find(type);
@@ -629,3 +546,4 @@ bool has_resource(uint32 type, int id)
 	}
 	return false;
 }
+*/
