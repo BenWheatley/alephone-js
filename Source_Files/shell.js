@@ -111,17 +111,11 @@ import * as DefaultStringSets from './Misc/DefaultStringSets.js';
 #include "WadImageCache.h"
 
 #include "shell_options.h"
-
 */
-// Data directories - not sure how this will map conceptually to JS
-let data_search_path = []; // List of directories in which data files are searched for
-let local_data_dir = '';    // Local (per-user) data file directory
-/*
-DirectorySpecifier default_data_dir;  // Default scenario directory
-DirectorySpecifier bundle_data_dir;	  // Data inside Mac OS X app bundle
-*/
-/*
 
+export let scenario_dir = ""; // TODO: any ref to searching within a data_search_path array, just directly go here without search
+
+/*
 // cross-platform static variables
 short vidmasterStringSetID = -1; // can be set with MML
 short vidmasterLevelOffset = 1; // can be set with MML
@@ -191,64 +185,11 @@ export function initialize_application()
 	
 	const urlParams = new URLSearchParams(window.location.search);
 	const scenarioName = urlParams.get("scenario_name") || "Marathon 2";
-	const scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + scenarioName;
-
+	scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + scenarioName;
+	
 	DefaultStringSets.InitDefaultStringSets();
+	
 /*
-	// Find data directories, construct search path
-	
-	default_data_dir = get_data_path(kPathDefaultData);
-	
-	local_data_dir = get_data_path(cspaths.CSPathType.kPathLocalData);
-
-	if (!get_data_path(kPathBundleData).empty())
-	{
-		bundle_data_dir = get_data_path(kPathBundleData);
-		data_search_path.push_back(bundle_data_dir);
-	}
-	
-	// in case we need to redo search path later:
-	size_t dsp_insert_pos = data_search_path.size();
-	size_t dsp_delete_pos = (size_t)-1;
-	
-	if (shell_options.directory != "")
-	{
-		default_data_dir = shell_options.directory;
-		dsp_delete_pos = data_search_path.size();
-		data_search_path.push_back(shell_options.directory);
-	}
-	else if (!default_data_env.empty())
-	{
-		default_data_dir = default_data_env;
-		dsp_delete_pos = data_search_path.size();
-		data_search_path.push_back(default_data_env);
-	}
-
-	const string data_env = a1_getenv("ALEPHONE_DATA");
-	if (!data_env.empty()) {
-		// Read colon-separated list of directories
-		string path = data_env;
-		string::size_type pos;
-		char LIST_SEP = get_path_list_separator();
-		while ((pos = path.find(LIST_SEP)) != string::npos) {
-			if (pos) {
-				string element = path.substr(0, pos);
-				data_search_path.push_back(element);
-			}
-			path.erase(0, pos + 1);
-		}
-		if (!path.empty())
-			data_search_path.push_back(path);
-	} else {
-		if (shell_options.directory == "" && default_data_env == "")
-		{
-			dsp_delete_pos = data_search_path.size();
-			data_search_path.push_back(default_data_dir);
-		}
-		
-		data_search_path.push_back(local_data_dir);
-	}
-
 	// Setup resource manager
 	initialize_resources();
 
@@ -265,32 +206,12 @@ export function initialize_application()
 		throw std::runtime_error("Can't find required text strings (missing MML?)");
 	}
 	
-	// Check for presence of files (one last chance to change data_search_path)
-	if (!have_default_files()) {
-		char chosen_dir[256];
-		if (alert_choose_scenario(chosen_dir)) {
-			// remove original argument (or fallback) from search path
-			if (dsp_delete_pos < data_search_path.size())
-				data_search_path.erase(data_search_path.begin() + dsp_delete_pos);
-			// add selected directory where command-line argument would go
-			data_search_path.insert(data_search_path.begin() + dsp_insert_pos, chosen_dir);
-			
-			default_data_dir = chosen_dir;
-			
-			// Parse MML files again, now that we have a new dir to search
-			initialize_fonts(false);
-			LoadBaseMMLScripts(true);
-		}
-	}
-
 	initialize_fonts(true);
 	Plugins::instance()->enumerate();
 	
 	// Load preferences
 	initialize_preferences();
 
-	local_data_dir.CreateDirectory();
-	
 	WadImageCache::instance()->initialize_cache();
 
 	if (shell_options.nogl)

@@ -18,10 +18,10 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
-const CSPathType = Object.freeze({
+/* The following are commented out rather than deleted, because while they don't make any sense in JS-land, I need to be able to find this message when their names cause a JS runtime or compile-time error:
+export const CSPathType = Object.freeze({
 	kPathLocalData: 0,
 	kPathDefaultData: 1,
-/* The following are commented out rather than deleted, because while they don't make any sense in JS-land, I need to be able to find this message when their names cause a JS runtime or compile-time error:
 	kPathLegacyData: 2,
 	kPathBundleData: 3,
 	kPathLogs: 4,
@@ -31,127 +31,10 @@ const CSPathType = Object.freeze({
 	kPathSavedGames: 8,
 	kPathQuickSaves: 9,
 	kPathImageCache: 10,
-	kPathRecordings: 11 */
+	kPathRecordings: 11
 });
-
-function get_path_list_separator() {
-	return '/';
-}
+*/
 
 function get_application_name() {
 	return "Aleph One JS";
 }
-
-import * as cstypes from './cstypes.js';
-
-/*
-static std::string _add_app_name(std::string parent)
-{
-#ifdef PREFER_APP_NAME_TO_BUNDLE_ID
-	return parent + "/" + get_application_name();
-#else
-	return parent + "/" + "AlephOne";
-#endif
-}
-
-static std::string _add_app_id(std::string parent)
-{
-#ifdef PREFER_APP_NAME_TO_BUNDLE_ID
-	return parent + "/" + get_application_name();
-#else
-	return parent + "/" + get_application_identifier();
-#endif
-}
-
-static std::string _get_local_data_path()
-{
-	static std::string local_data_dir = "";
-	if (local_data_dir.empty())
-	{
-		NSArray *arr = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory, NSUserDomainMask, YES);
-		NSString *supportPath = [arr objectAtIndex:0];
-		if (supportPath != nil)
-			local_data_dir = _add_app_name([supportPath UTF8String]);
-	}
-	return local_data_dir;
-}
-
-static std::string _get_default_data_path()
-{
-	static std::string default_dir = "";
-	if (default_dir.empty())
-	{
-		char parentdir[MAXPATHLEN];
-		CFURLRef url = CFBundleCopyBundleURL(CFBundleGetMainBundle());
-		CFURLRef url2 = CFURLCreateCopyDeletingLastPathComponent(0, url);
-		if (CFURLGetFileSystemRepresentation(url2, true, (UInt8 *)parentdir, MAXPATHLEN)) {
-			default_dir = parentdir;
-		}
-		CFRelease(url);
-		CFRelease(url2);
-	}
-	return default_dir;
-}
-
-static std::string _get_library_path()
-{
-	static std::string library_dir = "";
-	if (library_dir.empty())
-	{
-		NSArray *arr = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
-		NSString *libraryPath = [arr objectAtIndex:0];
-		if (libraryPath != nil)
-			library_dir = [libraryPath UTF8String];
-	}
-	return library_dir;
-}
-
-#ifdef MAC_APP_STORE
-static std::string _get_pictures_path()
-{
-	static std::string pictures_dir = "";
-	if (pictures_dir.empty())
-	{
-		NSArray *arr = NSSearchPathForDirectoriesInDomains(NSPicturesDirectory, NSUserDomainMask, YES);
-		NSString *picturesPath = [arr objectAtIndex:0];
-		if (picturesPath != nil)
-			pictures_dir = [picturesPath UTF8String];
-	}
-	return pictures_dir;
-}
-#endif
-*/
-
-export function get_data_path(type) {
-	if (type==CSPathType.kPathLocalData) {
-		return _get_local_data_path();
-	} else if (type==CSPathType.kPathDefaultData) {
-		return _get_default_data_path();
-	}
-}
-
-/*
-std::string get_application_name()
-{
-	static std::string name = "";
-	if (name.empty())
-	{
-		NSDictionary *bundleInfo = [[NSBundle mainBundle] localizedInfoDictionary];
-		NSString *appName = [bundleInfo objectForKey:(NSString *)kCFBundleNameKey];
-		name = [appName UTF8String];
-	}
-	return name;
-}
-
-std::string get_application_identifier()
-{
-	static std::string ident = "";
-	if (ident.empty())
-	{
-		NSDictionary *bundleInfo = [[NSBundle mainBundle] infoDictionary];
-		NSString *bundleID = [bundleInfo objectForKey:(NSString *)kCFBundleIdentifierKey];
-		ident = [bundleID UTF8String];
-	}
-	return ident;
-}
-*/
