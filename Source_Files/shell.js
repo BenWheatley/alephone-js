@@ -1202,19 +1202,6 @@ bool expand_symbolic_paths_helper(char *dest, const char *src, int maxlen, const
    return false;
 }
 
-char *expand_symbolic_paths(char *dest, const char *src, int maxlen)
-{
-	bool expanded =
-		expand_symbolic_paths_helper(dest, src, maxlen, "$local$", local_data_dir) ||
-		expand_symbolic_paths_helper(dest, src, maxlen, "$default$", default_data_dir);
-	if (!expanded)
-	{
-		strncpy(dest, src, maxlen);
-		dest[maxlen] = '\0';
-	}
-	return dest;
-}
-			   
 bool contract_symbolic_paths_helper(char *dest, const char *src, int maxlen, const char *symbol, DirectorySpecifier &dir)
 {
    const char *dpath = dir.GetPath();
@@ -1227,19 +1214,6 @@ bool contract_symbolic_paths_helper(char *dest, const char *src, int maxlen, con
 	   return true;
    }
    return false;
-}
-
-char *contract_symbolic_paths(char *dest, const char *src, int maxlen)
-{
-	bool contracted =
-		contract_symbolic_paths_helper(dest, src, maxlen, "$default$", default_data_dir) || //default first in case user installed his game in his local data dir
-		contract_symbolic_paths_helper(dest, src, maxlen, "$local$", local_data_dir);
-	if (!contracted)
-	{
-		strncpy(dest, src, maxlen);
-		dest[maxlen] = '\0';
-	}
-	return dest;
 }
 
 // LP: the rest of the code has been moved to Jeremy's shell_misc.file.
