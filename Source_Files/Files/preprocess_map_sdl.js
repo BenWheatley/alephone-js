@@ -17,15 +17,18 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
+import * as shell from '../CSeries/cseries.js';
 /*
-
-#include "cseries.h"
 #include "FileHandler.h"
 
 #include "world.h"
 #include "map.h"
 #include "shell.h"
 #include "interface.h"
+*/
+import * as shell from '../shell.js';
+import * as _interface from '../Misc/interface.js';
+/*
 #include "game_wad.h"
 #include "game_errors.h"
 #include "QuickSave.h"
