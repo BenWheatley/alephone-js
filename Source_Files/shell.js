@@ -246,9 +246,6 @@ export function initialize_application()
 			data_search_path.push_back(default_data_dir);
 		}
 		
-		string legacy_data_path = get_data_path(kPathLegacyData);
-		if (!legacy_data_path.empty())
-			data_search_path.push_back(DirectorySpecifier(legacy_data_path));
 		data_search_path.push_back(local_data_dir);
 	}
 

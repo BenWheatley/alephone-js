@@ -21,9 +21,9 @@
 const CSPathType = Object.freeze({
 	kPathLocalData: 0,
 	kPathDefaultData: 1,
+/* The following are commented out rather than deleted, because while they don't make any sense in JS-land, I need to be able to find this message when their names cause a JS runtime or compile-time error:
 	kPathLegacyData: 2,
 	kPathBundleData: 3,
-/* The following are commented out rather than deleted, because while they don't make any sense in JS-land, I need to be able to find this message when their names cause a JS runtime or compile-time error:
 	kPathLogs: 4,
 	kPathPreferences: 5,
 	kPathLegacyPreferences: 6,
@@ -120,56 +120,17 @@ static std::string _get_pictures_path()
 	return pictures_dir;
 }
 #endif
+*/
 
-std::string get_data_path(CSPathType type)
-{
-	std::string path = "";
-	
-	switch (type) {
-		case kPathLocalData:
-			path = _get_local_data_path();
-			break;
-		case kPathDefaultData:
-			path = _get_default_data_path();
-			break;
-		case kPathLegacyData:
-			// not applicable
-			break;
-		case kPathBundleData:
-			path = std::string([[[NSBundle mainBundle] resourcePath] UTF8String]) + "/DataFiles";
-			break;
-		case kPathLogs:
-			path = _get_library_path() + "/Logs";
-			break;
-		case kPathPreferences:
-			path = _add_app_id(_get_library_path() + "/Preferences");
-			break;
-		case kPathLegacyPreferences:
-			path = _get_local_data_path();
-			break;
-		case kPathScreenshots:
-#ifdef MAC_APP_STORE
-			path = _add_app_name(_get_pictures_path()) + " Screenshots";
-#else
-			path = _get_local_data_path() + "/Screenshots";
-#endif
-			break;
-		case kPathSavedGames:
-			path = _get_local_data_path() + "/Saved Games";
-			break;
-		case kPathQuickSaves:
-			path = _get_local_data_path() + "/Quick Saves";
-			break;
-		case kPathImageCache:
-			path = _get_local_data_path() + "/Image Cache";
-			break;
-		case kPathRecordings:
-			path = _get_local_data_path() + "/Recordings";
-			break;
+export function get_data_path(type) {
+	if (type==CSPathType.kPathLocalData) {
+		return _get_local_data_path();
+	} else if (type==CSPathType.kPathDefaultData) {
+		return _get_default_data_path();
 	}
-	return path;
 }
 
+/*
 std::string get_application_name()
 {
 	static std::string name = "";
