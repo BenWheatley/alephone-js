@@ -90,8 +90,10 @@ import * as interface_menus from './Misc/interface_menus.js';
 #include "FilmProfile.h"
 
 #include "mytm.h"	// mytm_initialize(), for platform-specific shell_*.h
-
+*/
 #include "resource_manager.h"
+import * as resource_manager from './Files/resource_manager.js';
+/*
 #include "sdl_dialogs.h"
 #include "sdl_fonts.h"
 #include "sdl_widgets.h"
