@@ -192,9 +192,6 @@ export function initialize_application()
 	DefaultStringSets.InitDefaultStringSets();
 	
 /*
-	// Setup resource manager
-	initialize_resources();
-
 	init_physics_wad_data();
 	initialize_fonts(false);
 
