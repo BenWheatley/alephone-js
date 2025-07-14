@@ -42,9 +42,9 @@ function get_application_name() {
 	return "Aleph One JS";
 }
 
-/*
-#include "cstypes.h"
+import * as cstypes from './cstypes.js';
 
+/*
 static std::string _add_app_name(std::string parent)
 {
 #ifdef PREFER_APP_NAME_TO_BUNDLE_ID
