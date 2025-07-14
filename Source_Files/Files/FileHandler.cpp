@@ -704,12 +704,6 @@ bool FileSpecifier::Rename(const FileSpecifier& Destination)
 	return err == 0;
 }
 
-// Set to local (per-user) data directory
-void FileSpecifier::SetToLocalDataDir()
-{
-	name = local_data_dir.name;
-}
-
 // Set to preferences directory
 void FileSpecifier::SetToPreferencesDir()
 {
