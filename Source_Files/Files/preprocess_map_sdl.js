@@ -1,5 +1,4 @@
 /*
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -16,19 +15,12 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
 */
 
 /*
- *  preprocess_map_sdl.cpp - Save game routines, SDL implementation
- *
- *  Written in 2000 by Christian Bauer
- */
 
 #include "cseries.h"
 #include "FileHandler.h"
-
-#include <vector>
 
 #include "world.h"
 #include "map.h"
@@ -38,13 +30,7 @@
 #include "game_errors.h"
 #include "QuickSave.h"
 
-// From shell_sdl.cpp
-extern vector<DirectorySpecifier> data_search_path;
-
-
-/*
- *  Get FileSpecifiers for default data files
- */
+//  Get FileSpecifiers for default data files
 
 static bool get_default_spec(FileSpecifier &file, const string &name)
 {
@@ -114,9 +100,7 @@ bool get_default_theme_spec(FileSpecifier &file)
 	return get_default_spec(file, theme.GetPath());
 }
 
-/*
- *  Choose saved game for loading
- */
+//  Choose saved game for loading
 
 bool choose_saved_game_to_load(FileSpecifier &saved_game)
 {
@@ -124,9 +108,7 @@ bool choose_saved_game_to_load(FileSpecifier &saved_game)
 }
 
 
-/*
- *  Save game
- */
+// Save game
 
 bool save_game(void)
 {
@@ -140,12 +122,11 @@ bool save_game(void)
 }
 
 
-/*
- *  Store additional data in saved game file
- */
+//  Store additional data in saved game file
 
 void add_finishing_touches_to_save_file(FileSpecifier &file)
 {
 	// The MacOS version stores an overhead thumbnail and the level name
 	// in resources. Do we want to imitate this?
 }
+*/
