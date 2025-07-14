@@ -142,17 +142,6 @@ void set_external_resources_file(FileSpecifier& f)
 	f.Open(ExternalResources);
 }
 
-void close_external_resources()
-{
-	ExternalResources.Close();
-}
-
-void initialize_resources(void)
-{
-	atexit(close_external_resources);
-}
-
-
 bool res_file_t::read_map(void)
 {
 	SDL_RWseek(f, 0, SEEK_END);
