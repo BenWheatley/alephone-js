@@ -95,7 +95,9 @@ import * as interface_menus from './Misc/interface_menus.js';
 import * as resource_manager from './Files/resource_manager.js';
 /*
 #include "sdl_dialogs.h"
-#include "sdl_fonts.h"
+*/
+import { initialize_fonts } from './RenderOther/fonts.js';
+/*
 #include "sdl_widgets.h"
 */
 import * as DefaultStringSets from './Misc/DefaultStringSets.js';
@@ -195,8 +197,9 @@ export async function initialize_application()
 	
 /*
 	init_physics_wad_data();
-	initialize_fonts(false);
-
+*/
+	initialize_fonts();
+/*
 	load_film_profile(FILM_PROFILE_DEFAULT);
 */
 	// Parse MML files
@@ -207,7 +210,6 @@ export async function initialize_application()
 		throw std::runtime_error("Can't find required text strings (missing MML?)");
 	}
 	
-	initialize_fonts(true);
 	Plugins::instance()->enumerate();
 	
 	// Load preferences
