@@ -91,7 +91,6 @@ import * as interface_menus from './Misc/interface_menus.js';
 
 #include "mytm.h"	// mytm_initialize(), for platform-specific shell_*.h
 */
-#include "resource_manager.h"
 import * as resource_manager from './Files/resource_manager.js';
 /*
 #include "sdl_dialogs.h"
