@@ -17,7 +17,7 @@
 */
 
 import * as TextStrings from '../RenderOther/TextStrings.js';
-import * as cspaths from './cspaths.js';
+import { get_application_name } from './cspaths.js';
 import * as alephversion from '../Misc/alephversion.js';
 
 /*
@@ -307,7 +307,7 @@ std::string wide_to_utf8(const std::wstring& utf16) { return wide_to_utf8(utf16.
 
 function expand_app_variables(str) {
   return str
-    .replaceAll("$appName$", cspaths.get_application_name())
+    .replaceAll("$appName$", get_application_name())
     .replaceAll("$appVersion$", alephversion.A1JS_DISPLAY_VERSION)
     .replaceAll("$appLongVersion$", alephversion.A1JS_VERSION_STRING)
     .replaceAll("$appDate$", alephversion.A1JS_DISPLAY_DATE_VERSION)

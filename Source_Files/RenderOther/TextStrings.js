@@ -25,6 +25,7 @@
 */
 
 import * as Logging from '../Misc/Logging.js';
+import * as cstypes from '../CSeries/cstypes.js';
 
 const StringSetRoot = new Map(); // {int: {int: string}}
 
@@ -39,7 +40,7 @@ export function TS_PutCString(ID, Index, String) {
 }
 
 // Returns a pointer to a string; if the ID and the index do not point to a valid string,  this function will then return null
-function TS_GetCString(ID, Index) {
+export function TS_GetCString(ID, Index) {
 	const set = StringSetRoot.get(ID);
 	if (!set) return null;
 	return set.get(Index) || null;
@@ -80,9 +81,23 @@ function reset_mml_stringset() {
 	// no reset
 }
 
-function parse_mml_stringset()
-{
-	Logging.logMessage(Logging.Level.error, 0, 0, "parse_mml_stringset is stupid but was called anyway. I suggest replacing this whole thing with a more sensible JSON thing once the app actually runs.");
+export function parse_mml_stringset(root) {
+	const indexAttr = root.getAttribute("index");
+	if (indexAttr === null) return;
+
+	const index = parseInt(indexAttr, 10);
+	if (isNaN(index)) return;
+
+	for (const child of root.querySelectorAll("string")) {
+		const cindexAttr = child.getAttribute("index");
+		if (cindexAttr === null) continue;
+
+		const cindex = parseInt(cindexAttr, 10);
+		if (isNaN(cindex) || cindex > cstypes.INT16_MAX) continue;
+		
+		if (!StringSetRoot.get(index)) StringSetRoot.set(index, new Map());
+		StringSetRoot.get(index).set(cindex, child.textContent);
+	}
 }
 
 // TODO: this is redundant in JS land where everything's the same kind of string, so get rid of it when the app works right. Note that it doesn't match the old list of args for this function, but that's fine as using it the old way would have been an error in JS anyway.

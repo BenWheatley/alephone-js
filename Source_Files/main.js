@@ -16,6 +16,8 @@ export function main() {
 		"You are welcome to redistribute it under certain conditions.\n" +
 		"For details, see the file COPYING.\n"
 	);
-	shell.initialize_application();
-	shell.main_event_loop();
+	shell.initialize_application()
+		.then(() =>
+			shell.main_event_loop()
+		);
 }

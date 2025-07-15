@@ -45,9 +45,10 @@ const PREFERENCES_NAME_LENGTH = 32;
  *  shell.cpp - Main game loop and input handling
  */
 
+import * as xml from './XML/xml.js';
 import * as cseries from './CSeries/cseries.js';
-import * as cspaths from './CSeries/cspaths.js';
 import * as map from './GameWorld/map.js';
+import * as preprocess_map_sdl from './Files/preprocess_map_sdl.js';
 /*
 #include "monsters.h"
 #include "player.h"
@@ -114,6 +115,7 @@ import * as DefaultStringSets from './Misc/DefaultStringSets.js';
 #include "shell_options.h"
 */
 
+export let scenarioName = "";
 export let scenario_dir = ""; // TODO: any ref to searching within a data_search_path array, just directly go here without search
 
 /*
@@ -169,7 +171,7 @@ bool handle_open_document(const std::string& filename)
 	return done;
 }
 */
-export function initialize_application()
+export async function initialize_application()
 {
 	const canvas = document.getElementById("glCanvas");
 	
@@ -184,9 +186,10 @@ export function initialize_application()
 		return;
 	}
 	
+	// TODO: move all the URLSearchParams stuff to shell_options when that's working
 	const urlParams = new URLSearchParams(window.location.search);
-	const scenarioName = urlParams.get("scenario_name") || "Marathon 2";
-	scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + scenarioName;
+	scenarioName = urlParams.get("scenario_name") || "Marathon 2";
+	scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + scenarioName + "/";
 	
 	DefaultStringSets.InitDefaultStringSets();
 	
@@ -195,10 +198,10 @@ export function initialize_application()
 	initialize_fonts(false);
 
 	load_film_profile(FILM_PROFILE_DEFAULT);
-
+*/
 	// Parse MML files
-	LoadBaseMMLScripts(true);
-
+	await LoadBaseMMLScripts(true);
+/*
 	// Check for presence of strings
 	if (!TS_IsPresent(strERRORS) || !TS_IsPresent(strFILENAMES)) {
 		throw std::runtime_error("Can't find required text strings (missing MML?)");
@@ -269,7 +272,7 @@ function networking_available()
 }
 
 function initialize_marathon_music_handler() {
-	const url = "http://localhost:8000/ALEPHONE_DEFAULT_DATA/Marathon%202/Music.ogg"; // TODO: replace hard-coded value with `const url = get_default_music_spec();` once I've got get_default_music_spec() into JS-land
+	const url = preprocess_map_sdl.get_default_music_spec();
 	if (url != null) {
 		Music.instance().SetupIntroMusic(url);
 	}
@@ -1146,48 +1149,21 @@ export function dump_screen()
 	link.click();
 	document.body.removeChild(link);
 }
-/*
-static bool _ParseMMLDirectory(DirectorySpecifier& dir, bool load_menu_mml_only)
-{
-	// Get sorted list of files in directory
-	vector<dir_entry> de;
-	if (!dir.ReadDirectory(de))
-		return false;
-	sort(de.begin(), de.end());
-	
-	// Parse each file
-	vector<dir_entry>::const_iterator i, end = de.end();
-	for (i=de.begin(); i!=end; i++) {
-		if (i->is_directory)
-			continue;
-		if (i->name[i->name.length() - 1] == '~')
-			continue;
-		// people stick Lua scripts in Scripts/
-		if (boost::algorithm::ends_with(i->name, ".lua"))
-			continue;
-		
-		// Construct full path name
-		FileSpecifier file_name = dir + i->name;
-		
-		// Parse file
-		ParseMMLFromFile(file_name, load_menu_mml_only);
-	}
-	
-	return true;
+
+async function _ParseMMLDirectory(dir, load_menu_mml_only) {
+	// TODO: JS can't read a directory listing from a web server, as a temporary workaround this semi-hard-coded list is going to make guesses based on what's in `Marathon 2/Scripts/`
+	let files = ["Filenames.mml", `${scenarioName}.mml`, "Default Preferences.xml"];
+	for (const file of files) {
+		await xml.ParseMMLFromFile(new URL(file, dir), load_menu_mml_only);
+	};
 }
 
-void LoadBaseMMLScripts(bool load_menu_mml_only)
-{
-	vector <DirectorySpecifier>::const_iterator i = data_search_path.begin(), end = data_search_path.end();
-	while (i != end) {
-		DirectorySpecifier path = *i + "MML";
-		_ParseMMLDirectory(path, load_menu_mml_only);
-		path = *i + "Scripts";
-		_ParseMMLDirectory(path, load_menu_mml_only);
-		i++;
-	}
+async function LoadBaseMMLScripts(load_menu_mml_only) {
+	await _ParseMMLDirectory(new URL('MML/', scenario_dir), load_menu_mml_only);
+	await _ParseMMLDirectory(new URL('Scripts/', scenario_dir), load_menu_mml_only);
 }
-			   
+
+/*			   
 bool expand_symbolic_paths_helper(char *dest, const char *src, int maxlen, const char *symbol, DirectorySpecifier& dir)
 {
    int symlen = strlen(symbol);

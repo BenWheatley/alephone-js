@@ -17,14 +17,12 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
-import * as shell from '../CSeries/cseries.js';
+import * as cseries from '../CSeries/cseries.js';
 /*
 #include "FileHandler.h"
 
 #include "world.h"
 #include "map.h"
-#include "shell.h"
-#include "interface.h"
 */
 import * as shell from '../shell.js';
 import * as _interface from '../Misc/interface.js';
@@ -33,8 +31,28 @@ import * as _interface from '../Misc/interface.js';
 #include "game_errors.h"
 #include "QuickSave.h"
 
-//  Get FileSpecifiers for default data files
+*/
 
+// TODO: all old code expects two args, the first being a file pointer, the second being either a string or a number, returns bool (for success?). In JS, makes more sense to return the URL, allow it to be undefined if no success. Also, I have to fake overloading (unless I want to refactor extra hard while rewriting the C++ as JS, which seems unwise).
+export function get_default_spec(arg) {
+	if (typeof arg === 'string') {
+		return get_default_spec_string(arg);
+	} else if (typeof arg === 'number') {
+		return get_default_spec_code(arg);
+	}
+}
+
+function get_default_spec_string(string) { // original get_default_spec(file, name)
+	return new URL(string, shell.scenario_dir);
+}
+
+function get_default_spec_code(code) { // original get_default_spec(file, type)
+	let name = cseries.getcstr(_interface.strFILENAMES, code);
+	return get_default_spec(name);
+}
+
+/*
+//  Get FileSpecifiers for default data files
 static bool get_default_spec(FileSpecifier &file, const string &name)
 {
 	vector<DirectorySpecifier>::const_iterator i = data_search_path.begin(), end = data_search_path.end();
@@ -54,6 +72,7 @@ static bool get_default_spec(FileSpecifier &file, int type)
 	return get_default_spec(file, name);
 }
 
+/*
 bool have_default_files(void)
 {
 	FileSpecifier file;
@@ -90,12 +109,11 @@ void get_default_sounds_spec(FileSpecifier &file)
 	get_default_spec(file, filenameSOUNDS8);
 	// don't care if it does not exist
 }
-
-bool get_default_music_spec(FileSpecifier &file)
-{
-	return get_default_spec(file, filenameMUSIC);
+*/
+export function get_default_music_spec() {
+	return get_default_spec(_interface.filenameMUSIC);
 }
-
+/*
 bool get_default_theme_spec(FileSpecifier &file)
 {
 	FileSpecifier theme = "Themes";

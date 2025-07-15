@@ -35,6 +35,6 @@ export const CSPathType = Object.freeze({
 });
 */
 
-function get_application_name() {
+export function get_application_name() {
 	return "Aleph One JS";
 }
