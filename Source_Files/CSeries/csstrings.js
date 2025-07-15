@@ -310,7 +310,7 @@ function expand_app_variables(str) {
     .replaceAll("$appName$", cspaths.get_application_name())
     .replaceAll("$appVersion$", alephversion.A1JS_DISPLAY_VERSION)
     .replaceAll("$appLongVersion$", alephversion.A1JS_VERSION_STRING)
-    .replaceAll("$appDate$", alephversion/A1JS_DISPLAY_DATE_VERSION)
+    .replaceAll("$appDate$", alephversion.A1JS_DISPLAY_DATE_VERSION)
     .replaceAll("$appPlatform$", alephversion.A1JS_DISPLAY_PLATFORM)
     .replaceAll("$appURL$", alephversion.A1JS_HOMEPAGE_URL)
     .replaceAll("$appLogFile$", "{see browser developer console}")
