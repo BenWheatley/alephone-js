@@ -21,24 +21,22 @@ INTERFACE.H
 
 import * as cseries from '../CSeries/cseries.js';
 
-const strFILENAMES = 129;
-const Filenames = Object.freeze({
-	filenameSHAPES8: 0,
-	filenameSHAPES16: 1,
-	filenameSOUNDS8: 2,
-	filenameSOUNDS16: 3,
-	filenamePREFERENCES: 4,
-	filenameDEFAULT_MAP: 5,
-	filenameDEFAULT_SAVE_GAME: 6,
-	filenameMARATHON_NAME: 7,
-	filenameMARATHON_RECORDING: 8,
-	filenamePHYSICS_MODEL: 9,
-	filenameMUSIC: 10,
-	filenameIMAGES: 11,
-	filenameMOVIE: 12,
-	filenameDEFAULT_THEME: 13,
-	filenameEXTERNAL_RESOURCES: 14
-});
+export const strFILENAMES = 129;
+export const filenameSHAPES8 = 0;
+export const filenameSHAPES16 = 1;
+export const filenameSOUNDS8 = 2;
+export const filenameSOUNDS16 = 3;
+export const filenamePREFERENCES = 4;
+export const filenameDEFAULT_MAP = 5;
+export const filenameDEFAULT_SAVE_GAME = 6;
+export const filenameMARATHON_NAME = 7;
+export const filenameMARATHON_RECORDING = 8;
+export const filenamePHYSICS_MODEL = 9;
+export const filenameMUSIC = 10;
+export const filenameIMAGES = 11;
+export const filenameMOVIE = 12;
+export const filenameDEFAULT_THEME = 13;
+export const filenameEXTERNAL_RESOURCES = 14;
 
 const strPATHS = 138;
 
