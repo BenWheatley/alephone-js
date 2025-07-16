@@ -47,7 +47,7 @@ export function TS_GetCString(ID, Index) {
 }
 
 // Checks on the presence of a string set
-function TS_IsPresent(ID) {
+export function TS_IsPresent(ID) {
 	return StringSetRoot.has(ID);
 }
 

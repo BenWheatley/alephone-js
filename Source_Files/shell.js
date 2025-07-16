@@ -102,8 +102,8 @@ import { initialize_fonts } from './RenderOther/fonts.js';
 #include "sdl_widgets.h"
 */
 import * as DefaultStringSets from './Misc/DefaultStringSets.js';
+import * as TextStrings from './RenderOther/TextStrings.js';
 /*
-#include "TextStrings.h"
 
 #include "OGL_Headers.h"
 
@@ -203,12 +203,12 @@ export async function initialize_application()
 */
 	// Parse MML files
 	await LoadBaseMMLScripts(true);
-/*
 	// Check for presence of strings
-	if (!TS_IsPresent(strERRORS) || !TS_IsPresent(strFILENAMES)) {
-		throw std::runtime_error("Can't find required text strings (missing MML?)");
+	if (!TextStrings.TS_IsPresent(_interface.strERRORS) || !TextStrings.TS_IsPresent(_interface.strFILENAMES)) {
+		alert("Can't find required text strings (missing MML?)");
 	}
 	
+/*
 	Plugins::instance()->enumerate();
 	
 	// Load preferences
@@ -316,7 +316,7 @@ short get_level_number_from_user(void)
 	// Create dialog
 	dialog d;
 	vertical_placer *placer = new vertical_placer;
-	if (vidmasterStringSetID != -1 && TS_IsPresent(vidmasterStringSetID) && TS_CountStrings(vidmasterStringSetID) > 0) {
+	if (vidmasterStringSetID != -1 && TextStrings.TS_IsPresent(vidmasterStringSetID) && TS_CountStrings(vidmasterStringSetID) > 0) {
 		// if we there's a stringset present for it, load the message from there
 		int num_lines = TS_CountStrings(vidmasterStringSetID);
 

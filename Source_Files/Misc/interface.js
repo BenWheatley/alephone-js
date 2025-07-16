@@ -38,10 +38,10 @@ export const filenameMOVIE = 12;
 export const filenameDEFAULT_THEME = 13;
 export const filenameEXTERNAL_RESOURCES = 14;
 
-const strPATHS = 138;
+export const strPATHS = 138;
 
-const strERRORS = 128;
-const Errors = Object.freeze({
+export const strERRORS = 128;
+export const Errors = Object.freeze({
 	badProcessor: 0,
 	badQuickDraw: 1,
 	badSystem: 2,
@@ -79,7 +79,7 @@ const Errors = Object.freeze({
 	keyScrollWheelDoesntWork: 34
 });
 
-const AnimationTypes = Object.freeze({
+export const AnimationTypes = Object.freeze({
 	_animated1: 1,
 	_animated2to8: 2, // ??
 	_animated3to4: 3,
@@ -92,19 +92,17 @@ const AnimationTypes = Object.freeze({
 });
 
 // Shape types used in the editor
-const ShapeTypes = Object.freeze({
+export const ShapeTypes = Object.freeze({
 	_wall_shape: 0, // things designated as walls
 	_floor_or_ceiling_shape: 1, // walls in raw format
 	_object_shape: 2, // things designated as objects
 	_other_shape: 3 // anything not falling into the above categories (guns, interface elements, etc)
 });
 
-const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
+export const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
 
 import * as shape_descriptors from '../RenderMain/shape_descriptors.js';
 /*
-// ---------- structures
-
 struct shape_information_data
 {
 	uint16 flags; // [x-mirror.1] [y-mirror.1] [keypoint_obscured.1] [unused.13]
@@ -281,10 +279,6 @@ import * as screen_definitions from '../RenderOther/screen_definitions.js';
 #include "lua_hud_script.h"
 
 #include <progress.h>
-
-using alephone::Screen;
-
-//  ------------- constants 
 */
 const CLOSE_WITHOUT_WARNING_DELAY = (5 * map.TICKS_PER_SECOND);
 
