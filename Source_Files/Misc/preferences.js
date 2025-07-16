@@ -337,10 +337,11 @@ static const char* sNetworkGameProtocolNames[] =
 
 static const size_t NUMBER_OF_NETWORK_GAME_PROTOCOL_NAMES = sizeof(sNetworkGameProtocolNames) / sizeof(sNetworkGameProtocolNames[0]);
 
-
+*/
 // Have the prefs been inited?
-static bool PrefsInited = false;
+let PrefsInited = false;
 
+/*
 static std::vector<boost::filesystem::path> orphan_disabled_plugins;
 static std::vector<boost::filesystem::path> orphan_enabled_plugins;
 
@@ -3624,44 +3625,40 @@ void transition_preferences(const DirectorySpecifier& legacy_preferences_dir)
 	}
 }
 
+*/
 //  Initialize preferences (load from file or setup defaults)
+export function initialize_preferences() {
+	if (PrefsInited) return;
+/*
+	graphics_preferences= new graphics_preferences_data;
+	player_preferences= new player_preferences_data;
+	input_preferences= new input_preferences_data;
+	sound_preferences = new SoundManager::Parameters;
+	network_preferences= new network_preferences_data;
+	environment_preferences= new environment_preferences_data;
+	
+	for (int i = 0; i < NUM_KEYS; ++i)
+		input_preferences->key_bindings[i] = std::set<SDL_Scancode>();
+	for (int i = 0; i < NUMBER_OF_SHELL_KEYS; ++i)
+		input_preferences->shell_key_bindings[i] = std::set<SDL_Scancode>();
+*/
+	PrefsInited = true;
+/*	
+	CommandParser PreferenceSetCommandParser;
+	PreferenceSetCommandParser.register_command("latency_tolerance", set_latency_tolerance());
+	CommandParser PreferenceGetCommandParser;
+	PreferenceGetCommandParser.register_command("latency_tolerance", get_latency_tolerance());
 
-void initialize_preferences(
-	void)
-{
-	logContext("initializing preferences");
-
-	// In case this function gets called more than once...
-	if (!PrefsInited)
-	{
-		graphics_preferences= new graphics_preferences_data;
-		player_preferences= new player_preferences_data;
-		input_preferences= new input_preferences_data;
-		sound_preferences = new SoundManager::Parameters;
-		network_preferences= new network_preferences_data;
-		environment_preferences= new environment_preferences_data;
-		
-		for (int i = 0; i < NUM_KEYS; ++i)
-			input_preferences->key_bindings[i] = std::set<SDL_Scancode>();
-		for (int i = 0; i < NUMBER_OF_SHELL_KEYS; ++i)
-			input_preferences->shell_key_bindings[i] = std::set<SDL_Scancode>();
-
-		PrefsInited = true;
-
-		CommandParser PreferenceSetCommandParser;
-		PreferenceSetCommandParser.register_command("latency_tolerance", set_latency_tolerance());
-		CommandParser PreferenceGetCommandParser;
-		PreferenceGetCommandParser.register_command("latency_tolerance", get_latency_tolerance());
-
-		CommandParser PreferenceCommandParser;
-		PreferenceCommandParser.register_command("set", PreferenceSetCommandParser);
-		PreferenceCommandParser.register_command("get", PreferenceGetCommandParser);
-		Console::instance()->register_command("preferences", PreferenceCommandParser);
-		
-		read_preferences ();
-	}
+	CommandParser PreferenceCommandParser;
+	PreferenceCommandParser.register_command("set", PreferenceSetCommandParser);
+	PreferenceCommandParser.register_command("get", PreferenceGetCommandParser);
+	Console::instance()->register_command("preferences", PreferenceCommandParser);
+	
+	read_preferences();
+*/
 }
 
+/*
 void read_preferences ()
 {
 	// Set to defaults; will be overridden by reading in the XML stuff

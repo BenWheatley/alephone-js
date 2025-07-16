@@ -209,11 +209,14 @@ export async function initialize_application()
 	}
 	
 /*
+	// TODO: implement plugins, but do it much much later when all else works — they're 2000s not 90s
 	Plugins::instance()->enumerate();
-	
-	// Load preferences
-	initialize_preferences();
+*/
 
+	// Load preferences
+	preferences.initialize_preferences();
+	
+/*
 	WadImageCache::instance()->initialize_cache();
 
 	if (shell_options.nogl)
