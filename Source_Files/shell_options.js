@@ -30,9 +30,9 @@ struct ShellOptions {
 #include "FileHandler.h"
 #include "Logging.h"
 #include "csstrings.h"
-
-ShellOptions shell_options;
-
+*/
+export let shell_options;
+/*
 struct ShellOptionsOption {
 	bool match(const std::string& s) {
 		if (s[0] == '-') {
