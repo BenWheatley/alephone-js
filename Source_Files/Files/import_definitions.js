@@ -65,16 +65,17 @@ void set_to_default_physics_file(
 {
 	get_default_physics_spec(PhysicsFileSpec);
 }
-
-void init_physics_wad_data()
-{
+*/
+export function init_physics_wad_data() {
+	/* TODO: all these, or perhaps none of these. They look pretty stupid TBH. Stub function for now:
 	init_monster_definitions();
 	init_effect_definitions();
 	init_projectile_definitions();
 	init_physics_constants();
 	init_weapon_definitions();
+	*/
 }
-
+/*
 bool physics_file_is_m1(void)
 {
     bool m1_physics = false;

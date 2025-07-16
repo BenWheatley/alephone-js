@@ -93,6 +93,7 @@ import * as interface_menus from './Misc/interface_menus.js';
 #include "mytm.h"	// mytm_initialize(), for platform-specific shell_*.h
 */
 import * as resource_manager from './Files/resource_manager.js';
+import * as import_definitions from './Files/import_definitions.js';
 /*
 #include "sdl_dialogs.h"
 */
@@ -195,9 +196,7 @@ export async function initialize_application()
 	
 	DefaultStringSets.InitDefaultStringSets();
 	
-/*
-	init_physics_wad_data();
-*/
+	import_definitions.init_physics_wad_data();
 	initialize_fonts();
 /*
 	load_film_profile(FILM_PROFILE_DEFAULT);
