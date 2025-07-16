@@ -226,14 +226,6 @@ export async function initialize_application()
 
 	Plugins::instance()->load_mml(true);
 
-	if (TTF_Init() < 0)
-	{
-		std::ostringstream oss;
-		oss << "Couldn't initialize SDL_ttf (" << TTF_GetError() << ")";
-
-		throw std::runtime_error(oss.str());
-	}
-	
 	HTTPClient::Init();
 
 	// Initialize everything
