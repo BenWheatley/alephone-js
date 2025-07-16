@@ -246,15 +246,6 @@ struct environment_preferences_data
 	bool auto_play_demos;
 };
 
-// New preferences.. (this sorta defeats the purpose of this system, but not really)
-extern struct graphics_preferences_data *graphics_preferences;
-extern struct network_preferences_data *network_preferences;
-extern struct player_preferences_data *player_preferences;
-extern struct input_preferences_data *input_preferences;
-//extern struct sound_manager_parameters *sound_preferences;
-extern SoundManager::Parameters *sound_preferences;
-extern struct environment_preferences_data *environment_preferences;
-
 static inline int16 get_fps_target() {
 	return graphics_preferences->fps_target;
 }
