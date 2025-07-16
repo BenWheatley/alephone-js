@@ -64,7 +64,9 @@ import { Music } from './Sound/Music.js';
 /*
 #include "images.h"
 #include "vbl.h"
-#include "preferences.h"
+*/
+import * as preferences from './Misc/preferences.js';
+/*
 #include "tags.h" // for scenario file type..
 */
 import * as mouse from './Input/mouse.js';
