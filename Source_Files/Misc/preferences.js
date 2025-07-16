@@ -4716,42 +4716,6 @@ struct ViewSizeData
 	bool HUD;
 };
 
-const ViewSizeData LegacyViewSizes[32] =
-{
-	{ 320, 160, true},
-	{ 480, 240, true},
-	{ 640, 480, true},
-	{ 640, 480, false},
-	{ 800, 600, true},
-	{ 800, 600, false},
-	{ 1024, 768, true},
-	{ 1024, 768, false},
-	{ 1280, 1024, true},
-	{ 1280, 1024, false},
-	{ 1600, 1200, true},
-	{ 1600, 1200, false},
-	{ 1024, 640, true},
-	{ 1024, 640, false},
-	{ 1280, 800, true},
-	{ 1280, 800, false},
-	{ 1280, 854, true},
-	{ 1280, 854, false},
-	{ 1440, 900, true},
-	{ 1440, 900, false},
-	{ 1680, 1050, true},
-	{ 1680, 1050, false},
-	{ 1920, 1200, true},
-	{ 1920, 1200, false},
-	{ 2560, 1600, true},
-	{ 2560, 1600, false},
-	{ 1280, 768, true},
-	{ 1280, 768, false},
-	{ 1280, 960, true},
-	{ 1280, 960, false},
-	{ 1280, 720, true},
-	{ 1280, 720, false}
-};
-
 void parse_graphics_preferences(InfoTree root, std::string version)
 {
 	int scmode = -1;
