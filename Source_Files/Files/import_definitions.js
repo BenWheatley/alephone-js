@@ -27,8 +27,8 @@ Aug 31, 2000 (Loren Petrich):
 	Added unpacking code for the physics models
 */
 
+/*
 #include "cseries.h"
-#include <string.h>
 
 #include "crc.h"
 #include "tags.h"
@@ -43,7 +43,6 @@ Aug 31, 2000 (Loren Petrich):
 #include "shell.h"
 #include "preferences.h"
 
-// LP: get all the unpacker definitions
 #include "monsters.h"
 #include "effects.h"
 #include "projectiles.h"
@@ -53,21 +52,9 @@ Aug 31, 2000 (Loren Petrich):
 
 #include "AStream.h"
 
-/* ---------- globals */
-
 #define IMPORT_STRUCTURE
 #include "extensions.h"
 
-/* ---------- local globals */
-static FileSpecifier PhysicsFileSpec;
-
-/* ---------- local prototype */
-static struct wad_data *get_physics_wad_data(bool *bungie_physics);
-static void import_physics_wad_data(struct wad_data *wad);
-static void import_m1_physics_data();
-static void import_m1_physics_data_from_network(uint8 *data, uint32 length);
-
-/* ---------- code */
 void set_physics_file(FileSpecifier& File)
 {
 	PhysicsFileSpec = File;
@@ -77,7 +64,6 @@ void set_to_default_physics_file(
 	void)
 {
 	get_default_physics_spec(PhysicsFileSpec);
-//	dprintf("Set to: %d %d %.*s", physics_file.vRefNum, physics_file.parID, physics_file.name[0], physics_file.name+1);
 }
 
 void init_physics_wad_data()
@@ -133,7 +119,6 @@ void import_definition_structures(
 		wad= get_physics_wad_data(&bungie_physics);
 		if(wad)
 		{
-			/* Actually load it in.. */		
 			import_physics_wad_data(wad);
 			
 			free_wad(wad);
@@ -218,7 +203,7 @@ void process_network_physics_model(
 		if(wad)
 		{
 			import_physics_wad_data(wad);
-			free_wad(wad); /* Note that the flat data points into the wad. */
+			free_wad(wad);
 		}
 	}
 }
@@ -228,14 +213,11 @@ uint32_t get_physics_file_checksum()
 	return calculate_crc_for_file(PhysicsFileSpec);
 }
 
-/* --------- local code */
 static struct wad_data *get_physics_wad_data(
 	bool *bungie_physics)
 {
 	struct wad_data *wad= NULL;
 	
-//	dprintf("Open is: %d %d %.*s", physics_file.vRefNum, physics_file.parID, physics_file.name[0], physics_file.name+1);
-
 	OpenedFile PhysicsFile;
 	if(open_wad_file_for_reading(PhysicsFileSpec,PhysicsFile))
 	{
@@ -258,7 +240,6 @@ static struct wad_data *get_physics_wad_data(
 		close_wad_file(PhysicsFile);
 	} 
 	
-	/* Reset any errors that might have occurred.. */
 	set_game_error(systemError, errNone);
 
 	return wad;
@@ -408,4 +389,4 @@ static void import_m1_physics_data_from_network(uint8 *data, uint32 length)
 		position += count * size;
 	}
 }
-
+*/
