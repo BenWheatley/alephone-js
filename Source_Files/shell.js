@@ -119,6 +119,7 @@ import * as TextStrings from './RenderOther/TextStrings.js';
 
 #include "shell_options.h"
 */
+import * as shell_options from './shell_options.js';
 
 export let scenarioName = "";
 export let scenario_dir = ""; // TODO: any ref to searching within a data_search_path array, just directly go here without search
