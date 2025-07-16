@@ -222,12 +222,6 @@ export async function initialize_application()
 /*
 	WadImageCache::instance()->initialize_cache();
 
-	if (shell_options.nogl)
-		graphics_preferences->screen_mode.acceleration = _no_acceleration;
-	if (shell_options.force_fullscreen)
-		graphics_preferences->screen_mode.fullscreen = true;
-	if (shell_options.force_windowed)		// takes precedence over fullscreen because windowed is safer
-		graphics_preferences->screen_mode.fullscreen = false;
 	write_preferences();
 
 	Plugins::instance()->load_mml(true);
