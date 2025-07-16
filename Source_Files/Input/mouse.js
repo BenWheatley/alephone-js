@@ -169,6 +169,13 @@ window.addEventListener("mouseup", e => {
 	currentMouseButtons &= ~(1 << e.button);
 });
 
-window.addEventListener('click', () => {
-	audioContext.resume();
+window.addEventListener('click', async () => {
+	await audioContext.resume();
+	try {
+		const canvas = document.getElementById("glCanvas");
+		await canvas.requestFullscreen();
+		canvas.classList.remove('game_frame');
+	} catch (err) {
+		console.error(`Error enabling fullscreen: ${err.message}`);
+	};
 }, { once: true });
