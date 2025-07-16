@@ -50,7 +50,6 @@ enum {
 
 struct graphics_preferences_data
 {
-	struct screen_mode_data screen_mode;
 	// LP change: added OpenGL support
 	OGL_ConfigureData OGL_Configure;
 
@@ -256,7 +255,6 @@ void transition_preferences(const DirectorySpecifier& legacy_prefs_dir);
 #include "FileHandler.h"
 
 #include "map.h"
-#include "shell.h" // For the screen_mode structure
 #include "interface.h"
 #include "SoundManager.h"
 
@@ -1294,15 +1292,9 @@ static void software_rendering_options_dialog(void* arg)
 	table_placer *table = new table_placer(2, get_theme_space(ITEM_WIDGET), true);
 	table->col_flags(0, placeable::kAlignRight);
 
-#ifdef TRUE_COLOR_ONLY
-	w_select *depth_w = new w_select(graphics_preferences->screen_mode.bit_depth == 16 ? 0 : 1, depth_labels);
-#else
-	w_select *depth_w = new w_select(graphics_preferences->screen_mode.bit_depth == 8 ? 0 : graphics_preferences->screen_mode.bit_depth == 16 ? 1 : 2, depth_labels);
-#endif
 	table->dual_add(depth_w->label("Color Depth"), d);
 	table->dual_add(depth_w, d);
 
-	w_toggle *resolution_w = new w_toggle(graphics_preferences->screen_mode.high_resolution, resolution_labels);
 	table->dual_add(resolution_w->label("Resolution"), d);
 	table->dual_add(resolution_w, d);
 
@@ -1341,17 +1333,6 @@ static void software_rendering_options_dialog(void* arg)
 #else
 		int depth = (depth_w->get_selection() == 0 ? 8 : depth_w->get_selection() == 1 ? 16 : 32);
 #endif
-		if (depth != graphics_preferences->screen_mode.bit_depth) {
-			graphics_preferences->screen_mode.bit_depth = depth;
-			changed = true;
-			// don't change mode now; it will be changed when the game starts
-		}
-
-		bool hi_res = resolution_w->get_selection() != 0;
-		if (hi_res != graphics_preferences->screen_mode.high_resolution) {
-			graphics_preferences->screen_mode.high_resolution = hi_res;
-			changed = true;
-		}
 
 		if (sw_alpha_blending_w->get_selection() != graphics_preferences->software_alpha_blending)
 		{
@@ -1448,7 +1429,6 @@ static void graphics_dialog(void *arg)
 	table->col_flags(0, placeable::kAlignRight);
 	table->col_flags(1, placeable::kAlignLeft);
 	
-	w_select* renderer_w = new w_select(graphics_preferences->screen_mode.acceleration, renderer_labels);
 	renderer_w->set_identifier(iRENDERING_SYSTEM);
 #ifndef HAVE_OPENGL
 	renderer_w->set_selection(_no_acceleration);
@@ -1458,51 +1438,7 @@ static void graphics_dialog(void *arg)
 	table->dual_add(renderer_w, d);
 
 	table->add_row(new w_spacer(), true);
-
-	w_select_popup *size_w = new w_select_popup();
-	size_w->set_labels(build_resolution_labels());
-	if (graphics_preferences->screen_mode.auto_resolution)
-		size_w->set_selection(0);
-	else
-		size_w->set_selection(Screen::instance()->FindMode(graphics_preferences->screen_mode.width, graphics_preferences->screen_mode.height) + 1);
-	table->dual_add(size_w->label("Screen Size"), d);
-	table->dual_add(size_w, d);
-		
-	w_toggle *fullscreen_w = new w_toggle(!graphics_preferences->screen_mode.fullscreen);
-	table->dual_add(fullscreen_w->label("Windowed Mode"), d);
-	table->dual_add(fullscreen_w, d);
-
-	w_toggle *high_dpi_w = NULL;
-	high_dpi_w = new w_toggle(graphics_preferences->screen_mode.high_dpi);
-#if (defined(__APPLE__) && defined(__MACH__))
-	// SDL's DPI support only enabled on macOS
-	table->dual_add(high_dpi_w->label("Use High DPI"), d);
-	table->dual_add(high_dpi_w, d);
-#endif
-
-	w_select_popup *gamma_w = new w_select_popup();
-	gamma_w->set_labels(build_stringvector_from_cstring_array(gamma_labels));
-	gamma_w->set_selection(graphics_preferences->screen_mode.gamma_level);
-	table->dual_add(gamma_w->label("Brightness"), d);
-	table->dual_add(gamma_w, d);
-
-	w_select *fps_target_w = new w_select(0, fps_target_labels);
-	for (auto i = 0; fps_target_labels[i] != NULL; ++i)
-	{
-		if (fps_target_values[i] == graphics_preferences->fps_target)
-		{
-			fps_target_w->set_selection(i);
-		}
-	}
-	table->dual_add(fps_target_w->label("Framerate Target"), d);
-	table->dual_add(fps_target_w, d);
-
-	table->add_row(new w_spacer(), true);
 	
-	w_toggle *fixh_w = new w_toggle(!graphics_preferences->screen_mode.fix_h_not_v);
-	table->dual_add(fixh_w->label("Limit Vertical View"), d);
-	table->dual_add(fixh_w, d);
-
 	w_toggle *override_fov_w = new w_toggle(graphics_preferences->screen_mode.fov != 0);
 	w_fov_slider *fov_slider_w = new w_fov_slider((graphics_preferences->screen_mode.fov == 0 ? static_cast<int>(View_FOV_Normal()) : graphics_preferences->screen_mode.fov) - 30);
 	fov_slider_w->set_enabled(graphics_preferences->screen_mode.fov != 0);
@@ -1613,68 +1549,6 @@ static void graphics_dialog(void *arg)
     // Run dialog
     if (d.run() == 0) {	// Accepted
 	    bool changed = false;
-	    
-	    bool fullscreen = fullscreen_w->get_selection() == 0;
-	    if (fullscreen != graphics_preferences->screen_mode.fullscreen) {
-		    graphics_preferences->screen_mode.fullscreen = fullscreen;
-		    changed = true;
-	    }
-
-	    short renderer = static_cast<short>(renderer_w->get_selection());
-	    assert(renderer >= 0);
-	    if(renderer != graphics_preferences->screen_mode.acceleration) {
-		    graphics_preferences->screen_mode.acceleration = renderer;
-		    if (renderer) graphics_preferences->screen_mode.bit_depth = 32;
-		    changed = true;
-	    }
-	    
-	    short resolution = static_cast<short>(size_w->get_selection());
-		if (resolution == 0)
-		{
-			if (!graphics_preferences->screen_mode.auto_resolution) {
-				graphics_preferences->screen_mode.auto_resolution = true;
-				changed = true;
-			}
-		}
-	    else if (Screen::instance()->ModeWidth(resolution - 1) != graphics_preferences->screen_mode.width || Screen::instance()->ModeHeight(resolution - 1) != graphics_preferences->screen_mode.height || graphics_preferences->screen_mode.auto_resolution)
-	    {
-		    graphics_preferences->screen_mode.width = Screen::instance()->ModeWidth(resolution - 1);
-		    graphics_preferences->screen_mode.height = Screen::instance()->ModeHeight(resolution - 1);
-			graphics_preferences->screen_mode.auto_resolution = false;
-		    changed = true;
-	    }
-	    
-		bool high_dpi = high_dpi_w->get_selection() != 0;
-		if (high_dpi != graphics_preferences->screen_mode.high_dpi) {
-			graphics_preferences->screen_mode.high_dpi = high_dpi;
-			changed = true;
-		}
-		
-	    short gamma = static_cast<short>(gamma_w->get_selection());
-	    if (gamma != graphics_preferences->screen_mode.gamma_level) {
-		    graphics_preferences->screen_mode.gamma_level = gamma;
-		    changed = true;
-	    }
-
-		auto fps_target = fps_target_values[fps_target_w->get_selection()];
-		if (fps_target != graphics_preferences->fps_target)
-		{
-			graphics_preferences->fps_target = fps_target;
-			changed = true;
-		}
-		
-        bool fix_h_not_v = fixh_w->get_selection() == 0;
-        if (fix_h_not_v != graphics_preferences->screen_mode.fix_h_not_v) {
-            graphics_preferences->screen_mode.fix_h_not_v = fix_h_not_v;
-            changed = true;
-        }
-
-	    bool hud = hud_w->get_selection() != 0;
-	    if (hud != graphics_preferences->screen_mode.hud)
-	    {
-		    graphics_preferences->screen_mode.hud = hud;
-		    changed = true;
-	    }
 
 		auto hud_plugin = static_cast<int>(hud_plugin_w->get_selection());
 		if (hud_plugin != hud_plugin_index) {
@@ -1689,39 +1563,6 @@ static void graphics_dialog(void *arg)
 			changed = true;
 		}
 	    
-	    short hud_scale = static_cast<short>(hud_scale_w->get_selection());
-	    if (hud_scale != graphics_preferences->screen_mode.hud_scale_level)
-	    {
-		    graphics_preferences->screen_mode.hud_scale_level = hud_scale;
-		    changed = true;
-	    }
-	    
-	    short term_scale = static_cast<short>(term_scale_w->get_selection());
-	    if (term_scale != graphics_preferences->screen_mode.term_scale_level)
-	    {
-		    graphics_preferences->screen_mode.term_scale_level = term_scale;
-		    changed = true;
-	    }
-		
-		bool translucent_map = map_w->get_selection() != 0;
-		if (translucent_map != graphics_preferences->screen_mode.translucent_map) {
-			graphics_preferences->screen_mode.translucent_map = translucent_map;
-			changed = true;
-		}
-
-		auto bobbing_type = static_cast<BobbingType>(bobbing_type_w->get_selection());
-		if (bobbing_type != graphics_preferences->screen_mode.bobbing_type) {
-			graphics_preferences->screen_mode.bobbing_type = bobbing_type;
-			changed = true;
-		}
-
-		int fov = override_fov_w->get_selection() == 0 ? 0 : fov_slider_w->get_selection() + 30;
-		if (fov != graphics_preferences->screen_mode.fov)
-		{
-			graphics_preferences->screen_mode.fov = fov;
-			changed = true;
-		}
-		
 	    if (changed) {
 			Plugins::instance()->invalidate();
 		    write_preferences();
@@ -1730,7 +1571,6 @@ static void graphics_dialog(void *arg)
 			LoadBaseMMLScripts(true);
 			Plugins::instance()->load_mml(true);
 
-		    change_screen_mode(&graphics_preferences->screen_mode, true);
 		    clear_screen(true);
 		    parent->layout();
 		    parent->draw();		// DirectX seems to need this
@@ -3783,23 +3623,6 @@ InfoTree graphics_preferences_tree()
 {
 	InfoTree root;
 
-	root.put_attr("scmode_width", graphics_preferences->screen_mode.width);
-	root.put_attr("scmode_height", graphics_preferences->screen_mode.height);
-	root.put_attr("scmode_auto_resolution", graphics_preferences->screen_mode.auto_resolution);
-	root.put_attr("scmode_high_dpi", graphics_preferences->screen_mode.high_dpi);
-	root.put_attr("scmode_hud", graphics_preferences->screen_mode.hud);
-	root.put_attr("scmode_hud_scale", graphics_preferences->screen_mode.hud_scale_level);
-	root.put_attr("scmode_term_scale", graphics_preferences->screen_mode.term_scale_level);
-	root.put_attr("scmode_translucent_map", graphics_preferences->screen_mode.translucent_map);
-	root.put_attr("scmode_camera_bob", static_cast<int>(graphics_preferences->screen_mode.bobbing_type));
-	root.put_attr("scmode_accel", graphics_preferences->screen_mode.acceleration);
-	root.put_attr("scmode_highres", graphics_preferences->screen_mode.high_resolution);
-	root.put_attr("scmode_draw_every_other_line", graphics_preferences->screen_mode.draw_every_other_line);
-	root.put_attr("scmode_fov", graphics_preferences->screen_mode.fov);
-	root.put_attr("scmode_fullscreen", graphics_preferences->screen_mode.fullscreen);
-	root.put_attr("scmode_bitdepth", graphics_preferences->screen_mode.bit_depth);
-	root.put_attr("scmode_gamma", graphics_preferences->screen_mode.gamma_level);
-	root.put_attr("scmode_fix_h_not_v", graphics_preferences->screen_mode.fix_h_not_v);
 	root.put_attr("ogl_flags", graphics_preferences->OGL_Configure.Flags);
 	root.put_attr("software_alpha_blending", graphics_preferences->software_alpha_blending);
 	root.put_attr("software_sdl_driver", graphics_preferences->software_sdl_driver);
@@ -4286,28 +4109,6 @@ void write_preferences()
 
 static void default_graphics_preferences(graphics_preferences_data *preferences)
 {
-  memset(&preferences->screen_mode, '\0', sizeof(screen_mode_data));
-	preferences->screen_mode.gamma_level= DEFAULT_GAMMA_LEVEL;
-
-	preferences->screen_mode.width = 640;
-	preferences->screen_mode.height = 480;
-	preferences->screen_mode.auto_resolution = true;
-	preferences->screen_mode.high_dpi = true;
-	preferences->screen_mode.hud = true;
-	preferences->screen_mode.hud_scale_level = 0;
-	preferences->screen_mode.term_scale_level = 2;
-	preferences->screen_mode.translucent_map = false;
-	preferences->screen_mode.acceleration = _opengl_acceleration;
-	preferences->screen_mode.high_resolution = true;
-	preferences->screen_mode.fullscreen = true;
-	preferences->screen_mode.fix_h_not_v = true;
-	preferences->screen_mode.bobbing_type = BobbingType::camera_and_weapon;
-	preferences->screen_mode.bit_depth = 32;
-	
-	preferences->screen_mode.draw_every_other_line= false;
-
-	preferences->screen_mode.fov = 0; // use default
-	
 	OGL_SetDefaults(preferences->OGL_Configure);
 
 	preferences->software_alpha_blending = _sw_alpha_off;
@@ -4476,49 +4277,6 @@ static void default_environment_preferences(environment_preferences_data *prefer
 static bool validate_graphics_preferences(graphics_preferences_data *preferences)
 {
 	bool changed= false;
-
-	// Fix bool options
-	preferences->screen_mode.high_resolution = !!preferences->screen_mode.high_resolution;
-	preferences->screen_mode.fullscreen = !!preferences->screen_mode.fullscreen;
-	preferences->screen_mode.draw_every_other_line = !!preferences->screen_mode.draw_every_other_line;
-    preferences->screen_mode.fix_h_not_v = !!preferences->screen_mode.fix_h_not_v;
-
-	if(preferences->screen_mode.gamma_level<0 || preferences->screen_mode.gamma_level>=NUMBER_OF_GAMMA_LEVELS)
-	{
-		preferences->screen_mode.gamma_level= DEFAULT_GAMMA_LEVEL;
-		changed= true;
-	}
-
-	if (preferences->screen_mode.acceleration != _no_acceleration && preferences->screen_mode.acceleration != _opengl_acceleration)
-		preferences->screen_mode.acceleration = _opengl_acceleration;
-
-	// OpenGL requires at least 16 bit color depth
-	if (preferences->screen_mode.acceleration != _no_acceleration && preferences->screen_mode.bit_depth == 8)
-	{
-		preferences->screen_mode.bit_depth= 16;
-		changed= true;
-	}
-
-#ifdef TRUE_COLOR_ONLY
-	if (preferences->screen_mode.bit_depth == 8)
-	{
-		preferences->screen_mode.bit_depth = 16;
-		changed = true;
-	}
-#endif
-
-	if (preferences->screen_mode.fov < 30 && preferences->screen_mode.fov != 0)
-	{
-		preferences->screen_mode.fov = 30;
-		changed = true;
-	}
-
-	if (preferences->screen_mode.fov > 130)
-	{
-		preferences->screen_mode.fov = 130;
-		changed = true;
-	}
-
 	return changed;
 }
 
@@ -4711,39 +4469,7 @@ void parse_graphics_preferences(InfoTree root, std::string version)
 {
 	int scmode = -1;
 	root.read_attr("scmode_size", scmode);
-	if (scmode >= 0 && scmode < 32)
-	{
-		graphics_preferences->screen_mode.height = LegacyViewSizes[scmode].Height;
-		graphics_preferences->screen_mode.width = LegacyViewSizes[scmode].Width;
-		graphics_preferences->screen_mode.hud = LegacyViewSizes[scmode].HUD;
-	}
 
-	root.read_attr("scmode_height", graphics_preferences->screen_mode.height);
-	root.read_attr("scmode_width", graphics_preferences->screen_mode.width);
-	root.read_attr("scmode_auto_resolution", graphics_preferences->screen_mode.auto_resolution);
-	root.read_attr("scmode_high_dpi", graphics_preferences->screen_mode.high_dpi);
-	root.read_attr("scmode_hud", graphics_preferences->screen_mode.hud);
-	root.read_attr("scmode_hud_scale", graphics_preferences->screen_mode.hud_scale_level);
-	root.read_attr("scmode_term_scale", graphics_preferences->screen_mode.term_scale_level);
-	root.read_attr("scmode_translucent_map", graphics_preferences->screen_mode.translucent_map);
-
-	int bobbing_type = -1;
-	root.read_attr("scmode_camera_bob", bobbing_type);
-
-	if (bobbing_type != -1)
-	{
-		graphics_preferences->screen_mode.bobbing_type = static_cast<BobbingType>(bobbing_type);
-	}
-
-	root.read_attr("scmode_accel", graphics_preferences->screen_mode.acceleration);
-	root.read_attr("scmode_highres", graphics_preferences->screen_mode.high_resolution);
-	root.read_attr("scmode_draw_every_other_line", graphics_preferences->screen_mode.draw_every_other_line);
-	root.read_attr("scmode_fullscreen", graphics_preferences->screen_mode.fullscreen);
-	
-	root.read_attr("scmode_fix_h_not_v", graphics_preferences->screen_mode.fix_h_not_v);
-	root.read_attr("scmode_bitdepth", graphics_preferences->screen_mode.bit_depth);
-	root.read_attr("scmode_gamma", graphics_preferences->screen_mode.gamma_level);
-	root.read_attr("scmode_fov", graphics_preferences->screen_mode.fov);
 	root.read_attr("ogl_flags", graphics_preferences->OGL_Configure.Flags);
 	root.read_attr("software_alpha_blending", graphics_preferences->software_alpha_blending);
 	root.read_attr("software_sdl_driver", graphics_preferences->software_sdl_driver);
