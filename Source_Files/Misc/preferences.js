@@ -255,19 +255,11 @@ extern struct input_preferences_data *input_preferences;
 extern SoundManager::Parameters *sound_preferences;
 extern struct environment_preferences_data *environment_preferences;
 
-// --------- functions
-void initialize_preferences(void);
-void read_preferences();
-void handle_preferences(void);
-void write_preferences(void);
-
 static inline int16 get_fps_target() {
 	return graphics_preferences->fps_target;
 }
 
 void transition_preferences(const DirectorySpecifier& legacy_prefs_dir);
-
-#endif
 
 #include "cseries.h"
 #include "FileHandler.h"
