@@ -16,33 +16,14 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
-	Created by Loren Petrich,
-	Dec. 23, 2000
-	Contains everything shared between screen.cpp and screen_sdl.cpp
-	
-Dec 29, 2000 (Loren Petrich):
-	Added stuff for doing screen messages
-
-Mar 19, 2001 (Loren Petrich):
-	Added some even bigger screen resolutions
-
-Jan 25, 2002 (Br'fin (Jeremy Parsons)):
-	Added accessors for datafields now opaque in Carbon
-
- Aug 6, 2003 (Woody Zenfell):
-	Minor tweaks to screen_printf() mechanism (safer; resets when screen_reset called)
 */
-
+/*
 #include "computer_interface.h"
 #include "fades.h"
 #include "network.h"
 #include "OGL_Render.h"
 #include "overhead_map.h"
 #include "screen.h"
-#include <stdarg.h>
-
-#include <chrono>
 
 extern SDL_Surface *world_pixels;
 
@@ -59,14 +40,14 @@ extern SDL_Surface *world_pixels;
 #include "Image_Blitter.h"
 #include "OGL_Blitter.h"
 
-/* ---------- globals */
+// ---------- globals
 
-struct color_table *uncorrected_color_table; /* the pristine color environment of the game (can be 16bit) */
-struct color_table *world_color_table; /* the gamma-corrected color environment of the game (can be 16bit) */
-struct color_table *interface_color_table; /* always 8bit, for mixed-mode (i.e., valkyrie) fades */
-struct color_table *visible_color_table; /* the color environment the player sees (can be 16bit) */
+struct color_table *uncorrected_color_table; // the pristine color environment of the game (can be 16bit)
+struct color_table *world_color_table; // the gamma-corrected color environment of the game (can be 16bit)
+struct color_table *interface_color_table; // always 8bit, for mixed-mode (i.e., valkyrie) fades
+struct color_table *visible_color_table; // the color environment the player sees (can be 16bit)
 
-struct view_data *world_view; /* should be static */
+struct view_data *world_view; // should be static
 
 static struct screen_mode_data screen_mode;
 
@@ -151,7 +132,6 @@ short interface_bit_depth= NONE;
 // It indicates whether to render the overhead map in OpenGL
 extern bool OGL_MapActive;
 
-
 // Current screen messages:
 const int NumScreenMessages = 7;
 struct ScreenMessage
@@ -169,10 +149,10 @@ struct ScreenMessage
 static int MostRecentMessage = NumScreenMessages-1;
 static ScreenMessage Messages[NumScreenMessages];
 
-/* SB */
+// SB
 static struct ScriptHUDElement {
-	/* this needs optimized (sorry, making fun of my grandmother...) */
-	/* it's char[4] instead of int32 to make the OpenGL support simpler to implement */
+	// this needs optimized (sorry, making fun of my grandmother...)
+	// it's char[4] instead of int32 to make the OpenGL support simpler to implement
 	unsigned char icon[1024];
 	bool isicon;
 	int color;
@@ -182,16 +162,9 @@ static struct ScriptHUDElement {
 	OGL_Blitter ogl_blitter;
 #endif	
 } ScriptHUDElements[MAXIMUM_NUMBER_OF_NETWORK_PLAYERS][MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS];
-/* /SB */
+// /SB
 
-/* ---------- private prototypes */
-
-static void set_overhead_map_status(bool status);
-static void set_terminal_status(bool status);
-
-/* ---------- code */
-
-/* SB */
+// SB
 namespace icon {
 	
   static inline char nextc(const char*& p, size_t& rem) {
@@ -246,11 +219,11 @@ namespace icon {
 	palette[n * 4] = readuc(p, rem);
 	palette[n * 4 + 1] = readuc(p, rem);
 	palette[n * 4 + 2] = readuc(p, rem);
-	c = nextc(p, rem); /* ignore a char, UNLESS... */
-	if(isadigit(c)) {  /* ...it's a digit */
-	  --p; ++rem; /* let readuc see it */
+	c = nextc(p, rem); // ignore a char, UNLESS...
+	if(isadigit(c)) {  // ...it's a digit
+	  --p; ++rem; // let readuc see it
 	  palette[n * 4 + 3] = readuc(p, rem);
-	  nextc(p, rem); /* remember to ignore another char */
+	  nextc(p, rem); // remember to ignore another char
 	}
 	else
 	  palette[n * 4 + 3] = 255;
@@ -315,8 +288,8 @@ void SetScriptHUDNonlocal(bool nonlocal) {
 
 void SetScriptHUDColor(int player, int idx, int color) {
   player %= MAXIMUM_NUMBER_OF_NETWORK_PLAYERS;
-  idx %= MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS; /* o_o */
-  ScriptHUDElements[player][idx].color = color % 8; /* O_O */
+  idx %= MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS; // o_o
+  ScriptHUDElements[player][idx].color = color % 8; // O_O
 }
 
 void SetScriptHUDText(int player, int idx, const char* text) {
@@ -339,7 +312,7 @@ bool SetScriptHUDIcon(int player, int idx, const char* text, size_t rem) {
 }
 
 void SetScriptHUDSquare(int player, int idx, int _color) {
-  unsigned char palette[4]; /* short, I KNOW. */
+  unsigned char palette[4]; // short, I KNOW.
   unsigned char graphic[256];
   player %= MAXIMUM_NUMBER_OF_NETWORK_PLAYERS;
   idx %= MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS;
@@ -353,14 +326,14 @@ void SetScriptHUDSquare(int player, int idx, int _color) {
   palette[3] = 0xff;
   icon::seticon(player, idx, palette, graphic);
 }
-/* /SB */
+// /SB
 
 void reset_messages()
 {
 	// ZZZ: reset screen_printf's
 	for(int i = 0; i < NumScreenMessages; i++)
 		Messages[i].ExpirationTime = machine_tick_count();
-	/* SB: reset HUD elements */
+	// SB: reset HUD elements
 	for(int p = 0; p < MAXIMUM_NUMBER_OF_NETWORK_PLAYERS; p++) {
 		for(int i = 0; i < MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS; i++) {
 			ScriptHUDElements[p][i].color = 1;
@@ -452,7 +425,7 @@ screen_mode_data *get_screen_mode(
 	return &screen_mode;
 }
 
-/* These should be replaced with better preferences control functions */
+// These should be replaced with better preferences control functions
 // LP change: generalizing this
 bool game_window_is_full_screen(
 	void)
@@ -473,8 +446,6 @@ void change_gamma_level(
 	set_fade_effect(NONE);
 }
 
-/* ---------- private code */
-
 // LP addition: routine for displaying text
 
 // Globals for communicating with the SDL contents of DisplayText
@@ -482,7 +453,7 @@ static SDL_Surface *DisplayTextDest = NULL;
 static font_info *DisplayTextFont = NULL;
 static short DisplayTextStyle = 0;
 
-/*static*/ void DisplayText(short BaseX, short BaseY, const char *Text, unsigned char r = 0xff, unsigned char g = 0xff, unsigned char b = 0xff)
+void DisplayText(short BaseX, short BaseY, const char *Text, unsigned char r = 0xff, unsigned char g = 0xff, unsigned char b = 0xff)
 {
 #ifdef HAVE_OPENGL
 	// OpenGL version:
@@ -496,7 +467,7 @@ static short DisplayTextStyle = 0;
 
 }
 
-/*static*/ void DisplayTextCursor(SDL_Surface *s, short BaseX, short BaseY, const char *Text, short Offset, unsigned char r = 0xff, unsigned char g = 0xff, unsigned char b = 0xff)
+void DisplayTextCursor(SDL_Surface *s, short BaseX, short BaseY, const char *Text, short Offset, unsigned char r = 0xff, unsigned char g = 0xff, unsigned char b = 0xff)
 {
 	SDL_Rect cursor_rect;
 	int w;
@@ -667,7 +638,7 @@ static void DisplayMessages(SDL_Surface *s)
 	short X = X0 + LineSpacing/3;
 	short Y = Y0 + LineSpacing;
 	if (ShowPosition) Y += 6*LineSpacing;	// Make room for the position data
-	/* SB */
+	// SB
 	short view = nonlocal_script_hud ? local_player_index : current_player_index;
 	for(int i = 0; i < MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS; ++i) {
 		if(!ScriptHUDElements[view][i].text.empty()) {
@@ -691,7 +662,7 @@ static void DisplayMessages(SDL_Surface *s)
 				break;
 			}
 			bool had_icon = false;
-			/* Yes, I KNOW this is the same i as above. I know what I'm doing. */
+			// Yes, I KNOW this is the same i as above. I know what I'm doing.
 			for(i = 0; i < MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS; ++i) {
 				if(ScriptHUDElements[view][i].text.empty()) continue;
 				if(ScriptHUDElements[view][i].isicon) {
@@ -742,7 +713,7 @@ static void DisplayMessages(SDL_Surface *s)
 			break;
 		}
 	}
-	/* /SB */
+	// /SB
 	//	for (int k=0; k<NumScreenMessages; k++)
 	for (int k = NumScreenMessages - 1; k >= 0; k--)
 	{
@@ -978,13 +949,13 @@ static void DisplayNetLoadingScreen(SDL_Surface* s)
 }
 
 
-static void set_overhead_map_status( /* it has changed, this is the new status */
+static void set_overhead_map_status( // it has changed, this is the new status
 	bool status)
 {
 	world_view->overhead_map_active= status;
 }
 
-static void set_terminal_status( /* It has changed, this is the new state.. */
+static void set_terminal_status( // It has changed, this is the new state..
 	bool status)
 {
 	bool restore_effect= false;
@@ -1007,7 +978,7 @@ static void set_terminal_status( /* It has changed, this is the new state.. */
 		world_view->effect_phase= phase;
 	}
 
-	/* Dirty the view.. */
+	// Dirty the view..
 	dirty_terminal_view(current_player_index);
 }
 
@@ -1055,3 +1026,4 @@ void screen_printf(const char *format, ...)
 	vsnprintf(Message.Text,sizeof(Message.Text),format,list);
 	va_end(list);
 }
+*/
