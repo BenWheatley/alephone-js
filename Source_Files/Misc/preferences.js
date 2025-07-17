@@ -1365,25 +1365,6 @@ static void rendering_options_dialog_demux(void* arg)
 	}
 }
 
-std::vector<std::string> build_resolution_labels()
-{
-	std::vector<std::string> result;
-	bool first_mode = true;
-	for (std::vector<std::pair<int, int> >::const_iterator it = Screen::instance()->GetModes().begin(); it != Screen::instance()->GetModes().end(); ++it)
-	{
-		std::ostringstream os;
-		os << it->first << "x" << it->second;
-		if (first_mode)
-		{
-			result.push_back("Automatic");
-			first_mode = false;
-		}
-		result.push_back(os.str());
-	}
-
-	return result;
-}
-
 class w_fov_slider : public w_slider {
 public:
 	w_fov_slider(int sel) : w_slider(101, sel) {
