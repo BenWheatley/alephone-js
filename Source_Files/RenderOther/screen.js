@@ -96,11 +96,6 @@ extern struct color_table *world_color_table, *visible_color_table, *interface_c
 
 #include "cseries.h"
 
-#include <math.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "OGL_Headers.h"
 #include "OGL_Blitter.h"
 #include "OGL_Faders.h"
