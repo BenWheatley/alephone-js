@@ -68,9 +68,6 @@
 
 #include "preferences.h"
 
-#include <boost/algorithm/string/predicate.hpp>
-#include <boost/filesystem.hpp>
-
 #ifdef HAVE_NFD
 #include "nfd.h"
 #endif
