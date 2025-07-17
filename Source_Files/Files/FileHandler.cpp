@@ -60,15 +60,7 @@
 #include "SDL_rwops_zzip.h"
 #endif
 
-#if defined(__WIN32__)
-#if defined _MSC_VER
-#define R_OK 4
-#endif
-#include <wchar.h>
-#define PATH_SEP '\\'
-#else
 #define PATH_SEP '/'
-#endif
 
 #include "sdl_dialogs.h"
 #include "sdl_widgets.h"

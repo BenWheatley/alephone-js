@@ -131,7 +131,7 @@ extern struct color_table *world_color_table, *visible_color_table, *interface_c
 #include "Movie.h"
 #include "shell_options.h"
 
-#if defined(__WIN32__) || (defined(__MACH__) && defined(__APPLE__))
+#if (defined(__MACH__) && defined(__APPLE__))
 #define MUST_RELOAD_VIEW_CONTEXT
 #endif
 

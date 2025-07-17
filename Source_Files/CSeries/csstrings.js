@@ -278,31 +278,6 @@ std::string utf8_to_mac_roman(const std::string& input)
 
 	return output;
 }
-
-
-#ifdef __WIN32__
-static std::wstring utf8_to_wide(const char* utf8, int in_length)
-{
-	const int out_length = MultiByteToWideChar(CP_UTF8, 0, utf8, in_length, nullptr, 0); // >= 0
-	std::wstring out(out_length, char{});
-	MultiByteToWideChar(CP_UTF8, 0, utf8, in_length, &out[0], out_length);
-	return out;
-}
-
-static std::string wide_to_utf8(const wchar_t* utf16, int in_length)
-{
-	const int out_length = WideCharToMultiByte(CP_UTF8, 0, utf16, in_length, nullptr, 0, nullptr, nullptr); // >= 0
-	std::string out(out_length, char{});
-	WideCharToMultiByte(CP_UTF8, 0, utf16, in_length, &out[0], out_length, nullptr, nullptr);
-	return out;
-}
-
-std::wstring utf8_to_wide(const char* utf8)         { return utf8_to_wide(utf8, strlen(utf8)); }
-std::wstring utf8_to_wide(const std::string& utf8)  { return utf8_to_wide(utf8.c_str(), utf8.size()); }
-std::string wide_to_utf8(const wchar_t* utf16)      { return wide_to_utf8(utf16, wcslen(utf16)); }
-std::string wide_to_utf8(const std::wstring& utf16) { return wide_to_utf8(utf16.c_str(), utf16.size()); }
-#endif // __WIN32__
-
 */
 
 function expand_app_variables(str) {
