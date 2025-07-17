@@ -55,7 +55,7 @@ import * as preprocess_map_sdl from './Files/preprocess_map_sdl.js';
 #include "render.h"
 */
 import * as _interface from './Misc/interface.js';
-import * as SoundManager from './Sounds/SoundManager.js';
+import * as SoundManager from './Sound/SoundManager.js';
 /*
 #include "fades.h"
 */
