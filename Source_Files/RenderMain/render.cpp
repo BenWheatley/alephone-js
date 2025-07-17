@@ -306,13 +306,8 @@ static struct view_data explore_view;
 static RenderVisTreeClass explore_tree;
 
 void OGL_Rasterizer_Init() {
-	
-#ifdef HAVE_OPENGL
-	if (graphics_preferences->screen_mode.acceleration == _opengl_acceleration) {
-		Rasterizer_Shader.setupGL();
-		Render_Shader.setupGL(Rasterizer_Shader);
-	}
-#endif
+	Rasterizer_Shader.setupGL();
+	Render_Shader.setupGL(Rasterizer_Shader);
 }
 
 /* ---------- private prototypes */
