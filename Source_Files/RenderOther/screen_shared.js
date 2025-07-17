@@ -27,12 +27,6 @@
 
 extern SDL_Surface *world_pixels;
 
-#define DESIRED_SCREEN_WIDTH 640
-#define DESIRED_SCREEN_HEIGHT 480
-
-#define DEFAULT_WORLD_WIDTH 640
-#define DEFAULT_WORLD_HEIGHT 320
-
 #include "Console.h"
 #include "screen_drawing.h"
 
