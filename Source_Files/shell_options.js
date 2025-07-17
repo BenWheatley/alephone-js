@@ -6,8 +6,6 @@ struct ShellOptions {
 
 	bool skip_intro;
 	bool editor;
-
-	std::string output;
 };
 
 #include "FileHandler.h"
@@ -87,11 +85,6 @@ static const std::vector<ShellOptionsFlag> shell_options_flags {
 	{"s", "nosound", "Do not access the sound card", shell_options.nosound},
 	{"Q", "skip-intro", "Skip intro screens", shell_options.skip_intro},
 	{"e", "editor", "Use editor prefs; jump directly to map", shell_options.editor},
-};
-
-static const std::vector<ShellOptionsString> shell_options_strings {
-	{"o", "output", "With -e, output to [file] and exit on quit", shell_options.output},
-	{"NSDocumentRevisionsDebugMode", "", "", ignore} // annoying Xcode argument
 };
 
 std::unordered_map<int, bool> ShellOptions::parse(int argc, char** argv)
