@@ -1267,10 +1267,6 @@ static const std::unordered_map<int, ChannelType> mapping_index_channel = {
 };
 
 
-enum {
-    iRENDERING_SYSTEM = 1000
-};
-
 static const vector<string> build_stringvector_from_cstring_array (const char** label_array)
 {
 	std::vector<std::string> label_vector;
