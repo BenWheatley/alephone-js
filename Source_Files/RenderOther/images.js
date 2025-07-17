@@ -924,26 +924,19 @@ void scroll_full_screen_pict_resource_from_scenario(int pict_resource_number, bo
 		} while (!done && !aborted);
 	}
 }
-
+*/
 //  Initialize image manager, open Images file
+export function initialize_images_manager() {
+	let file = null;
 
-void initialize_images_manager(void)
-{
-	FileSpecifier file;
-
-  logContext("loading Images...");
-
-	file.SetNameWithPath(getcstr(temporary, strFILENAMES, filenameIMAGES)); // _typecode_images
+	file = shell.scenario_dir + cseries.getcstr(_interface.strFILENAMES, _interface.filenameIMAGES);
 	
-	if (!file.Exists())
-        logContext("Images file not found");
-	
-	if (!ImagesFile.open_file(file))
-        logContext("Images file could not be opened");
-
-	atexit(shutdown_images_handler);
+	if (!ImagesFile.open_file(file)) {
+        alert("Images file could not be opened");
+	}
 }
 
+/*
 //  Set map file to load images from
 
 void set_scenario_images_file(FileSpecifier &file)

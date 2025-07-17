@@ -61,8 +61,8 @@ import * as SoundManager from './Sound/SoundManager.js';
 */
 import * as screen from './RenderOther/screen.js';
 import { Music } from './Sound/Music.js';
+import * as images from './RenderOther/images.js';
 /*
-#include "images.h"
 #include "vbl.h"
 */
 import * as preferences from './Misc/preferences.js';
@@ -234,7 +234,9 @@ export async function initialize_application() {
 	initialize_terminal_manager();
 	initialize_shape_handler();
 	initialize_fades();
-	initialize_images_manager();
+*/
+	images.initialize_images_manager();
+/*
 	load_environment_from_preferences();
 */
 	_interface.initialize_game_state();
