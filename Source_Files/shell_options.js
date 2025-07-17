@@ -3,7 +3,6 @@ struct ShellOptions {
 	std::unordered_map<int, bool> parse(int argc, char** argv, bool ignore_unknown_args = false);
 
 	bool nosound;
-	bool nogamma;
 	bool debug;
 	bool nojoystick;
 	bool insecure_lua;
@@ -97,7 +96,6 @@ static const std::vector<ShellOptionsCommand> shell_options_commands {
 static const std::vector<ShellOptionsFlag> shell_options_flags {
 	{"d", "debug", "Allow saving of core files", shell_options.debug},
 	{"s", "nosound", "Do not access the sound card", shell_options.nosound},
-	{"m", "nogamma", "Disable gamma table effects (menu fades)", shell_options.nogamma},
 	{"j", "nojoystick", "Do not initialize joysticks", shell_options.nojoystick},
 	{"i", "insecure_lua", "", shell_options.insecure_lua},
 	{"Q", "skip-intro", "Skip intro screens", shell_options.skip_intro},
