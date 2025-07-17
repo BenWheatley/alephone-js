@@ -174,8 +174,7 @@ bool handle_open_document(const std::string& filename)
 	return done;
 }
 */
-export async function initialize_application()
-{
+export async function initialize_application() {
 	const canvas = document.getElementById("glCanvas");
 	
 	if (!canvas) {
@@ -215,9 +214,7 @@ export async function initialize_application()
 	
 /*
 	WadImageCache::instance()->initialize_cache();
-
-	write_preferences();
-
+	
 	Plugins::instance()->load_mml(true);
 
 	HTTPClient::Init();
