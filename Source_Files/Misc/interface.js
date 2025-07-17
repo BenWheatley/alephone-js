@@ -389,12 +389,6 @@ let interface_fade_in_progress = false;
 static short current_picture_clut_depth;
 static struct color_table *animated_color_table= NULL;
 static struct color_table *current_picture_clut= NULL;
-
-//  -------------- externs 
-extern short interface_bit_depth;
-extern short bit_depth;
-
-//  ---------------------- code begins 
 */
 
 function get_screen_data(index) {

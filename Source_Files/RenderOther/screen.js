@@ -212,10 +212,7 @@ void start_tunnel_vision_effect(
 void Screen::Initialize(screen_mode_data* mode)
 //void initialize_screen(struct screen_mode_data *mode, bool ShowFreqDialog)
 {
-	interface_bit_depth = bit_depth = mode->bit_depth;
-
 	if (!screen_initialized) {
-
 		SDL_PixelFormat *pf = SDL_AllocFormat(SDL_PIXELFORMAT_RGB565);
 		pixel_format_16 = *pf;
 		SDL_FreeFormat(pf);
@@ -597,20 +594,7 @@ static void reallocate_world_pixels(int width, int height)
 		world_pixels_corrected = NULL;
 	}
 	SDL_PixelFormat *f = main_surface->format;
-//	world_pixels = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, f->BitsPerPixel, f->Rmask, f->Gmask, f->Bmask, f->Amask);
-	switch (bit_depth)
-	{
-	case 8:
-		world_pixels = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 8, 0, 0, 0, 0);
-		break;
-	case 16:
-		world_pixels = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 16, pixel_format_16.Rmask, pixel_format_16.Gmask, pixel_format_16.Bmask, 0);
-		break;
-	default:
-		world_pixels = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, pixel_format_32.Rmask, pixel_format_32.Gmask, pixel_format_32.Bmask, 0);
-		break;
-
-	}
+	world_pixels = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, 32, pixel_format_32.Rmask, pixel_format_32.Gmask, pixel_format_32.Bmask, 0);
 
 	if (world_pixels == NULL)
 		alert_out_of_memory();
@@ -1522,7 +1506,7 @@ static inline bool pixel_formats_equal(SDL_PixelFormat* a, SDL_PixelFormat* b)
 static void update_screen(SDL_Rect &source, SDL_Rect &destination, bool every_other_line)
 {
 	SDL_Surface *s = world_pixels;
-	if (!using_default_gamma && bit_depth > 8) {
+	if (!using_default_gamma) {
 		apply_gamma(world_pixels, world_pixels_corrected);
 		s = world_pixels_corrected;
 	}
@@ -1590,13 +1574,8 @@ void change_interface_clut(struct color_table *color_table)
 
 void change_screen_clut(struct color_table *color_table)
 {
-	if (bit_depth == 8) {
-		memcpy(uncorrected_color_table, color_table, sizeof(struct color_table));
-		memcpy(interface_color_table, color_table, sizeof(struct color_table));
-	} else {
-		build_direct_color_table(uncorrected_color_table, bit_depth);
-		memcpy(interface_color_table, uncorrected_color_table, sizeof(struct color_table));
-	}
+	build_direct_color_table(uncorrected_color_table, bit_depth);
+	memcpy(interface_color_table, uncorrected_color_table, sizeof(struct color_table));
 
 	gamma_correct_color_table(uncorrected_color_table, world_color_table, screen_mode.gamma_level);
 	memcpy(visible_color_table, world_color_table, sizeof(struct color_table));
