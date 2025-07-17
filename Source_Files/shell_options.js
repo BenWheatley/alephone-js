@@ -1,6 +1,6 @@
 /*
 struct ShellOptions {
-	std::unordered_map<int, bool> parse(int argc, char** argv, bool ignore_unknown_args = false);
+	std::unordered_map<int, bool> parse(int argc, char** argv);
 
 	bool nosound;
 	bool debug;
@@ -96,7 +96,7 @@ static const std::vector<ShellOptionsString> shell_options_strings {
 	{"NSDocumentRevisionsDebugMode", "", "", ignore} // annoying Xcode argument
 };
 
-std::unordered_map<int, bool> ShellOptions::parse(int argc, char** argv, bool ignore_unknown_args)
+std::unordered_map<int, bool> ShellOptions::parse(int argc, char** argv)
 {
     std::vector<std::string> args;
     while (argc > 0)
