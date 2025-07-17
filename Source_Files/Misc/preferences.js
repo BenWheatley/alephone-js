@@ -1292,9 +1292,6 @@ static void software_rendering_options_dialog(void* arg)
 	table_placer *table = new table_placer(2, get_theme_space(ITEM_WIDGET), true);
 	table->col_flags(0, placeable::kAlignRight);
 
-	table->dual_add(resolution_w->label("Resolution"), d);
-	table->dual_add(resolution_w, d);
-
 	table->add_row(new w_spacer(), true);
 
 	w_select *sw_alpha_blending_w = new w_select(graphics_preferences->software_alpha_blending, sw_alpha_blending_labels);
