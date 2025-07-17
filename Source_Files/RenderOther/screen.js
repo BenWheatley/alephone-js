@@ -80,11 +80,6 @@ namespace alephone
 	};
 }
 
-enum // hardware acceleration codes
-{
-	_opengl_acceleration
-};
-
 enum // screen selection based on game state
 {
 	_screentype_level,
@@ -932,7 +927,7 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 		if (main_screen)
 			logWarning("Stencil buffer is not available");
 	}
-	if (main_screen != NULL && !nogl && screen_mode.acceleration == _opengl_acceleration)
+	if (main_screen != NULL && !nogl)
 	{
 		// see if we can actually run shaders
 		if (!context_created) {
