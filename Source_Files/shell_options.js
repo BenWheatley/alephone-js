@@ -2,7 +2,6 @@
 struct ShellOptions {
 	std::unordered_map<int, bool> parse(int argc, char** argv, bool ignore_unknown_args = false);
 
-	std::string program_name;
 	
 	bool nogl;
 	bool nosound;
@@ -122,10 +121,6 @@ static const std::vector<ShellOptionsString> shell_options_strings {
 
 std::unordered_map<int, bool> ShellOptions::parse(int argc, char** argv, bool ignore_unknown_args)
 {
-	shell_options.program_name = argv[0];
-	--argc;
-	++argv;
-
     std::vector<std::string> args;
     while (argc > 0)
     {
@@ -234,7 +229,7 @@ void print_usage()
 {
 	std::ostringstream oss;
 
-	oss << "\nUsage: " << shell_options.program_name << " [options] [directory] [file]\n";
+	oss << "\nUsage: " << " [options] [directory] [file]\n";
 
 	for (auto command : shell_options_commands)
 	{
