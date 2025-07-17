@@ -1079,7 +1079,7 @@ static void process_event(const SDL_Event &event)
 	case SDL_WINDOWEVENT:
 		switch (event.window.event) {
 			case SDL_WINDOWEVENT_FOCUS_LOST:
-				if (get_game_state() == _game_in_progress && get_keyboard_controller_status() && !Movie::instance()->IsRecording() && shell_options.replay_directory.empty()) {
+				if (get_game_state() == _game_in_progress && get_keyboard_controller_status() && !Movie::instance()->IsRecording()) {
 					pause_game();
 				}
 

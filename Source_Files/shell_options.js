@@ -10,8 +10,6 @@ struct ShellOptions {
 
 	bool no_chooser;
 
-	std::string replay_directory;
-
 	std::string directory;
 	std::vector<std::string> files;
 
@@ -101,7 +99,6 @@ static const std::vector<ShellOptionsFlag> shell_options_flags {
 
 static const std::vector<ShellOptionsString> shell_options_strings {
 	{"o", "output", "With -e, output to [file] and exit on quit", shell_options.output},
-	{"l", "replay-directory", "Directory with replays to load", shell_options.replay_directory},
 	{"NSDocumentRevisionsDebugMode", "", "", ignore} // annoying Xcode argument
 };
 

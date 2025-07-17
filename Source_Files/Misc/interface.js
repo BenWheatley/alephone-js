@@ -410,7 +410,7 @@ export function initialize_game_state() {
 	game_state.main_menu_display_count = 0;
 
 /* TODO: shell options. Until then, I'm *forcing* display_main_menu();
-	if (!shell_options.editor && shell_options.replay_directory.length === 0) {
+	if (!shell_options.editor) {
 		if (shell_options.skip_intro) {
 			display_main_menu();
 		} else {
@@ -1906,9 +1906,7 @@ static void transfer_to_new_level(
 			finish_game(false);
 			show_cursor(); // for some reason, cursor stays hidden otherwise
 
-			if (shell_options.replay_directory.empty()) {
-				set_game_state(_begin_display_of_epilogue);
-			}
+			set_game_state(_begin_display_of_epilogue);
 
 			force_game_state_change();
 			return;
@@ -2394,12 +2392,7 @@ static void finish_game(
 
 	if (game_state.user == _replay)
 	{
-		if (!shell_options.replay_directory.empty())
-		{
-			game_state.state = _quit_game;
-			return_to_main_menu = false;
-		}
-		else if (!(dynamic_world->game_information.game_type == _game_of_kill_monsters && dynamic_world->player_count == 1))
+		if (!(dynamic_world->game_information.game_type == _game_of_kill_monsters && dynamic_world->player_count == 1))
 		{
 			game_state.state = _displaying_network_game_dialogs;
 
@@ -2412,7 +2405,7 @@ static void finish_game(
 	set_current_player_index(NONE);
 	
 	load_environment_from_preferences();
-	if ((game_state.user == _replay && shell_options.replay_directory.empty()) || game_state.user == _demo)
+	if (game_state.user == _replay || game_state.user == _demo)
 	{
 		Plugins::instance()->set_mode(Plugins::kMode_Menu);
 	}
@@ -2772,7 +2765,7 @@ static void try_and_display_chapter_screen(
 	bool interface_table_is_valid,
 	bool text_block)
 {
-	if (Movie::instance()->IsRecording() || !shell_options.replay_directory.empty())
+	if (Movie::instance()->IsRecording())
 		return;
 	
 	short pict_resource_number = get_screen_data(_display_chapter_heading)->screen_base + level;
@@ -3041,7 +3034,7 @@ static void video_frame_decoder_callback(plm_t* mpeg, plm_frame_t* frame, void* 
 
 void show_movie(short index)
 {
-	if (Movie::instance()->IsRecording() || !shell_options.replay_directory.empty())
+	if (Movie::instance()->IsRecording())
 		return;
 	
 	float PlaybackSize = 0;
