@@ -49,7 +49,6 @@ namespace alephone
 		int window_width();
 		bool hud();
 		bool lua_hud();
-		bool openGL();
 		bool fifty_percent();
 		bool seventyfive_percent();
 		SDL_Rect window_rect(); // 3D view + interface
@@ -85,7 +84,6 @@ namespace alephone
 
 enum // hardware acceleration codes
 {
-	_no_acceleration,
 	_opengl_acceleration
 };
 
@@ -383,11 +381,6 @@ bool Screen::hud()
 bool Screen::lua_hud()
 {
 	return screen_mode.hud && LuaHUDRunning();
-}
-
-bool Screen::openGL()
-{
-	return screen_mode.acceleration != _no_acceleration;
 }
 
 bool Screen::fifty_percent()
@@ -798,7 +791,7 @@ static bool need_mode_change(int window_width, int window_height,
 	bool wantgl = false;
 	bool hasgl = MainScreenIsOpenGL();
 #ifdef HAVE_OPENGL
-	wantgl = !nogl && (screen_mode.acceleration != _no_acceleration);
+	wantgl = !nogl;
 	if (wantgl != hasgl)
 		return true;
 	if (wantgl) {
@@ -911,7 +904,6 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 //	main_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, vmode_width, vmode_height, 32, pixel_format_32.Rmask, pixel_format_32.Gmask, pixel_format_32.Bmask, 0);
 
 	
-	if (nogl || screen_mode.acceleration == _no_acceleration) {
 		switch (graphics_preferences->software_sdl_driver) {
 			case _sw_driver_none:
 				SDL_SetHint(SDL_HINT_RENDER_DRIVER, "software");
@@ -931,7 +923,7 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 	
 	if (need_mode_change(sdl_width, sdl_height, vmode_width, vmode_height, depth, nogl)) {
 #ifdef HAVE_OPENGL
-	if (!nogl && screen_mode.acceleration != _no_acceleration) {
+	if (!nogl) {
 		passed_shader = false;
 		flags |= SDL_WINDOW_OPENGL;
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -978,7 +970,7 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 
 	bool context_created = false;
 #ifdef HAVE_OPENGL
-	if (main_screen == NULL && !nogl && screen_mode.acceleration != _no_acceleration && Get_OGL_ConfigureData().Multisamples > 0) {
+	if (main_screen == NULL && !nogl && Get_OGL_ConfigureData().Multisamples > 0) {
 		// retry with multisampling off
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 0);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 0);
@@ -991,7 +983,7 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 			failed_multisamples = Get_OGL_ConfigureData().Multisamples;
 	}
 #endif
-	if (main_screen == NULL && !nogl && screen_mode.acceleration != _no_acceleration) {
+	if (main_screen == NULL && !nogl) {
 		fprintf(stderr, "WARNING: Failed to initialize OpenGL with 24 bit depth\n");
 		fprintf(stderr, "WARNING: Retrying with 16 bit depth\n");
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
@@ -1107,7 +1099,7 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 	}
 #endif
 	} // end if need_window
-	if (nogl || screen_mode.acceleration == _no_acceleration) {
+	if (nogl) {
 		if (!main_render) {
 			main_render = SDL_CreateRenderer(main_screen, -1, 0);
 			SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
@@ -1121,7 +1113,7 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 		main_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, vmode_width, vmode_height, 32, pixel_format_32.Rmask, pixel_format_32.Gmask, pixel_format_32.Bmask, 0);
 	}
 #ifdef MUST_RELOAD_VIEW_CONTEXT
-	if (!nogl && screen_mode.acceleration != _no_acceleration) 
+	if (!nogl) 
 		ReloadViewContext();
 #endif
 	if (depth == 8) {
@@ -1142,7 +1134,7 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 	Term_Buffer = SDL_CreateRGBSurface(SDL_SWSURFACE, RECTANGLE_WIDTH(term_rect), RECTANGLE_HEIGHT(term_rect), 32, pixel_format_32.Rmask, pixel_format_32.Gmask, pixel_format_32.Bmask, pixel_format_32.Amask);
 
 #ifdef HAVE_OPENGL
-	if (!nogl && screen_mode.acceleration != _no_acceleration) {
+	if (!nogl) {
 		static bool gl_info_printed = false;
 		if (!gl_info_printed)
 		{
@@ -1428,7 +1420,7 @@ void render_screen(short ticks_elapsed)
 
 		dirty_terminal_view(current_player_index);
 	} 
-	else if (screen_mode.acceleration != _no_acceleration && clear_next_screen)
+	else if (clear_next_screen)
 	{
 		clear_screen(false);
 		update_full_screen = true;
@@ -1457,8 +1449,7 @@ void render_screen(short ticks_elapsed)
 
     // clear drawing from previous frame
     // (GL must do this before render_view)
-    if (screen_mode.acceleration != _no_acceleration)
-        clear_screen_margin();
+	clear_screen_margin();
     
 	// Update software_render_dest
 	if (OGL_IsActive())
@@ -1468,12 +1459,6 @@ void render_screen(short ticks_elapsed)
 	
 	// Render world view
 	render_view(world_view, software_render_dest.get());
-
-    // clear Lua drawing from previous frame
-    // (SDL is slower if we do this before render_view)
-    if (screen_mode.acceleration == _no_acceleration &&
-		(MapIsTranslucent || Screen::instance()->lua_hud()))
-        clear_screen_margin();
 
 	if (game_is_networked && is_network_pregame)
 	{

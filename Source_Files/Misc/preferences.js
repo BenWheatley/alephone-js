@@ -1348,21 +1348,7 @@ static void software_rendering_options_dialog(void* arg)
 // ZZZ addition: bounce to correct renderer-config box based on selected rendering system.
 static void rendering_options_dialog_demux(void* arg)
 {
-	int theSelectedRenderer = get_selection_control_value((dialog*) arg, iRENDERING_SYSTEM) - 1;
-
-	switch(theSelectedRenderer) {
-		case _no_acceleration:
-			software_rendering_options_dialog(arg);
-			break;
-
-		case _opengl_acceleration:
-			OpenGLDialog::Create (theSelectedRenderer)->OpenGLPrefsByRunning ();
-			break;
-
-		default:
-			assert(false);
-			break;
-	}
+	OpenGLDialog::Create (theSelectedRenderer)->OpenGLPrefsByRunning ();
 }
 
 class w_fov_slider : public w_slider {
