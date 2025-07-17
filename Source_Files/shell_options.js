@@ -8,9 +8,6 @@ struct ShellOptions {
 	bool nojoystick;
 	bool insecure_lua;
 
-	bool force_fullscreen;
-	bool force_windowed;
-
 	bool skip_intro;
 	bool editor;
 
@@ -99,8 +96,6 @@ static const std::vector<ShellOptionsCommand> shell_options_commands {
 
 static const std::vector<ShellOptionsFlag> shell_options_flags {
 	{"d", "debug", "Allow saving of core files", shell_options.debug},
-	{"f", "fullscreen", "Run the game fullscreen", shell_options.force_fullscreen},
-	{"w", "windowed", "Run the game in a window", shell_options.force_windowed},
 	{"s", "nosound", "Do not access the sound card", shell_options.nosound},
 	{"m", "nogamma", "Disable gamma table effects (menu fades)", shell_options.nogamma},
 	{"j", "nojoystick", "Do not initialize joysticks", shell_options.nojoystick},
