@@ -3,7 +3,6 @@ struct ShellOptions {
 	std::unordered_map<int, bool> parse(int argc, char** argv);
 
 	bool nosound;
-	bool debug;
 
 	bool skip_intro;
 	bool editor;
@@ -85,7 +84,6 @@ static const std::vector<ShellOptionsCommand> shell_options_commands {
 };
 
 static const std::vector<ShellOptionsFlag> shell_options_flags {
-	{"d", "debug", "Allow saving of core files", shell_options.debug},
 	{"s", "nosound", "Do not access the sound card", shell_options.nosound},
 	{"Q", "skip-intro", "Skip intro screens", shell_options.skip_intro},
 	{"e", "editor", "Use editor prefs; jump directly to map", shell_options.editor},
