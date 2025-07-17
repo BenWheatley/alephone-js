@@ -4006,9 +4006,13 @@ InfoTree environment_preferences_tree()
 	
 	return root;
 }
-
-void write_preferences()
-{
+*/
+export function write_preferences() {
+	// Stub.
+	// TODO: There's no real way to reliably save prefs as localStorage gets cleared when the cache is cleared, which means without warning.
+	// Export (and import) button(s) possible, but will need re-think for UX flow.
+	// Original code follows:
+/*
 	InfoTree root;
 	root.put_attr("version", A1_DATE_VERSION);
 	
@@ -4041,8 +4045,8 @@ void write_preferences()
 	} catch (const InfoTree::unexpected_error& ex) {
 		logError("Error saving preferences file (%s): %s", FileSpec.GetPath(), ex.what());
 	}
+*/
 }
-
 
 //  Setup default preferences
 
