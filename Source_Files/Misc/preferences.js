@@ -1292,9 +1292,6 @@ static void software_rendering_options_dialog(void* arg)
 	table_placer *table = new table_placer(2, get_theme_space(ITEM_WIDGET), true);
 	table->col_flags(0, placeable::kAlignRight);
 
-	table->dual_add(depth_w->label("Color Depth"), d);
-	table->dual_add(depth_w, d);
-
 	table->dual_add(resolution_w->label("Resolution"), d);
 	table->dual_add(resolution_w, d);
 
@@ -1327,12 +1324,6 @@ static void software_rendering_options_dialog(void* arg)
 	// Run dialog
 	if (d.run() == 0) {	// Accepted
 		bool changed = false;
-
-#ifdef TRUE_COLOR_ONLY
-		int depth = (depth_w->get_selection() == 0 ? 16 : 32);
-#else
-		int depth = (depth_w->get_selection() == 0 ? 8 : depth_w->get_selection() == 1 ? 16 : 32);
-#endif
 
 		if (sw_alpha_blending_w->get_selection() != graphics_preferences->software_alpha_blending)
 		{
