@@ -149,9 +149,7 @@ static struct ScriptHUDElement {
 	int color;
 	std::string text;
 	Image_Blitter sdl_blitter;
-#ifdef HAVE_OPENGL	
 	OGL_Blitter ogl_blitter;
-#endif	
 } ScriptHUDElements[MAXIMUM_NUMBER_OF_NETWORK_PLAYERS][MAXIMUM_NUMBER_OF_SCRIPT_HUD_ELEMENTS];
 // /SB
 
@@ -256,11 +254,9 @@ namespace icon {
 #else
 	srf = SDL_CreateRGBSurfaceFrom(ScriptHUDElements[player][idx].icon, 16, 16, 32, 64, 0xFF<<16, 0xFF<<8, 0xFF, 0xFF<<24);
 #endif
-#ifdef HAVE_OPENGL	
 	if (OGL_IsActive()) {
 		ScriptHUDElements[player][idx].ogl_blitter.Load(*srf);
 	} else
-#endif	  
 	{	  
 		ScriptHUDElements[player][idx].sdl_blitter.Load(*srf);
 	}
@@ -446,12 +442,10 @@ static short DisplayTextStyle = 0;
 
 void DisplayText(short BaseX, short BaseY, const char *Text, unsigned char r = 0xff, unsigned char g = 0xff, unsigned char b = 0xff)
 {
-#ifdef HAVE_OPENGL
 	// OpenGL version:
 	// activate only in the main view, and also if OpenGL is being used for the overhead map
 	if((OGL_MapActive || !world_view->overhead_map_active) && !world_view->terminal_mode_active)
 		if (OGL_RenderText(BaseX, BaseY, Text, r, g, b)) return;
-#endif
 
 	draw_text(DisplayTextDest, Text, BaseX+1, BaseY+1, SDL_MapRGB(world_pixels->format, 0x00, 0x00, 0x00), DisplayTextFont, DisplayTextStyle);
 	draw_text(DisplayTextDest, Text, BaseX, BaseY, SDL_MapRGB(world_pixels->format, r, g, b), DisplayTextFont, DisplayTextStyle);	
@@ -462,9 +456,7 @@ void DisplayTextCursor(SDL_Surface *s, short BaseX, short BaseY, const char *Tex
 {
 	SDL_Rect cursor_rect;
 	int w;
-#ifdef HAVE_OPENGL
     if (!OGL_TextWidth(Text, Offset, w))
-#endif
 	{
 		w = text_width(Text, Offset, DisplayTextFont, DisplayTextStyle);
 	}
@@ -478,12 +470,10 @@ void DisplayTextCursor(SDL_Surface *s, short BaseX, short BaseY, const char *Tex
 	shadow_rect.x += 1;
 	shadow_rect.y += 1;
 	
-#ifdef HAVE_OPENGL
 	// OpenGL version:
 	// activate only in the main view, and also if OpenGL is being used for the overhead map
 	if((OGL_MapActive || !world_view->overhead_map_active) && !world_view->terminal_mode_active)
 		if (OGL_RenderTextCursor(cursor_rect, r, g, b)) return;
-#endif
 	
 	SDL_FillRect(s, &shadow_rect, SDL_MapRGB(world_pixels->format, 0x00, 0x00, 0x00));
 	SDL_FillRect(s, &cursor_rect, SDL_MapRGB(world_pixels->format, r, g, b));
@@ -680,12 +670,10 @@ static void DisplayMessages(SDL_Surface *s)
 						}
 						break;
 					}
-#ifdef HAVE_OPENGL
 					if(OGL_IsActive()) {
 						ScriptHUDElements[view][i].ogl_blitter.Draw(rect);
 					}
 					else 
-#endif 
 					{
 						ScriptHUDElements[view][i].sdl_blitter.Draw(s, rect);
 					}
