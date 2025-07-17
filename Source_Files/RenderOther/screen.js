@@ -49,8 +49,6 @@ namespace alephone
 		int window_width();
 		bool hud();
 		bool lua_hud();
-		bool fifty_percent();
-		bool seventyfive_percent();
 		SDL_Rect window_rect(); // 3D view + interface
 		SDL_Rect view_rect(); // main 3D view
 		SDL_Rect map_rect();
@@ -379,16 +377,6 @@ bool Screen::lua_hud()
 	return screen_mode.hud && LuaHUDRunning();
 }
 
-bool Screen::fifty_percent()
-{
-	return screen_mode.height == 160;
-}
-
-bool Screen::seventyfive_percent()
-{
-	return screen_mode.height == 240;
-}
-
 SDL_Rect Screen::window_rect()
 {
 	SDL_Rect r;
@@ -436,21 +424,6 @@ SDL_Rect Screen::view_rect()
 		}
 		r.x = (width() - r.w) / 2;
 		r.y = (height() - window_height()) / 2 + (available_height - r.h) / 2;
-	}
-
-	if (fifty_percent())
-	{
-		r.y += r.h / 4;
-		r.x += r.w / 4;
-		r.w /= 2;
-		r.h /= 2;
-	}
-	else if (seventyfive_percent())
-	{
-		r.y += r.h / 8;
-		r.x += r.w / 8;
-		r.w = r.w * 3 / 4;
-		r.h = r.h * 3 / 4;
 	}
 
 	return r;
