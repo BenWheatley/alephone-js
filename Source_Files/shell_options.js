@@ -8,7 +8,6 @@ struct ShellOptions {
 	bool skip_intro;
 	bool editor;
 
-	std::string directory;
 	std::vector<std::string> files;
 
 	std::string output;
@@ -170,12 +169,7 @@ std::unordered_map<int, bool> ShellOptions::parse(int argc, char** argv, bool ig
 				FileSpecifier f(arg);
 				if (f.Exists())
 				{
-					if (f.IsDir())
-					{
-						shell_options.directory = arg;
-					}
-					else
-					{
+					if (!f.IsDir()) {
 						shell_options.files.push_back(arg);
 					}
 
