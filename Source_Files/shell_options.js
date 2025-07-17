@@ -4,7 +4,6 @@ struct ShellOptions {
 
 	bool nosound;
 	bool debug;
-	bool insecure_lua;
 
 	bool skip_intro;
 	bool editor;
@@ -95,7 +94,6 @@ static const std::vector<ShellOptionsCommand> shell_options_commands {
 static const std::vector<ShellOptionsFlag> shell_options_flags {
 	{"d", "debug", "Allow saving of core files", shell_options.debug},
 	{"s", "nosound", "Do not access the sound card", shell_options.nosound},
-	{"i", "insecure_lua", "", shell_options.insecure_lua},
 	{"Q", "skip-intro", "Skip intro screens", shell_options.skip_intro},
 	{"e", "editor", "Use editor prefs; jump directly to map", shell_options.editor},
 	{"", "no-chooser", "Disable the scenario chooser", shell_options.no_chooser}
