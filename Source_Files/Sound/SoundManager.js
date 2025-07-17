@@ -19,17 +19,14 @@
 
 export const audioContext = new AudioContext();
 
+import * as preferences from '../Misc/preferences.js';
+
 /*
 #include "cseries.h"
 #include "FileHandler.h"
 #include "SoundFile.h"
 #include "world.h"
 #include "SoundPlayer.h"
-#include <set>
-
-struct ambient_sound_data;
-
-class SoundMemoryManager;
 
 class SoundManager
 {
@@ -51,10 +48,8 @@ public:
 	struct Parameters;
 	void Initialize(const Parameters&);
 	void SetParameters(const Parameters&);
-	void Shutdown();
 
 	bool OpenSoundFile(FileSpecifier& File);
-	void CloseSoundFile();
 
 	bool AdjustVolumeUp(short sound_index = NONE);
 	bool AdjustVolumeDown(short sound_index = NONE);
@@ -224,9 +219,6 @@ class InfoTree;
 void parse_mml_sounds(const InfoTree& root);
 void reset_mml_sounds();
 
-#include <iostream>
-#include <functional>
-
 #include "SoundManager.h"
 #include "ReplacementSounds.h"
 #include "sound_definitions.h"
@@ -342,23 +334,16 @@ void SoundMemoryManager::Update(short index)
 }
 
 
-static void Shutdown()
-{
-	SoundManager::instance()->Shutdown();
-	OpenALManager::Shutdown();
-}
-
 // From FileSpecifier_SDL.cpp
 extern void get_default_sounds_spec(FileSpecifier &file);
 
-void SoundManager::Initialize(const Parameters& new_parameters)
-{
+// preferences.sound_preferences is JS replacement for Parameters& new_parameters
+void SoundManager::Initialize(const Parameters& new_parameters) {
 
 	FileSpecifier InitialSoundFile;
 	get_default_sounds_spec(InitialSoundFile);
 	if (OpenSoundFile(InitialSoundFile))
 	{
-		atexit(::Shutdown);
 		parameters.flags = 0;
 		initialized = true;
 		active = false;
@@ -366,6 +351,7 @@ void SoundManager::Initialize(const Parameters& new_parameters)
 	}
 }
 
+// preferences.sound_preferences is JS replacement for Parameters& new_parameters
 void SoundManager::SetParameters(const Parameters& parameters)
 {
 	if (!initialized) return;
@@ -374,12 +360,6 @@ void SoundManager::SetParameters(const Parameters& parameters)
 	this->parameters = parameters;
 	this->parameters.Verify();
 	SetStatus(true);
-}
-
-void SoundManager::Shutdown()
-{
-	instance()->SetStatus(false);
-	instance()->CloseSoundFile();
 }
 
 bool SoundManager::OpenSoundFile(FileSpecifier& File)
@@ -402,12 +382,6 @@ bool SoundManager::OpenSoundFile(FileSpecifier& File)
 		sound_source = _8bit_22k_source;
 
 	return true;
-}
-
-void SoundManager::CloseSoundFile()
-{
-	StopAllSounds();
-	sound_file->Close();
 }
 
 bool SoundManager::AdjustVolumeUp(short sound_index)
