@@ -944,17 +944,6 @@ void initialize_images_manager(void)
 	atexit(shutdown_images_handler);
 }
 
-//  Shutdown image manager
-
-static void shutdown_images_handler(void)
-{
-	SoundsImagesFile.close_file();
-	ExternalResourcesFile.close_file();
-	ShapesImagesFile.close_file();
-	ScenarioFile.close_file();
-	ImagesFile.close_file();
-}
-
 //  Set map file to load images from
 
 void set_scenario_images_file(FileSpecifier &file)
