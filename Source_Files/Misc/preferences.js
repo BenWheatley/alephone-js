@@ -1438,28 +1438,6 @@ static void graphics_dialog(void *arg)
 	table->dual_add(renderer_w, d);
 
 	table->add_row(new w_spacer(), true);
-	
-	w_toggle *override_fov_w = new w_toggle(graphics_preferences->screen_mode.fov != 0);
-	w_fov_slider *fov_slider_w = new w_fov_slider((graphics_preferences->screen_mode.fov == 0 ? static_cast<int>(View_FOV_Normal()) : graphics_preferences->screen_mode.fov) - 30);
-	fov_slider_w->set_enabled(graphics_preferences->screen_mode.fov != 0);
-	override_fov_w->set_selection_changed_callback(
-		[&](w_select*) {
-			if (override_fov_w->get_selection())
-			{
-				fov_slider_w->set_enabled(true);
-			}
-			else
-			{
-				fov_slider_w->set_enabled(false);
-			}
-		});
-
-	table->dual_add(override_fov_w->label("Override FOV*"), d);
-	auto fov_placer = new horizontal_placer(get_theme_space(ITEM_WIDGET));
-	fov_placer->dual_add(override_fov_w, d);
-	fov_placer->dual_add(fov_slider_w, d);
-
-	table->add(fov_placer);
 
 	table->dual_add_row(new w_static_text("*may interfere with third-party scenario effects"), d);
 
