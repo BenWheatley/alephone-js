@@ -4396,14 +4396,6 @@ template<class CType1, class CType2> void CopyColor(CType1& Dest, CType2& Src)
 	Dest.blue = Src.blue;
 }
 
-
-
-struct ViewSizeData
-{
-	short Width, Height;
-	bool HUD;
-};
-
 void parse_graphics_preferences(InfoTree root, std::string version)
 {
 	int scmode = -1;
