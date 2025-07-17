@@ -1454,10 +1454,6 @@ static void graphics_dialog(void *arg)
 	placer->dual_add(new w_button("RENDERING OPTIONS", rendering_options_dialog_demux, &d), d);
 	placer->add(new w_spacer(), true);
 
-#ifndef HAVE_OPENGL
-	expand_app_variables(temporary, "This copy of $appName$ was built without OpenGL support.");
-	placer->dual_add(new w_static_text(temporary), d);
-#endif
 	placer->add(new w_spacer(), true);
 
 	horizontal_placer *button_placer = new horizontal_placer;

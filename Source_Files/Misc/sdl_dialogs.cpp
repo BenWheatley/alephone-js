@@ -50,12 +50,10 @@
 #include "interface.h"
 #include "preferences.h"
 
-#ifdef HAVE_OPENGL
 #include "OGL_Headers.h"
 #include "OGL_Setup.h"
 #include "OGL_Blitter.h"
 #include "OGL_Render.h"
-#endif
 
 #include "InfoTree.h"
 #include "Logging.h"
@@ -1772,7 +1770,6 @@ void dialog::layout()
 
 void dialog::update(SDL_Rect r) const
 {
-#ifdef HAVE_OPENGL
 	if (OGL_IsActive()) {
 		OGL_Blitter::BoundScreen(false);
 		clear_screen(false);
@@ -1783,7 +1780,6 @@ void dialog::update(SDL_Rect r) const
 
 		MainScreenSwap();
 	} else 
-#endif
 	{
 		SDL_Surface *video = MainScreenSurface();
 		SDL_Rect dst_rect = rect;
@@ -2095,10 +2091,8 @@ void dialog::event(SDL_Event &e)
 	  if (e.type == SDL_MOUSEMOTION)
 	  {
 		  int x = e.motion.x, y = e.motion.y;
-#ifdef HAVE_OPENGL
 		  if (OGL_IsActive())
 			  OGL_Blitter::WindowToScreen(x, y);
-#endif
 		  widget *target = 0;
 		  if (mouse_widget)
 			  target = mouse_widget;
@@ -2121,10 +2115,8 @@ void dialog::event(SDL_Event &e)
 	  else if (e.type == SDL_MOUSEBUTTONDOWN)
 	  {
 		  int x = e.button.x, y = e.button.y;
-#ifdef HAVE_OPENGL
 		  if (OGL_IsActive())
 			  OGL_Blitter::WindowToScreen(x, y);
-#endif
 		  int num = find_widget(x, y);
 		  if (num >= 0)
 		  {
@@ -2143,10 +2135,8 @@ void dialog::event(SDL_Event &e)
 			  if (e.button.button == SDL_BUTTON_LEFT || e.button.button == SDL_BUTTON_RIGHT)
 			  {
 				  int x = e.button.x, y = e.button.y;
-#ifdef HAVE_OPENGL
 				  if (OGL_IsActive())
 					  OGL_Blitter::WindowToScreen(x, y);
-#endif
 				  mouse_widget->mouse_up(x - rect.x - mouse_widget->rect.x, y - rect.y - mouse_widget->rect.y);
 			  }
 			  
@@ -2285,7 +2275,7 @@ void dialog::start(bool play_sound)
 	frame_r = get_theme_image(DIALOG_FRAME, DEFAULT_STATE, R_IMAGE, 0, rect.h - frame_tr->h - frame_br->h);
 	frame_b = get_theme_image(DIALOG_FRAME, DEFAULT_STATE, B_IMAGE, rect.w - frame_bl->w - frame_br->w, 0);
 
-#if (defined(HAVE_OPENGL) && defined(OPENGL_DOESNT_COPY_ON_SWAP))
+#if (defined(OPENGL_DOESNT_COPY_ON_SWAP))
 	if (OGL_IsActive()) {
         // blank both buffers to avoid flickering
         clear_screen();
@@ -2354,7 +2344,6 @@ int dialog::finish(bool play_sound)
 	// Clear dialog surface
 	SDL_FillRect(dialog_surface, NULL, get_theme_color(DIALOG_FRAME, DEFAULT_STATE, BACKGROUND_COLOR));
 
-#ifdef HAVE_OPENGL
 	if (OGL_IsActive()) {
         glColor4f(0, 0, 0, 1);
 #ifdef OPENGL_DOESNT_COPY_ON_SWAP
@@ -2365,7 +2354,6 @@ int dialog::finish(bool play_sound)
             MainScreenSwap();
         }
 	} else
-#endif 
 	{
 
 		// Erase dialog from screen

@@ -957,12 +957,10 @@ int Lua_Fonts_New(lua_State *L)
 
 	FontSpecifier *ff = new FontSpecifier(f);
 	ff->Init();
-#ifdef HAVE_OPENGL	
 	if (alephone::Screen::instance()->openGL()) {
 		ff->NearFilter = TxtrTypeInfoList[OGL_Txtr_HUD].NearFilter;
 		ff->OGL_Reset(true);
 	}
-#endif	
 	if (ff->LineSpacing <= 0)
 	{
 		lua_pushnil(L);
@@ -3002,14 +3000,12 @@ typedef L_Class<Lua_HUDLighting_Fader_Name> Lua_HUDLighting_Fader;
 static int Lua_HUDLighting_Fader_Get_Active(lua_State *L)
 {
     bool active = false;
-#ifdef HAVE_OPENGL
     if (OGL_FaderActive())
     {
         OGL_Fader *fader = GetOGL_FaderQueueEntry(Lua_HUDLighting_Fader::Index(L, 1));
         if (fader && fader->Type != NONE && fader->Color[3] > 0.01)
             active = true;
     }
-#endif
     lua_pushboolean(L, active);
     return 1;
 }
@@ -3017,7 +3013,6 @@ static int Lua_HUDLighting_Fader_Get_Active(lua_State *L)
 
 static int Lua_HUDLighting_Fader_Get_Type(lua_State *L)
 {
-#ifdef HAVE_OPENGL
     if (OGL_FaderActive())
     {
         OGL_Fader *fader = GetOGL_FaderQueueEntry(Lua_HUDLighting_Fader::Index(L, 1));
@@ -3027,14 +3022,12 @@ static int Lua_HUDLighting_Fader_Get_Type(lua_State *L)
             return 1;
         }
     }
-#endif
     lua_pushnil(L);
     return 1;
 }
 
 static int Lua_HUDLighting_Fader_Get_Color(lua_State *L)
 {
-#ifdef HAVE_OPENGL
     if (OGL_FaderActive())
     {
         OGL_Fader *fader = GetOGL_FaderQueueEntry(Lua_HUDLighting_Fader::Index(L, 1));
@@ -3056,7 +3049,6 @@ static int Lua_HUDLighting_Fader_Get_Color(lua_State *L)
             return 1;
         }
     }
-#endif
     lua_pushnil(L);
     return 1;
 }

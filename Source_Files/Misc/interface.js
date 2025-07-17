@@ -930,10 +930,8 @@ void resume_game(
 	void)
 {
 	hide_cursor();
-#ifdef HAVE_OPENGL
 	if (OGL_IsActive())
 		OGL_Blitter::BoundScreen(true);
-#endif
 	validate_world_window();
 	set_keyboard_controller_status(true);
 	if (OpenALManager::Get()) OpenALManager::Get()->Pause(false);
@@ -3092,12 +3090,10 @@ void show_movie(short index)
 
 	plm_set_audio_enabled(plm_context, audio_playback);
 
-#ifdef HAVE_OPENGL
 	if (OGL_IsActive())
 		OGL_ClearScreen();
 
 	OGL_Blitter show_movie_blitter;
-#endif
 
 	if (audio_playback) OpenALManager::Get()->Start();
 
@@ -3134,7 +3130,6 @@ void show_movie(short index)
 
 		if (got_new_frame)
 		{
-#ifdef HAVE_OPENGL
 			if (OGL_IsActive())
 			{
 				OGL_Blitter::BoundScreen();
@@ -3144,7 +3139,6 @@ void show_movie(short index)
 				MainScreenSwap();
 			}
 			else
-#endif
 			{
 				SDL_BlitSurface(vframe, 0, MainScreenSurface(), &dst_rect);
 				MainScreenUpdateRects(1, &dst_rect);

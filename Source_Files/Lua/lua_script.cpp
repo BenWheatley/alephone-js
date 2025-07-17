@@ -1903,19 +1903,15 @@ bool LoadLuaScript(const char *buffer, size_t len, ScriptType script_type)
 	return states[script_type]->Load(buffer, len, desc);
 }
 
-#ifdef HAVE_OPENGL
 static OGL_FogData PreLuaFogState[OGL_NUMBER_OF_FOG_TYPES];
-#endif
 static bool MotionSensorWasActive;
 
 static void PreservePreLuaSettings()
 {
-#ifdef HAVE_OPENGL
 	for (int i = 0; i < OGL_NUMBER_OF_FOG_TYPES; i++) 
 	{
 		PreLuaFogState[i] = *OGL_GetFogData(i);
 	}
-#endif
 	MotionSensorWasActive = MotionSensorActive;
 }
 
@@ -1933,12 +1929,10 @@ static void InitializeLuaVariables()
 
 static void RestorePreLuaSettings()
 {
-#ifdef HAVE_OPENGL
 	for (int i = 0; i < OGL_NUMBER_OF_FOG_TYPES; i++)
 	{
 		*OGL_GetFogData(i) = PreLuaFogState[i];
 	}
-#endif
 	MotionSensorActive = MotionSensorWasActive;
 }
 
