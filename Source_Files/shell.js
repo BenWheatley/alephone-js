@@ -717,26 +717,6 @@ static void handle_game_key(const SDL_Event &event)
 				ShowPosition = !ShowPosition;
 			}
 		}
-		else if (sc == SDL_SCANCODE_F11) // Decrease gamma level
-		{
-			if (graphics_preferences->screen_mode.gamma_level) {
-				PlayInterfaceButtonSound(Sound_ButtonSuccess());
-				graphics_preferences->screen_mode.gamma_level--;
-				change_gamma_level(graphics_preferences->screen_mode.gamma_level);
-				changed_prefs = true;
-			} else
-				PlayInterfaceButtonSound(Sound_ButtonFailure());
-		}
-		else if (sc == SDL_SCANCODE_F12) // Increase gamma level
-		{
-			if (graphics_preferences->screen_mode.gamma_level < NUMBER_OF_GAMMA_LEVELS - 1) {
-				PlayInterfaceButtonSound(Sound_ButtonSuccess());
-				graphics_preferences->screen_mode.gamma_level++;
-				change_gamma_level(graphics_preferences->screen_mode.gamma_level);
-				changed_prefs = true;
-			} else
-				PlayInterfaceButtonSound(Sound_ButtonFailure());
-		}
 		else
 		{
 			if (get_game_controller() == _demo)
