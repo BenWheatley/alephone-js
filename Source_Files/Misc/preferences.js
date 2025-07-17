@@ -4025,7 +4025,7 @@ export function write_preferences() {
 	}
 */
 }
-
+/*
 //  Setup default preferences
 
 static void default_graphics_preferences(graphics_preferences_data *preferences)
