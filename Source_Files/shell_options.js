@@ -8,8 +8,6 @@ struct ShellOptions {
 	bool skip_intro;
 	bool editor;
 
-	bool no_chooser;
-
 	std::string directory;
 	std::vector<std::string> files;
 
@@ -94,7 +92,6 @@ static const std::vector<ShellOptionsFlag> shell_options_flags {
 	{"s", "nosound", "Do not access the sound card", shell_options.nosound},
 	{"Q", "skip-intro", "Skip intro screens", shell_options.skip_intro},
 	{"e", "editor", "Use editor prefs; jump directly to map", shell_options.editor},
-	{"", "no-chooser", "Disable the scenario chooser", shell_options.no_chooser}
 };
 
 static const std::vector<ShellOptionsString> shell_options_strings {
