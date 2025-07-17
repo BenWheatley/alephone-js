@@ -229,7 +229,9 @@ import * as interface_menus from './interface_menus.js';
 #include "QuickSave.h"
 #include "Plugins.h"
 #include "Statistics.h"
-#include "shell_options.h"
+*/
+import { shell_options } from '../shell_options.js';
+/*
 #include "OpenALManager.h"
 
 #define PL_MPEG_IMPLEMENTATION
@@ -409,7 +411,6 @@ export function initialize_game_state() {
 	game_state.current_screen = 0;
 	game_state.main_menu_display_count = 0;
 
-/* TODO: shell options. Until then, I'm *forcing* display_main_menu();
 	if (!shell_options.editor) {
 		if (shell_options.skip_intro) {
 			display_main_menu();
@@ -417,8 +418,6 @@ export function initialize_game_state() {
 			display_introduction();
 		}
 	}
-	*/
-	display_main_menu(); // TODO: if shell options work in web, this line has to go
 }
 
 function force_game_state_change() {
@@ -1592,10 +1591,9 @@ void paint_window_black(
 static LoadedResource SoundRsrc;
 
 //  --------------------- static code 
-
-static void display_introduction(
-	void)
-{
+*/
+function display_introduction() {
+/*
 	struct screen_data *screen_data= get_screen_data(GameStates._display_intro_screens);
 
 	paint_window_black();
@@ -1624,11 +1622,11 @@ static void display_introduction(
 		}
 	}
 	else
-	{
+	{*/
 		display_main_menu();
-	}
+/*	} */
 }
-
+/*
 static void display_introduction_screen_for_demo(	
 	void)
 {

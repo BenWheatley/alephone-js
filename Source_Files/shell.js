@@ -116,12 +116,9 @@ import * as TextStrings from './RenderOther/TextStrings.js';
 #include "Movie.h"
 #include "HTTP.h"
 #include "WadImageCache.h"
-
-#include "shell_options.h"
 */
 import * as shell_options from './shell_options.js';
 
-export let scenarioName = "";
 export let scenario_dir = ""; // TODO: any ref to searching within a data_search_path array, just directly go here without search
 
 /*
@@ -192,10 +189,7 @@ export async function initialize_application()
 		return;
 	}
 	
-	// TODO: move all the URLSearchParams stuff to shell_options when that's working
-	const urlParams = new URLSearchParams(window.location.search);
-	scenarioName = urlParams.get("scenario_name") || "Marathon 2";
-	scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + scenarioName + "/";
+	scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + shell_options.shell_options.scenario_name + "/";
 	
 	DefaultStringSets.InitDefaultStringSets();
 	
@@ -1145,7 +1139,7 @@ export function dump_screen()
 
 async function _ParseMMLDirectory(dir, load_menu_mml_only) {
 	// TODO: JS can't read a directory listing from a web server, as a temporary workaround this semi-hard-coded list is going to make guesses based on what's in `Marathon 2/Scripts/`
-	let files = ["Filenames.mml", `${scenarioName}.mml`, "Default Preferences.xml"];
+	let files = ["Filenames.mml", `${shell_options.scenario_name}.mml`, "Default Preferences.xml"];
 	for (const file of files) {
 		await xml.ParseMMLFromFile(new URL(file, dir), load_menu_mml_only);
 	};

@@ -1,6 +1,7 @@
 // This one file was written by Ben, not AI, examining main.cpp and replacing it with what seems to makes sense for a JS webapp (i.e. it's not starting off by loading any files)
 
 import * as shell from './shell.js';
+import * as shell_options from './shell_options.js';
 
 export var glContext;
 
@@ -16,6 +17,7 @@ export function main() {
 		"You are welcome to redistribute it under certain conditions.\n" +
 		"For details, see the file COPYING.\n"
 	);
+	shell_options.parse();
 	shell.initialize_application()
 		.then(() =>
 			shell.main_event_loop()
