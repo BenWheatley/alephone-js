@@ -8,8 +8,6 @@ struct ShellOptions {
 	bool skip_intro;
 	bool editor;
 
-	std::vector<std::string> files;
-
 	std::string output;
 };
 
@@ -159,30 +157,6 @@ std::unordered_map<int, bool> ShellOptions::parse(int argc, char** argv, bool ig
                     print_usage();
                     exit(1);
                 }
-			}
-		}
-
-		if (!found)
-		{
-			if (arg[0] != '-')
-			{
-				FileSpecifier f(arg);
-				if (f.Exists())
-				{
-					if (!f.IsDir()) {
-						shell_options.files.push_back(arg);
-					}
-
-					found = true;
-				}
-			}
-
-			if (!found && !ignore_unknown_args)
-			{
-				logFatal("Unrecognized argument '%s'.", arg.c_str());
-				printf("Unrecognized argument '%s'.\n", arg.c_str());
-				print_usage();
-				exit(1);
 			}
 		}
 
