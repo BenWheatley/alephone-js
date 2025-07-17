@@ -227,7 +227,7 @@ export async function initialize_application() {
 	/*
 	initialize_keyboard_controller();
 	initialize_gamma();
-	alephone::Screen::instance()->Initialize(&graphics_preferences->screen_mode);
+	Screen::instance()->Initialize(&graphics_preferences->screen_mode);
 	initialize_marathon();
 	initialize_screen_drawing();
 	initialize_dialogs();
