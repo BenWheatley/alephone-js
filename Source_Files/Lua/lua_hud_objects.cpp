@@ -957,10 +957,8 @@ int Lua_Fonts_New(lua_State *L)
 
 	FontSpecifier *ff = new FontSpecifier(f);
 	ff->Init();
-	if (alephone::Screen::instance()->openGL()) {
-		ff->NearFilter = TxtrTypeInfoList[OGL_Txtr_HUD].NearFilter;
-		ff->OGL_Reset(true);
-	}
+	ff->NearFilter = TxtrTypeInfoList[OGL_Txtr_HUD].NearFilter;
+	ff->OGL_Reset(true);
 	if (ff->LineSpacing <= 0)
 	{
 		lua_pushnil(L);

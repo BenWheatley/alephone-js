@@ -277,45 +277,14 @@ void initialize_game_window(void)
 /* draws the entire interface */
 void draw_interface(void)
 {
-	if (alephone::Screen::instance()->openGL())
-		return;
-
-	if (!game_window_is_full_screen())
-	{
-		/* draw the frame */
-		draw_panels();
-	}
-		
-	validate_world_window();
+	return; // not in opengl
 }
 
-/* updates only what needs changing (time_elapsed==NONE means redraw everything no matter what,
-	but skip the interface frame) */
+// updates only what needs changing (time_elapsed==NONE means redraw everything no matter what, but skip the interface frame)
 void update_interface(short time_elapsed)
 {
 	if (time_elapsed == NONE)
         reset_motion_sensor(current_player_index);
-	if (alephone::Screen::instance()->openGL() || alephone::Screen::instance()->lua_hud())
-        return;
-
-	if (!game_window_is_full_screen())
-	{
-		// LP addition: don't force an update unless explicitly requested
-		bool force_update = (time_elapsed == NONE);
-
-		ensure_HUD_buffer();
-
-		// LP addition: added support for HUD buffer;
-		_set_port_to_HUD();
-		if (HUD_SW.update_everything(time_elapsed))
-			force_update = true;
-		_restore_port();
-		
-		// Draw the whole thing if doing so is requested
-		// (may need some smart way of drawing only what has to be drawn)
-		if (force_update)
-			RequestDrawingHUD();
-	}
 }
 
 void mark_interface_collections(bool loading)
@@ -478,45 +447,13 @@ void ensure_HUD_buffer(void) {
   }
 }
 
-/*
- *  Draw HUD (to HUD surface)
- */
+//  Draw HUD (to HUD surface)
 
 extern int LuaTexturePaletteSize();
 
 void draw_panels(void)
 {
-	if (alephone::Screen::instance()->openGL())
-		return;
-
-	ensure_HUD_buffer();
-
-	// Draw static HUD picture
-	static std::shared_ptr<SDL_Surface> static_hud_pict = std::shared_ptr<SDL_Surface>(nullptr, SDL_FreeSurface);
-	static bool hud_pict_not_found = false;
-	if (!static_hud_pict && !hud_pict_not_found) {
-		LoadedResource rsrc;
-		if (get_picture_resource_from_images(INTERFACE_PANEL_BASE, rsrc))
-			static_hud_pict = picture_to_surface(rsrc);
-		else
-			hud_pict_not_found = true;
-	} 
-
-	if (!hud_pict_not_found) {
-		SDL_Rect dst_rect = {0, 320, 640, 160};
-		if (!LuaTexturePaletteSize())
-			SDL_BlitSurface(static_hud_pict.get(), NULL, HUD_Buffer, &dst_rect);
-		else
-			SDL_FillRect(HUD_Buffer, &dst_rect, 0);
-	}
-
-	// Add dynamic elements
-	_set_port_to_HUD();
-	HUD_SW.update_everything(NONE);
-	_restore_port();
-
-	// Tell main loop to render the HUD in the next run
-	RequestDrawingHUD();
+	return; // not in opengl
 }
 
 extern short vidmasterStringSetID; // shell.cpp
