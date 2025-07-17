@@ -174,9 +174,9 @@ static bool in_game = false;	// Flag: menu (fixed 640x480) or in-game (variable 
 
 static int failed_multisamples = 0;		// remember when GL multisample setting didn't succeed
 static bool passed_shader = false;      // remember when we passed Shader tests
-
-#include "screen_shared.h"
-
+*/
+import * as screen_shared from './screen_shared.js';
+/*
 using namespace alephone;
 
 Screen Screen::m_instance;
