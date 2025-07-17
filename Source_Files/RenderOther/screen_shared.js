@@ -125,9 +125,6 @@ static bool Term_RenderRequest = false;
 static bool screen_initialized= false;
 static bool nonlocal_script_hud= false;
 
-short bit_depth= NONE;
-short interface_bit_depth= NONE;
-
 // LP addition: this is defined in overhead_map.c
 // It indicates whether to render the overhead map in OpenGL
 extern bool OGL_MapActive;
