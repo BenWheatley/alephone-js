@@ -1417,14 +1417,6 @@ static void graphics_dialog(void *arg)
 	table->col_flags(0, placeable::kAlignRight);
 	table->col_flags(1, placeable::kAlignLeft);
 	
-	renderer_w->set_identifier(iRENDERING_SYSTEM);
-#ifndef HAVE_OPENGL
-	renderer_w->set_selection(_no_acceleration);
-	renderer_w->set_enabled(false);
-#endif
-	table->dual_add(renderer_w->label("Rendering System"), d);
-	table->dual_add(renderer_w, d);
-
 	table->add_row(new w_spacer(), true);
 
 	table->dual_add_row(new w_static_text("*may interfere with third-party scenario effects"), d);
