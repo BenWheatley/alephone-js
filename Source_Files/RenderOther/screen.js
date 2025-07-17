@@ -1389,14 +1389,6 @@ void render_screen(short ticks_elapsed)
 		PrevTransparent = MapIsTranslucent;
 	}
 	
-	static bool PrevHighRes = true;
-	bool HighResolution = mode->high_resolution || is_network_pregame;
-	if (PrevHighRes != HighResolution)
-	{
-		ViewChangedSize = true;
-		PrevHighRes = HighResolution;
-	}
-	
 	static short PrevDepth = 0;
 	if (PrevDepth != mode->bit_depth)
 	{
@@ -1412,11 +1404,6 @@ void render_screen(short ticks_elapsed)
 	}
 
 	SDL_Rect BufferRect = {0, 0, ViewRect.w, ViewRect.h};
-	// Now the buffer rectangle; be sure to shrink it as appropriate
-	if (!HighResolution && screen_mode.acceleration == _no_acceleration) {
-		BufferRect.w >>= 1;
-		BufferRect.h >>= 1;
-	}
 
 	// Set up view data appropriately
 	world_view->screen_width = BufferRect.w;
@@ -1505,7 +1492,7 @@ void render_screen(short ticks_elapsed)
 		SDL_Rect rect = { (Screen::instance()->window_rect().w - ViewRect.w) / 2, (Screen::instance()->window_rect().h - ViewRect.h) / 2, 0, 0 };
 		SDL_FillRect(world_pixels, NULL, SDL_MapRGB(world_pixels->format, 0, 0, 0));
 		DisplayNetLoadingScreen(world_pixels);
-		update_screen(rect, rect, true, false);
+		update_screen(rect, rect, false);
 		MainScreenUpdateRect(0, 0, 0, 0);
 		return;
 	}
@@ -1572,7 +1559,7 @@ void render_screen(short ticks_elapsed)
 		// Update world window
 		if (!world_view->terminal_mode_active &&
 			(!world_view->overhead_map_active || MapIsTranslucent))
-			update_screen(BufferRect, ViewRect, HighResolution, DrawEveryOtherLine);
+			update_screen(BufferRect, ViewRect, DrawEveryOtherLine);
 		
 		// Update map
 		if (world_view->overhead_map_active) {
@@ -1745,7 +1732,7 @@ static inline bool pixel_formats_equal(SDL_PixelFormat* a, SDL_PixelFormat* b)
 		a->Bmask == b->Bmask);
 }
 
-static void update_screen(SDL_Rect &source, SDL_Rect &destination, bool hi_rez, bool every_other_line)
+static void update_screen(SDL_Rect &source, SDL_Rect &destination, bool every_other_line)
 {
 	SDL_Surface *s = world_pixels;
 	if (!using_default_gamma && bit_depth > 8) {
@@ -1753,47 +1740,7 @@ static void update_screen(SDL_Rect &source, SDL_Rect &destination, bool hi_rez, 
 		s = world_pixels_corrected;
 	}
 		
-	if (hi_rez) 
-	{
-		SDL_BlitSurface(s, NULL, main_surface, &destination);
-	} 
-	else 
-	{
-		SDL_Surface* intermediary = 0;
-		if (SDL_MUSTLOCK(main_surface)) 
-		{
-			if (SDL_LockSurface(main_surface) < 0) return;
-		}
-
-		if (!pixel_formats_equal(s->format, main_surface->format))
-		{
-			intermediary = SDL_ConvertSurface(s, main_surface->format, s->flags);
-			s = intermediary;
-		}
-
-		switch (s->format->BytesPerPixel) 
-		{
-		case 1:
-			quadruple_surface((pixel8 *)s->pixels, s->pitch, (pixel8 *)main_surface->pixels, main_surface->pitch, destination, every_other_line);
-			break;
-		case 2:
-			quadruple_surface((pixel16 *)s->pixels, s->pitch, (pixel16 *)main_surface->pixels, main_surface->pitch, destination, every_other_line);
-			break;
-		case 4:
-			quadruple_surface((pixel32 *)s->pixels, s->pitch, (pixel32 *)main_surface->pixels, main_surface->pitch, destination, every_other_line);
-			break;
-		}
-		
-		if (SDL_MUSTLOCK(main_surface)) {
-			SDL_UnlockSurface(main_surface);
-		}
-
-		if (intermediary) 
-		{
-			SDL_FreeSurface(intermediary);
-		}
-	}
-//	SDL_UpdateRects(main_surface, 1, &destination);
+	SDL_BlitSurface(s, NULL, main_surface, &destination);
 }
 
 
