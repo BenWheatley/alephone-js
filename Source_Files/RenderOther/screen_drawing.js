@@ -1,6 +1,4 @@
 /*
-	SCREEN_DRAWING.C
-
 	Copyright (C) 1991-2001 and beyond by Bungie Studios, Inc.
 	and the "Aleph One" developers.
  
@@ -17,28 +15,144 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
-	Monday, August 15, 1994 1:55:21 PM
- 
-    Wednesday, August 24, 1994 12:50:20 AM (ajr)
-	  added _right_justified for _draw_screen_text
-	Thursday, June 22, 1995 8:45:41 AM- note that we no longer hold your hand and set the port
-		for you.  We have a grafptr and a restore ptr call.\
-
-Apr 30, 2000 (Loren Petrich):
-	Added XML-parser support (actually, some days earlier, but had modified it
-	so as to have "interface" be defined in "game_window".
-
-Jul 2, 2000 (Loren Petrich):
-	The HUD is now always buffered; it is lazily allocated
-
-Oct 19, 2000 (Loren Petrich):
-	Added graceful degradation if get_shape_pixmap() returns NULL; CB had already done that
-	with the SDL version.
-	
-Dec 17, 2000 (Loren Petrich):
-	Added font-abstraction support (FontHandler.*)
 */
+
+/*
+
+#include	"shape_descriptors.h"
+#include "sdl_fonts.h"
+
+struct rgb_color;
+
+// Rectangles for the interface, etc..
+// rectangle id's
+enum {
+	// game window rectangles
+	_player_name_rect= 0,
+	_oxygen_rect,
+	_shield_rect,
+	_motion_sensor_rect,
+	_microphone_rect,
+	_inventory_rect,
+	_weapon_display_rect,
+	
+	// interface rectangles
+	START_OF_MENU_INTERFACE_RECTS,
+	_new_game_button_rect = 7,
+	_load_game_button_rect,
+	_gather_button_rect,
+	_join_button_rect,
+	_prefs_button_rect,
+	_replay_last_button_rect,
+	_save_last_button_rect,
+	_replay_saved_button_rect,
+	_credits_button_rect,
+	_quit_button_rect,
+	_center_button_rect,
+	_singleton_game_button_rect,
+	_about_alephone_rect,
+	END_OF_MENU_INTERFACE_RECTS,
+	
+	// Marathon compatibility rectangles
+	_terminal_screen_rect = 20,
+	_terminal_header_rect,
+	_terminal_footer_rect,
+	_terminal_full_text_rect,
+	_terminal_left_rect,
+	_terminal_right_rect,
+	_terminal_logon_graphic_rect,
+	_terminal_logon_title_rect,
+	_terminal_logon_location_rect,
+	_respawn_indicator_rect,
+	_blinker_rect,
+	
+	NUMBER_OF_INTERFACE_RECTANGLES
+};
+
+// Colors for drawing..
+enum {
+	_energy_weapon_full_color,
+	_energy_weapon_empty_color,
+	_black_color,
+	_inventory_text_color,
+	_inventory_header_background_color,
+	_inventory_background_color,
+	PLAYER_COLOR_BASE_INDEX,
+	
+	_white_color= 14,
+	_invalid_weapon_color,
+	_computer_border_background_text_color,
+	_computer_border_text_color,
+	_computer_interface_text_color,
+	_computer_interface_color_purple,
+	_computer_interface_color_red,
+	_computer_interface_color_pink,
+	_computer_interface_color_aqua,
+	_computer_interface_color_yellow,
+	_computer_interface_color_brown,
+	_computer_interface_color_blue,
+    NUMBER_OF_INTERFACE_COLORS
+};
+
+enum { // justification flags for _draw_screen_text
+	_no_flags,
+	_center_horizontal= 0x01,
+	_center_vertical= 0x02,
+	_right_justified= 0x04,
+	_top_justified= 0x08,
+	_bottom_justified= 0x10,
+	_wrap_text= 0x20
+};
+
+enum { // Fonts for the interface et al..
+	_interface_font,
+	_weapon_name_font,
+	_player_name_font,
+	_interface_item_count_font,
+	_computer_interface_font,
+	_computer_interface_title_font,
+	_net_stats_font,
+	NUMBER_OF_INTERFACE_FONTS
+};
+
+// Structure for portable rectangles.  notice it is exactly same as Rect
+struct screen_rectangle {
+	short top, left;
+	short bottom, right;
+};
+typedef struct screen_rectangle screen_rectangle;
+
+struct world_point2d;
+
+static inline int draw_text(SDL_Surface *s, const char *text, size_t length, int x, int y, uint32 pixel, const font_info *font, uint16 style, bool utf8 = false)
+{
+	return font ? font->draw_text(s, text, length, x, y, pixel, style, utf8) : 0;
+}
+
+static inline int draw_text(SDL_Surface *s, const char *text, int x, int y, uint32 pixel, const font_info *font, uint16 style, bool utf8 = false)
+{
+	return font ? font->draw_text(s, text, strlen(text), x, y, pixel, style, utf8) : 0;
+}
+
+static inline int8 char_width(uint8 c, const font_info *font, uint16 style)
+{
+	return font ? font->char_width(c, style) : 0;
+}
+
+static inline uint16 text_width(const char *text, const font_info *font, uint16 style, bool utf8 = false)
+{
+	return font ? font->text_width(text, style, utf8) : 0;
+}
+
+static inline uint16 text_width(const char *text, size_t length, const font_info *font, uint16 style, bool utf8 = false)
+{
+	return font ? font->text_width(text, length, style, utf8) : 0;
+}
+
+static inline int trunc_text(const char *text, int max_width, const font_info *font, uint16 style)
+{
+	return font ? font->trunc_text(text, max_width, style) : 0;
+}
 
 #include "cseries.h"
 
@@ -63,16 +177,6 @@ Dec 17, 2000 (Loren Petrich):
 
 extern TextSpec *_get_font_spec(short font_index);
 
-/*
-struct interface_font_info 
-{
-	TextSpec fonts[NUMBER_OF_INTERFACE_FONTS];
-	short heights[NUMBER_OF_INTERFACE_FONTS];
-	short line_spacing[NUMBER_OF_INTERFACE_FONTS];
-};
-*/
-
-/* --------- Globals. */
 // LP change: hardcoding this quantity since we know how many we need
 // Putting in the Moo definitions
 static screen_rectangle interface_rectangles[NUMBER_OF_INTERFACE_RECTANGLES] = 
@@ -177,23 +281,15 @@ static rgb_color InterfaceColors[NumInterfaceColors] =
 	{3084, 0, 65535}
 };
 
-/* ------- Private prototypes */
-static void load_interface_rectangles(void);
-static void	load_screen_interface_colors(void);
-
-/* -------- Code */
 void initialize_screen_drawing(
 	void)
 {
 	short loop;
 
-	/* Load the rectangles */
 	load_interface_rectangles();
 	
-	/* Load the colors */
 	load_screen_interface_colors();
 	
-	/* load the font stuff. */
 	for(loop=0; loop<NUMBER_OF_INTERFACE_FONTS; ++loop)
 	{
 		InterfaceFonts[loop].Init();
@@ -240,10 +336,6 @@ extern bool intro_buffer_changed;
 // Prototypes
 extern TextSpec *_get_font_spec(short font_index);
 
-
-/*
- *  Redirect drawing to screen or offscreen buffer
- */
 
 void _set_port_to_screen_window(void)
 {
@@ -301,10 +393,6 @@ void _set_port_to_custom(SDL_Surface *surface)
 	draw_surface = surface;
 }
 
-/*
- *  Set clipping rectangle
- */
-
 void set_drawing_clip_rectangle(short top, short left, short bottom, short right)
 {
 	if (top < 0)
@@ -318,10 +406,6 @@ void set_drawing_clip_rectangle(short top, short left, short bottom, short right
 	}
 }
 
-
-/*
- *  Draw shapes
- */
 
 void _draw_screen_shape(shape_descriptor shape_id, screen_rectangle *destination, screen_rectangle *source)
 {
@@ -382,10 +466,6 @@ void _draw_screen_shape_at_x_y(shape_descriptor shape_id, short x, short y)
 	SDL_FreeSurface(s);
 }
 
-
-/*
- *  Draw text
- */
 
 // Draw single glyph at given position in frame buffer, return glyph width
 template <class T>
@@ -745,10 +825,6 @@ short _text_width(const char *text, short font_id)
 }
 
 
-/*
- *  Draw rectangle
- */
-
 void _fill_rect(screen_rectangle *rectangle, short color_index)
 {
 	// Convert source rectangle
@@ -819,10 +895,6 @@ void _erase_screen(short color_index)
 	_fill_rect(NULL, color_index);
 }
 
-
-/*
- *  Draw line
- */
 
 static inline uint8 cs_code(const world_point2d *p, int clip_top, int clip_bottom, int clip_left, int clip_right)
 {
@@ -1019,10 +1091,6 @@ clip_line:
 }
 
 
-/*
- *  Draw clipped, filled, convex polygon
- */
-
 void draw_polygon(SDL_Surface *s, const world_point2d *vertex_array, int vertex_count, uint32 pixel)
 {
 	if (vertex_count == 0)
@@ -1066,20 +1134,20 @@ void draw_polygon(SDL_Surface *s, const world_point2d *vertex_array, int vertex_
 	new_vertex_count = 0; \
 	for (int i=0; i<vertex_count; i++, v1 = v2, v2++) { \
 		if (v1->Y < clip) { \
-			if (v2->Y < clip) { 		/* Edge completely clipped */ \
+			if (v2->Y < clip) { \
 				continue; \
-			} else {		 			/* Clipped edge going down, find clip point */ \
+			} else {		 	\
 				clip_point.X = v1->X + (v2->X - v1->X) * (clip - v1->Y) / (v2->Y - v1->Y); \
-				*vp++ = clip_point;		/* Add clip point to array */ \
-				*vp++ = *v2;			/* Add visible endpoint to array */ \
+				*vp++ = clip_point; \
+				*vp++ = *v2; \
 				new_vertex_count += 2; \
 			} \
 		} else { \
-			if (v2->Y < clip) {			/* Clipped edge going up, find clip point */ \
+			if (v2->Y < clip) { \
 				clip_point.X = v2->X + (v1->X - v2->X) * (clip - v2->Y) / (v1->Y - v2->Y); \
-				*vp++ = clip_point;		/* Add clip point to array */ \
+				*vp++ = clip_point; \
 				new_vertex_count++; \
-			} else {					/* Edge completely visible, add endpoint to array */ \
+			} else { \
 				*vp++ = *v2; \
 				new_vertex_count++; \
 			} \
@@ -1087,7 +1155,7 @@ void draw_polygon(SDL_Surface *s, const world_point2d *vertex_array, int vertex_
 	} \
 	vertex_count = new_vertex_count; \
 	if (vertex_count == 0) \
-		return;		/* Polygon completely clipped */ \
+		return; \
 	vertex_array = dst_array;
 
 #define clip_max(X, Y, clip, dst_array) \
@@ -1098,28 +1166,28 @@ void draw_polygon(SDL_Surface *s, const world_point2d *vertex_array, int vertex_
 	new_vertex_count = 0; \
 	for (int i=0; i<vertex_count; i++, v1 = v2, v2++) { \
 		if (v1->Y < clip) { \
-			if (v2->Y < clip) {			/* Edge completely visible, add endpoint to array */ \
+			if (v2->Y < clip) { \
 				*vp++ = *v2; \
 				new_vertex_count++; \
-			} else {		 			/* Clipped edge going down, find clip point */ \
+			} else { \
 				clip_point.X = v1->X + (v2->X - v1->X) * (clip - v1->Y) / (v2->Y - v1->Y); \
-				*vp++ = clip_point;		/* Add clip point to array */ \
+				*vp++ = clip_point; \
 				new_vertex_count++; \
 			} \
 		} else { \
-			if (v2->Y < clip) {			/* Clipped edge going up, find clip point */ \
+			if (v2->Y < clip) { \
 				clip_point.X = v2->X + (v1->X - v2->X) * (clip - v2->Y) / (v1->Y - v2->Y); \
-				*vp++ = clip_point;		/* Add clip point to array */ \
-				*vp++ = *v2;			/* Add visible endpoint to array */ \
+				*vp++ = clip_point; \
+				*vp++ = *v2; \
 				new_vertex_count += 2; \
-			} else {					/* Edge completely clipped */ \
+			} else { \
 				continue; \
 			} \
 		} \
 	} \
 	vertex_count = new_vertex_count; \
 	if (vertex_count == 0) \
-		return;		/* Polygon completely clipped */ \
+		return; \
 	vertex_array = dst_array;
 
 	clip_min(x, y, clip_top, va1);
@@ -1200,10 +1268,6 @@ void draw_polygon(SDL_Surface *s, const world_point2d *vertex_array, int vertex_
 }
 
 
-/*
- *  Interface color management
- */
-
 void _get_interface_color(size_t color_index, SDL_Color *color)
 {	
 	assert(color_index<NumInterfaceColors);
@@ -1238,10 +1302,6 @@ void _get_player_color(size_t color_index, SDL_Color *color)
     color->a = 0xff;
 }
 
-/*
- *  Rectangle XML parser
- */
-
 static void load_interface_rectangles(void)
 {
 }
@@ -1250,3 +1310,4 @@ static void load_screen_interface_colors(void)
 {
 }
 
+*/
