@@ -153,9 +153,9 @@ static inline int trunc_text(const char *text, int max_width, const font_info *f
 {
 	return font ? font->trunc_text(text, max_width, style) : 0;
 }
-
-#include "cseries.h"
-
+*/
+import * as cseries from '../CSeries/cseries.js';
+/*
 #include "map.h"
 #include "interface.h"
 #include "shell.h"
