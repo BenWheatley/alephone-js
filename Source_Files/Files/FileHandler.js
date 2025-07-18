@@ -342,8 +342,9 @@ private:
 
 #include "cseries.h"
 #include "FileHandler.h"
-#include "resource_manager.h"
-
+*/
+import * as resource_manager from './resource_manager.js';
+/*
 #include "shell.h"
 #include "interface.h"
 #include "screen.h"
