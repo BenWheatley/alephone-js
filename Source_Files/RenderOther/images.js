@@ -17,9 +17,7 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
-/*
-#include "FileHandler.h"
-*/
+import * as FileHandler from '../Files/FileHandler.js';
 
 // Select what resource file is to be the source of the color table;
 // this is for the benefit of resource-file 
