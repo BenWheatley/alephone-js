@@ -282,22 +282,11 @@ static rgb_color InterfaceColors[NumInterfaceColors] =
 	{45000, 0, 0},
 	{3084, 0, 65535}
 };
-
-void initialize_screen_drawing(
-	void)
-{
-	short loop;
-
-	load_interface_rectangles();
-	
-	load_screen_interface_colors();
-	
-	for(loop=0; loop<NUMBER_OF_INTERFACE_FONTS; ++loop)
-	{
-		InterfaceFonts[loop].Init();
-	}
+*/
+export function initialize_screen_drawing() {
+	// TODO: everything stripped out of this method. Is it safe to remove?
 }
-
+/*
 screen_rectangle *get_interface_rectangle(short index)
 {
 	assert(index>=0 && index<NUMBER_OF_INTERFACE_RECTANGLES);
@@ -1288,14 +1277,6 @@ void _get_player_color(size_t color_index, SDL_Color *color)
     color->g = static_cast<Uint8>(c.green);
     color->b = static_cast<Uint8>(c.blue);
     color->a = 0xff;
-}
-
-static void load_interface_rectangles(void)
-{
-}
-
-static void load_screen_interface_colors(void)
-{
 }
 
 */
