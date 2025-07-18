@@ -924,7 +924,7 @@ void scroll_full_screen_pict_resource_from_scenario(int pict_resource_number, bo
 }
 */
 //  Initialize image manager, open Images file
-export function initialize_images_manager() {
+export async function initialize_images_manager() {
 	let file = null;
 
 	file = shell.scenario_dir + cseries.getcstr(_interface.strFILENAMES, _interface.filenameIMAGES);

@@ -235,7 +235,7 @@ export async function initialize_application() {
 	initialize_shape_handler();
 	initialize_fades();
 */
-	images.initialize_images_manager();
+	await images.initialize_images_manager();
 /*
 	load_environment_from_preferences();
 */
