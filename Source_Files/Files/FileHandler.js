@@ -203,7 +203,55 @@ struct dir_entry {
 	TimeType date;          // modification date
 };
 
+*/
 
+// Minimal JS equivalent for the old CPP FileSpecifier
+export class FileSpecifier {
+	constructor(url) {
+		this.url = url;
+		this.data = null; // Will hold Uint8Array of raw bytes
+		this.is_forked = false;
+		this.fork_offset = 0;
+		this.fork_length = 0;
+	}
+
+	// replaces FileSpecifier::Open(OpenedFile &OFile, bool Writable)
+	async Open() {
+		try {
+			const response = await fetch(this.url);
+			if (!response.ok) return false;
+			const buffer = await response.arrayBuffer();
+			this.data = new Uint8Array(buffer);
+		} catch (e) {
+			return false;
+		}
+		
+		// Try to detect AppleSingle
+		const appleSingleDecodeAttempt = resource_manager.is_applesingle(this.data, false);
+		if (appleSingleDecodeAttempt != null) {
+			this.is_forked = true;
+			this.fork_offset = appleSingleDecodeAttempt.offset;
+			this.fork_length = appleSingleDecodeAttempt.dataLength;
+			return true;
+		}
+	
+		// Try to detect MacBinary
+		const macbinaryDecodeAttempt = resource_manager.is_macbinary(this.data);
+		if (macbinaryDecodeAttempt != null) {
+			this.is_forked = true;
+			this.fork_offset = 128;
+			this.fork_length = macbinaryDecodeAttempt.dataLength;
+			return true;
+		}
+		
+		// Default case: start at beginning
+		this.fork_offset = 0;
+		this.fork_length = this.data.length;
+		return true;
+	}
+}
+
+/*
 // Abstraction for file specifications; designed to encapsulate both directly-specified paths and MacOS FSSpecs
 class FileSpecifier
 {	
@@ -236,7 +284,6 @@ public:
 	bool Create(Typecode Type);
 	
 	// Opens a file:
-	bool Open(OpenedFile& OFile, bool Writable=false);
 	bool OpenForWritingText(OpenedFile& OFile); // converts LF to CRLF on Windows
 	
 	// Opens either a MacOS resource fork or some imitation of it:
@@ -684,54 +731,6 @@ static std::string unix_path_separators(const std::string& input)
 #endif
 
 // Open data file
-bool FileSpecifier::Open(OpenedFile &OFile, bool Writable)
-{
-	OFile.Close();
-
-	SDL_RWops *f;
-	{
-#ifdef HAVE_ZZIP
-		if (!Writable)
-		{
-			f = OFile.f = SDL_RWFromZZIP(unix_path_separators(GetPath()).c_str(), &utf8_zzip_io());
-			err = f ? 0 : errno;
-		} 
-		else {
-			f = OFile.f = SDL_RWFromFile(GetPath(), "wb+");
-			err = f ? 0 : unknown_filesystem_error;
-		}
-#else
-		f = OFile.f = SDL_RWFromFile(GetPath(), Writable ? "wb+" : "rb");
-		err = f ? 0 : unknown_filesystem_error;
-#endif
-
-	}
-
-	if (f == NULL) {
-		return false;
-	}
-	if (Writable)
-		return true;
-
-	// Transparently handle AppleSingle and MacBinary files on reading
-	int32 offset, data_length, rsrc_length;
-	if (is_applesingle(f, false, offset, data_length)) {
-		OFile.is_forked = true;
-		OFile.fork_offset = offset;
-		OFile.fork_length = data_length;
-		SDL_RWseek(f, offset, SEEK_SET);
-		return true;
-	} else if (is_macbinary(f, data_length, rsrc_length)) {
-		OFile.is_forked = true;
-		OFile.fork_offset = 128;
-		OFile.fork_length = data_length;
-		SDL_RWseek(f, 128, SEEK_SET);
-		return true;
-	}
-	SDL_RWseek(f, 0, SEEK_SET);
-	return true;
-}
-
 bool FileSpecifier::OpenForWritingText(OpenedFile& OFile)
 {
 	OFile.Close();
