@@ -229,7 +229,9 @@ export async function initialize_application() {
 	initialize_gamma();
 	Screen::instance()->Initialize(&graphics_preferences->screen_mode);
 	initialize_marathon();
-	initialize_screen_drawing();
+	*/
+	screen_drawing.initialize_screen_drawing();
+	/*
 	initialize_dialogs();
 	initialize_terminal_manager();
 	initialize_shape_handler();
