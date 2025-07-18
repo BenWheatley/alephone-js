@@ -58,16 +58,15 @@ const kFontIDCourier = 22;
 TODO: replace each of these #'s with corresponding JS version below, as files become available:
 
 #include "cscluts.h"
-#include "csfonts.h"
 #include "csdialogs.h"
 #include "cspaths.h"
 
 export * from './cscluts.js';
-export * from './csfonts.js';
 export * from './csdialogs.js';
 export * from './cspaths.js';*/
 
 export * from './cstypes.js';
+export * from './csfonts.js';
 export * from './csstrings.js';
 export * from './csmacros.js';
 export * from './cspixels.js';
