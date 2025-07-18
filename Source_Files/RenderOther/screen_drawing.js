@@ -230,18 +230,20 @@ void set_about_alephone_rect(int width, int height)
 // static CTabHandle screen_colors;
 // LP change: now hardcoded and XML-changeable
 
+*/
+
 // Copied off of original 'finf' resource
-// static struct interface_font_info interface_fonts = 
-static FontSpecifier InterfaceFonts[NUMBER_OF_INTERFACE_FONTS] =
-{
-	{"Monaco",   9, styleBold,  0, "#4"},
-	{"Monaco",   9, styleBold,  0, "#4"},
-	{"Monaco",   9, styleBold,  0, "#4"},
-	{"Monaco",   9, styleNormal,0, "#4"},
-	{"Courier", 12, styleNormal,0, "#22"},
-	{"Courier", 14, styleBold,  0, "#22"},
-	{"Monaco",   9, styleNormal,0, "#4"}
-};
+const InterfaceFonts = [
+  { NameSet: "Monaco", Size: 9, Style: cseries.styleBold, AdjustLineHeight: 0, File: "#4" },
+  { NameSet: "Monaco", Size: 9, Style: cseries.styleBold, AdjustLineHeight: 0, File: "#4" },
+  { NameSet: "Monaco", Size: 9, Style: cseries.styleBold, AdjustLineHeight: 0, File: "#4" },
+  { NameSet: "Monaco", Size: 9, Style: cseries.styleNormal, AdjustLineHeight: 0, File: "#4" },
+  { NameSet: "Courier", Size: 12, Style: cseries.styleNormal, AdjustLineHeight: 0, File: "#22" },
+  { NameSet: "Courier", Size: 14, Style: cseries.styleBold, AdjustLineHeight: 0, File: "#22" },
+  { NameSet: "Monaco", Size: 9, Style: cseries.styleNormal, AdjustLineHeight: 0, File: "#4" }
+];
+
+/*
 
 // LP change: hardcoding the interface and player colors,
 // so as to banish the 'clut' resources
