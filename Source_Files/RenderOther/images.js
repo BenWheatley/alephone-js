@@ -49,46 +49,105 @@ const _images_file_delta16 = 1000;
 const _images_file_delta32 = 2000;
 const _scenario_file_delta16 = 10000;
 const _scenario_file_delta32 = 20000;
-/*
-// Structure for open image file
+
 class image_file_t {
-public:
-	image_file_t() {}
-	~image_file_t() {close_file();}
+	constructor() {
+		this.rsrc_file = null; // Original type: OpenedResourceFile
+		this.wad_file = null;  // Original type: OpenedFile
+		this.wad_hdr = null;   // Original type: wad_header
+	}
 
-	bool open_file(FileSpecifier &file);
-	void close_file(void);
-	bool is_open(void);
+	//  Open/close image file
+	async open_file(url) {
+		// Try to open as a resource file
+		const file = new FileHandler.FileSpecifier(url);
+		const was_opened = await file.Open();
+		/*
+		if (!was_opened) {
+			// This failed, maybe it's a wad file (M2 Win95 style)
+			if (!await wad.open_wad_file_for_reading(url, this.wad_file) ||
+				!await wad.read_wad_header(this.wad_file, this.wad_hdr)) {
+	
+				wad_file.Close();
+				return false;
+			}
+		} else if (!this.wad_file || !this.wad_file.IsOpen()) {
+			if (await wad.open_wad_file_for_reading(url, this.wad_file)) {
+				if (!await wad.read_wad_header(this.wad_file, this.wad_hdr)) {
+					wad_file.Close();
+				}
+			}
+		}*/
+	
+		return true;
+	}
+	
+	is_open() {
+		// TODO: Not sure yet if I want this or not, given nature of JS/webapp
+		return false; 
+	}
 
-	int determine_pict_resource_id(int base_id, int delta16, int delta32);
+	determine_pict_resource_id(base_id, delta16, delta32) {
+		// TODO: Implement ID calculation logic
+		return -1;
+	}
 
-	bool has_pict(int id);
-	bool has_clut(int id);
+	has_pict(id) {
+		// TODO: Check presence of pict resource
+		return false;
+	}
 
-	bool get_pict(int id, LoadedResource &rsrc);
-	bool get_clut(int id, LoadedResource &rsrc);
-	bool get_snd(int id, LoadedResource &rsrc);
-	bool get_text(int id, LoadedResource &rsrc);
+	has_clut(id) {
+		// TODO: Check presence of clut resource
+		return false;
+	}
 
-private:
-	bool has_rsrc(uint32 rsrc_type, uint32 wad_type, int id);
-	bool get_rsrc(uint32 rsrc_type, uint32 wad_type, int id, LoadedResource &rsrc);
+	get_pict(id, rsrc) { // original used a pointer: LoadedResource &rsrc
+		// TODO: Load pict resource
+		return false;
+	}
 
-	bool make_rsrc_from_pict(void *data, size_t length, LoadedResource &rsrc, void *clut_data, size_t clut_length);
-	bool make_rsrc_from_clut(void *data, size_t length, LoadedResource &rsrc);
+	get_clut(id, rsrc) { // original used a pointer: LoadedResource &rsrc
+		// TODO: Load clut resource
+		return false;
+	}
 
-	OpenedResourceFile rsrc_file;
-	OpenedFile wad_file;
-	wad_header wad_hdr;
-};
-*/
+	get_snd(id, rsrc) { // original used a pointer: LoadedResource &rsrc
+		// TODO: Load sound resource
+		return false;
+	}
 
-// These (.*)File properties will all be of type image_file_t, but that's not enforceable in JS
-let ImagesFile;
-let ScenarioFile;
-let ExternalResourcesFile;
-let ShapesImagesFile;
-let SoundsImagesFile;
+	get_text(id, rsrc) { // original used a pointer: LoadedResource &rsrc
+		// TODO: Load text resource
+		return false;
+	}
+
+	has_rsrc(rsrc_type, wad_type, id) {
+		// TODO: Generic check for resource presence
+		return false;
+	}
+
+	get_rsrc(rsrc_type, wad_type, id, rsrc) { // original used a pointer: LoadedResource &rsrc
+		// TODO: Generic resource loader
+		return false;
+	}
+
+	make_rsrc_from_pict(data, length, rsrc, clut_data, clut_length) { // original used a pointer: LoadedResource &rsrc
+		// TODO: Create LoadedResource from pict data
+		return false;
+	}
+
+	make_rsrc_from_clut(data, length, rsrc) { // original used a pointer: LoadedResource &rsrc
+		// TODO: Create LoadedResource from clut data
+		return false;
+	}
+}
+
+let ImagesFile = new image_file_t();
+let ScenarioFile = new image_file_t();
+let ExternalResourcesFile = new image_file_t();
+let ShapesImagesFile = new image_file_t();
+let SoundsImagesFile = new image_file_t();
 
 /*
 #include "byte_swapping.h"
@@ -927,7 +986,7 @@ void scroll_full_screen_pict_resource_from_scenario(int pict_resource_number, bo
 export async function initialize_images_manager() {
 	let file = null;
 
-	file = shell.scenario_dir + cseries.getcstr(_interface.strFILENAMES, _interface.filenameIMAGES);
+	file = new URL(shell.scenario_dir + cseries.getcstr(_interface.strFILENAMES, _interface.filenameIMAGES));
 	
 	if (!ImagesFile.open_file(file)) {
         alert("Images file could not be opened");
@@ -969,42 +1028,6 @@ void set_external_resources_images_file(FileSpecifier &file)
 void set_sounds_images_file(FileSpecifier &file)
 {
 	SoundsImagesFile.open_file(file);
-}
-
-//  Open/close image file
-
-bool image_file_t::open_file(FileSpecifier &file)
-{
-	close_file();
-	
-	// Try to open as a resource file
-	if (!file.Open(rsrc_file)) {
-	
-		// This failed, maybe it's a wad file (M2 Win95 style)
-		if (!open_wad_file_for_reading(file, wad_file)
-		 || !read_wad_header(wad_file, &wad_hdr)) {
-
-			// This also failed, bail out
-			wad_file.Close();
-			return false;
-		}
-	} // Try to open wad file, too
-	else if (!wad_file.IsOpen()) {
-		if (open_wad_file_for_reading(file, wad_file)) {
-			if (!read_wad_header(wad_file, &wad_hdr)) {
-				
-				wad_file.Close();
-			}
-		}
-	}
-	
-	return true;
-}
-
-void image_file_t::close_file(void)
-{
-	rsrc_file.Close();
-	wad_file.Close();
 }
 
 bool image_file_t::is_open(void)
@@ -1127,23 +1150,30 @@ bool image_file_t::get_text(int id, LoadedResource &rsrc)
 {
 	return get_rsrc(FOUR_CHARS_TO_INT('T','E','X','T'), FOUR_CHARS_TO_INT('t','e','x','t'), id, rsrc);
 }
-
+*/
 //  Get/draw image from Images file
 
-bool get_picture_resource_from_images(int base_resource, LoadedResource &PictRsrc)
-{
-    bool found = false;
-    
-    if (!found && ImagesFile.is_open())
-        found = ImagesFile.get_pict(ImagesFile.determine_pict_resource_id(base_resource, _images_file_delta16, _images_file_delta32), PictRsrc);
-    if (!found && ExternalResourcesFile.is_open())
-        found = ExternalResourcesFile.get_pict(base_resource, PictRsrc);
-    if (!found && ShapesImagesFile.is_open())
-        found = ShapesImagesFile.get_pict(base_resource, PictRsrc);
-    
-    return found;
+export function get_picture_resource_from_images(base_resource) {
+/* TODO: all branches needs testing */
+	if (ImagesFile.is_open()) {
+		const id = ImagesFile.determine_pict_resource_id(base_resource, _images_file_delta16, _images_file_delta32);
+		let result = ImagesFile.get_pict(id);
+		if (result != null) return result;
+	}
+
+	if (ExternalResourcesFile.is_open()) {
+		let result = ExternalResourcesFile.get_pict(base_resource);
+		if (result != null) return result;
+	}
+
+	if (ShapesImagesFile.is_open()) {
+		let result = ShapesImagesFile.get_pict(base_resource);
+		if (result != null) return result;
+	}
+	return null;
 }
 
+/*
 bool get_sound_resource_from_images(int resource_number, LoadedResource &SoundRsrc)
 {
     bool found = false;
