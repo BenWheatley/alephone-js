@@ -71,8 +71,8 @@ import * as preferences from './Misc/preferences.js';
 */
 import * as mouse from './Input/mouse.js';
 import * as joystick from './Input/joystick.js';
+import * as screen_drawing from "./RenderOther/screen_drawing.h"
 /*
-#include "screen_drawing.h"
 #include "computer_interface.h"
 #include "game_wad.h" // yuck...
 #include "game_window.h" // for draw_interface()
