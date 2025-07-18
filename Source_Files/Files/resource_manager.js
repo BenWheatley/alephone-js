@@ -23,71 +23,82 @@
 
 #include "cseries.h"
 #include "FileHandler.h"
-#include "Logging.h"
+*/
 
-bool is_applesingle(SDL_RWops *f, bool rsrc_fork, int32 &offset, int32 &length)
-{
+import * as Logging from '../Misc/Logging.js';
+
+export function is_applesingle(data, rsrc_fork) {
+	const dv = new DataView(data.buffer, data.byteOffset, data.byteLength);
+	
 	// Check header
-	SDL_RWseek(f, 0, SEEK_SET);
-	uint32 id = SDL_ReadBE32(f);
-	uint32 version = SDL_ReadBE32(f);
-	if (id != 0x00051600 || version != 0x00020000)
-		return false;
+	const id = dv.getUint32(0, false);      // Big-endian
+	const version = dv.getUint32(4, false); // Big-endian
+	if (id != 0x00051600 || version != 0x00020000) return null;
 	
 	// Find fork
-	uint32 req_id = rsrc_fork ? 2 : 1;
-	SDL_RWseek(f, 0x18, SEEK_SET);
-	int num_entries = SDL_ReadBE16(f);
-	while (num_entries--) {
-		uint32 id = SDL_ReadBE32(f);
-		int32 ofs = SDL_ReadBE32(f);
-		int32 len = SDL_ReadBE32(f);
-		//printf(" entry id %d, offset %d, length %d\n", id, ofs, len);
-		if (id == req_id) {
-			offset = ofs;
-			length = len;
-			return true;
+	const req_id = rsrc_fork ? 2 : 1;
+	let base = 0x18;
+	const num_entries = dv.getUint16(base, false); // Big-endian
+	base += 2;
+	for (let i = 0; i < num_entries; i++) {
+		const entry_id = dv.getUint32(base, false); // Big-endian
+		const ofs      = dv.getUint32(base + 4, false); // Big-endian
+		const len      = dv.getUint32(base + 8, false); // Big-endian
+		if (entry_id === req_id) {
+			return {offset: ofs, length: len};
 		}
+		base += 12;
 	}
-	return false;
+	
+	return null;
 }
 
-bool is_macbinary(SDL_RWops *f, int32 &data_length, int32 &rsrc_length)
-{
+export function is_macbinary(data) {
 	// This recognizes up to macbinary III (0x81)
-	SDL_RWseek(f, 0, SEEK_SET);
-	uint8 header[128];
-	if (SDL_RWread(f, header, 1, 128) != 128)
-	{
-		return false;
+	if (data.length < 128) return null;
+
+	const header = data.subarray(0, 128);
+	if (header[0] !== 0 || header[1] > 63 || header[74] !== 0 || header[123] > 0x81) {
+		return null;
 	}
-	
-	if (header[0] || header[1] > 63 || header[74]  || header[123] > 0x81)
-		return false;
-	
+
 	// Check CRC
-	uint16 crc = 0;
-	for (int i=0; i<124; i++) {
-		uint16 data = header[i] << 8;
-		for (int j=0; j<8; j++) {
-			if ((data ^ crc) & 0x8000)
+	let crc = 0;
+	for (let i = 0; i < 124; i++) {
+		let bits = header[i] << 8;
+		for (let j = 0; j < 8; j++) {
+			if ((bits ^ crc) & 0x8000)
 				crc = (crc << 1) ^ 0x1021;
 			else
 				crc <<= 1;
-			data <<= 1;
+			crc &= 0xFFFF; // To make it act like it's a 16 bit number again
+			bits <<= 1;
 		}
 	}
-	//printf("crc %02x\n", crc);
-	if (crc != ((header[124] << 8) | header[125]))
-		return false;
-	
-	// CRC valid, extract fork sizes
-	data_length = (header[83] << 24) | (header[84] << 16) | (header[85] << 8) | header[86];
-	rsrc_length = (header[87] << 24) | (header[88] << 16) | (header[89] << 8) | header[90];
-	return true;
+
+	const expected_crc = (header[124] << 8) | header[125];
+	if (crc !== expected_crc) {
+		Logging.logAnomaly("CRC checksum failed");
+		return null;
+	}
+
+	// Extract data fork and resource fork lengths
+	const data_length =
+		(header[83] << 24) |
+		(header[84] << 16) |
+		(header[85] << 8) |
+		header[86];
+
+	const rsrc_length =
+		(header[87] << 24) |
+		(header[88] << 16) |
+		(header[89] << 8) |
+		header[90];
+
+	return {data_length: data_length, rsrc_length: rsrc_length};
 }
 
-
+/*
 // Structure for open resource file
 struct res_file_t {
 	res_file_t() : f(NULL) {}
