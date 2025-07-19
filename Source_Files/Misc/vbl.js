@@ -111,9 +111,10 @@ Feb 20, 2002 (Woody Zenfell):
 inline short memory_error() {return 0;}
 
 #include "vbl_definitions.h"
-
-static int32 heartbeat_count;
-static bool input_task_active;
+*/
+let heartbeat_count = 0;
+let input_task_active = false;
+/*
 static timer_task_proc input_task;
 
 // LP: defined this here so it will work properly
@@ -193,13 +194,13 @@ void set_keyboard_controller_status(
                 exit_joystick();
         }
 }
+*/
 
-bool get_keyboard_controller_status(
-	void)
-{
+export function get_keyboard_controller_status() {
 	return input_task_active;
 }
 
+/*
 int32 get_heartbeat_count(
 	void)
 {
