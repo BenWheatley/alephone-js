@@ -99,7 +99,7 @@ export const ShapeTypes = Object.freeze({
 	_other_shape: 3 // anything not falling into the above categories (guns, interface elements, etc)
 });
 
-export const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
+const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
 
 import * as shape_descriptors from '../RenderMain/shape_descriptors.js';
 /*
