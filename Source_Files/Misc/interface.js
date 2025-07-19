@@ -944,7 +944,13 @@ void draw_menu_button_for_command(
 	draw_button(rectangle_index, false);
 	draw_intro_screen();
 }
+*/
+function update_interface_display() {
+	// TODO: convert the real cpp update_interface_display func below into JS, replacing this entirely
+	images.draw_full_screen_pict_resource_from_images(screen_definitions.MAIN_MENU_BASE + 0);
+}
 
+/*
 void update_interface_display(
 	void)
 {
@@ -966,60 +972,56 @@ void update_interface_display(
 
 	draw_intro_screen();
 }
+*/
+let last_heartbeat_fraction = -1.0;
+let is_network_pregame = false;
 
-extern bool first_frame_rendered;
-float last_heartbeat_fraction = -1.f;
-bool is_network_pregame = false;
+export function idle_game_state(/*uint32*/ time) {
+	let machine_ticks_elapsed = time - game_state.last_ticks_on_idle;
 
-bool idle_game_state(uint32 time)
-{
-	int machine_ticks_elapsed = time - game_state.last_ticks_on_idle;
-
-	if(machine_ticks_elapsed || game_state.phase==0)
-	{
-		if(game_state.phase != INDEFINATE_TIME_DELAY)
-		{
-			game_state.phase-= machine_ticks_elapsed;
+	if (machine_ticks_elapsed || game_state.phase==0) {
+		if (game_state.phase != INDEFINATE_TIME_DELAY) {
+			game_state.phase -= machine_ticks_elapsed;
 		}
 		
 		//  Note that we still go through this if we have an indefinate phase.. 
-		if(game_state.phase<=0)
-		{
-			switch(get_game_state())
-			{
-				case _display_quit_screens:
-				case GameStates_display_intro_screens:
-				case _display_prologue:
-				case _display_epilogue:
-				case _display_credits:
+		if (game_state.phase <= 0) {
+			switch(get_game_state()) {
+				case GameStates._display_quit_screens:
+				case GameStates._display_intro_screens:
+				case GameStates._display_prologue:
+				case GameStates._display_epilogue:
+				case GameStates._display_credits:
 					next_game_screen();
 					break;
 
-				case _display_intro_screens_for_demo:
-				case _display_main_menu:
+				case GameStates._display_intro_screens_for_demo:
+				case GameStates._display_main_menu:
+				/* TODO: convert this to JS:
 					//  Start the demo.. 
-					if(!environment_preferences->auto_play_demos ||
+					if (!environment_preferences->auto_play_demos ||
 					   !begin_game(_demo, false))
 					{
 						//  This means that there was not a valid demo to play 
 						game_state.phase= TICKS_UNTIL_DEMO_STARTS;
 					}
+					*/
 					break;
 
-				case _close_game:
+				case GameStates._close_game:
 					display_main_menu();
 					break;
 
-				case _switch_demo:
+				case GameStates._switch_demo:
 					//  This is deferred to the idle task because it 
 					//   occurs at interrupt time.. 
 					switch(game_state.user)
 					{
-						case _replay:
+						case PseudoPlayers._replay:
 							finish_game(true);
 							break;
 							
-						case _demo:
+						case PseudoPlayers._demo:
 							finish_game(false);
 							display_introduction_screen_for_demo();
 							break;
@@ -1030,16 +1032,17 @@ bool idle_game_state(uint32 time)
 					}
 					break;
 				
-				case _display_chapter_heading:
-					dprintf("Chapter heading...");
+				case GameStates._display_chapter_heading:
+					Logging.logNote("Chapter heading...");
 					break;
 
-				case _quit_game:
+				case GameStates._quit_game:
 					//  About to quit, but can still hit this through order of ops.. 
 					break;
 
-				case _revert_game:
+				case GameStates._revert_game:
 					//  Reverting while in the update loop sounds sketchy.. 
+					/* TODO: convert this to JS:
 					if(revert_game())
 					{
 						game_state.state= _game_in_progress;
@@ -1054,19 +1057,19 @@ bool idle_game_state(uint32 time)
 						//  And finish their current game.. 
 						finish_game(true);
 					}
+					*/
 					break;
 					
-				case _begin_display_of_epilogue:
+				case GameStates._begin_display_of_epilogue:
 					display_epilogue();
 					break;
 
-				case _game_in_progress:
+				case GameStates._game_in_progress:
 					game_state.phase = 15 * cseries.MACHINE_TICKS_PER_SECOND;
-					//game_state.last_ticks_on_idle= cseries.machine_tick_count();
 					break;
 
-				case _change_level:
-				case _displaying_network_game_dialogs:
+				case GameStates._change_level:
+				case GameStates._displaying_network_game_dialogs:
 					break;
 					
 				default:
@@ -1074,12 +1077,12 @@ bool idle_game_state(uint32 time)
 					break;
 			}
 		}
-		game_state.last_ticks_on_idle= cseries.machine_tick_count();
+		game_state.last_ticks_on_idle = cseries.machine_tick_count();
 	}
 
 	// if we’re not paused and there’s something to draw (i.e., anything different from last time), render a frame
-	if(game_state.state==_game_in_progress)
-	{
+	if (game_state.state == GameStates._game_in_progress) {
+	/* TODO: convert this CPP into JS
 		// ZZZ change: update_world() whether or not get_keyboard_controller_status() is true
 		// This way we won't fill up queues and stall netgames if one player switches out for a bit.
 		std::pair<bool, int16> theUpdateResult= update_world();
@@ -1116,13 +1119,14 @@ bool idle_game_state(uint32 time)
 		}
 		
 		return theUpdateResult.first;
+		*/
 	} else {
 		//  Update the fade ins, etc.. 
 		update_interface_fades();
 		return false;
 	}
 }
-
+/*
 void set_game_focus_lost()
 {
 	switch (game_state.state)
@@ -1617,6 +1621,10 @@ function display_introduction() {
 		display_main_menu();
 /*	} */
 }
+
+function display_introduction_screen_for_demo() {
+	// TODO: replace this stub with a JS conversion of the CPP in the following comment
+}
 /*
 static void display_introduction_screen_for_demo(	
 	void)
@@ -1634,7 +1642,11 @@ static void display_introduction_screen_for_demo(
 		display_main_menu();
 	}
 }
-
+*/
+function display_epilogue() {
+	// TODO: replace this stub with a JS conversion of the CPP in the following comment
+}
+/*
 static void display_epilogue(
 	void)
 {
@@ -2479,7 +2491,11 @@ static void handle_save_film(
 	hide_cursor(); // JTP: Will be shown by display_main_menu
 	display_main_menu();
 }
-
+*/
+function next_game_screen() {
+	// TODO: replace this stub with real function from the following code
+}
+/*
 static void next_game_screen(
 	void)
 {
@@ -2828,7 +2844,11 @@ static void start_interface_fade(
 		explicit_start_fade(type, original_color_table, animated_color_table);
 	}
 }
-
+*/
+function update_interface_fades() {
+	// TODO: replace this stub with JS converted from CPP in following comment
+}
+/*
 static void update_interface_fades(
 	void)
 {
@@ -2934,24 +2954,22 @@ void do_preferences(void)
 	} else if (memcmp(&mode, &graphics_preferences->screen_mode, sizeof(struct screen_mode_data)))
 		change_screen_mode(&graphics_preferences->screen_mode, false);
 }
-
+*/
 //  Update game window
-
-void update_game_window(void)
-{
+export function update_game_window() {
 	switch(get_game_state()) {
-		case _game_in_progress:
-			update_screen_window();
+		case GameStates._game_in_progress:
+			screen.update_screen_window();
 			break;
 			
-		case _display_quit_screens:
-		case _display_intro_screens_for_demo:
+		case GameStates._display_quit_screens:
+		case GameStates._display_intro_screens_for_demo:
 		case GameStates._display_intro_screens:
-		case _display_chapter_heading:
-		case _display_prologue:
-		case _display_epilogue:
-		case _display_credits:
-		case _display_main_menu:
+		case GameStates._display_chapter_heading:
+		case GameStates._display_prologue:
+		case GameStates._display_epilogue:
+		case GameStates._display_credits:
+		case GameStates._display_main_menu:
 			update_interface_display();
 			break;
 			
@@ -2959,7 +2977,7 @@ void update_game_window(void)
 			break;
 	}
 }
-
+/*
 
 //  Exit networking
 

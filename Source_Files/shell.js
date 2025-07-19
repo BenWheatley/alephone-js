@@ -362,99 +362,76 @@ short get_level_number_from_user(void)
 // Constants
 const TICKS_BETWEEN_EVENT_POLL = 16; // ~60Hz
 
-export function main_event_loop()
-{
-/*
-	uint32 last_event_poll = 0;
-	short game_state;
-
-	while ((game_state = get_game_state()) != _quit_game) {
-		uint32 cur_time = machine_tick_count();
-		bool yield_time = false;
-		bool poll_event = false;
-
-		switch (game_state) {
-			case _game_in_progress:
-			case _change_level:
-				if ((get_fps_target() == 0 && get_keyboard_controller_status()) || Console::instance()->input_active() || cur_time - last_event_poll >= TICKS_BETWEEN_EVENT_POLL) {
-					poll_event = true;
-					last_event_poll = cur_time;
-			  } else {				  
-					SDL_PumpEvents ();	// This ensures a responsive keyboard control
-			  }
-				break;
-
-			case GameStates._display_intro_screens:
-			case _display_main_menu:
-			case _display_chapter_heading:
-			case _display_prologue:
-			case _display_epilogue:
-			case _begin_display_of_epilogue:
-			case _display_credits:
-			case _display_intro_screens_for_demo:
-			case _display_quit_screens:
-			case _displaying_network_game_dialogs:
-				yield_time = interface_fade_finished();
-				poll_event = true;
-				break;
-
-			case _close_game:
-			case _switch_demo:
-			case _revert_game:
-				yield_time = poll_event = true;
-				break;
-		}
-
-		if (poll_event) {
-			global_idle_proc();
-
-			SDL_Event event;
-			if (yield_time)
-			{
-				// The game is not in a "hot" state, yield time to other
-				// processes but only try for a maximum of 30ms
-				if (SDL_WaitEventTimeout(&event, 30))
-				{
-					process_event(event);
-				}
-			}
-
-			while (SDL_PollEvent(&event))
-			{
-				process_event(event);
-			}
-		}
-
-		execute_timer_tasks(machine_tick_count());
-		idle_game_state(machine_tick_count());
-
-		auto fps_target = get_fps_target();
-		if (!get_keyboard_controller_status())
-		{
-			fps_target = 30;
-		}
+let last_event_poll = 0;
+let game_state;
+export function main_event_loop() {
+	game_state = _interface.get_game_state();
 	
-		if (game_state == _game_in_progress && fps_target != 0)
-		{
-			int elapsed_machine_ticks = machine_tick_count() - cur_time;
-			int desired_elapsed_machine_ticks = MACHINE_TICKS_PER_SECOND / fps_target;
-
-			if (desired_elapsed_machine_ticks - elapsed_machine_ticks > desired_elapsed_machine_ticks / 3)
-			{
-				sleep_for_machine_ticks(1);
+	let cur_time = cseries.machine_tick_count();
+	let poll_event = false;
+	
+	switch (game_state) {
+		case _interface.GameStates._game_in_progress:
+		case _interface.GameStates._change_level:
+			if ((preferences.get_fps_target() == 0 && vbl.get_keyboard_controller_status()) /*TODO: uncomment when Console has been converted from CPP to JS: || Console.instance().input_active()*/ || (cur_time - last_event_poll >= TICKS_BETWEEN_EVENT_POLL)) {
+				poll_event = true;
+				last_event_poll = cur_time;
+			} else {				  
+				// browser listeners do equivalent of SDL_PumpEvents automatically
 			}
-		}
-		else if (game_state != _game_in_progress)
+			break;
+		
+		case _interface.GameStates._display_intro_screens:
+		case _interface.GameStates._display_main_menu:
+		case _interface.GameStates._display_chapter_heading:
+		case _interface.GameStates._display_prologue:
+		case _interface.GameStates._display_epilogue:
+		case _interface.GameStates._begin_display_of_epilogue:
+		case _interface.GameStates._display_credits:
+		case _interface.GameStates._display_intro_screens_for_demo:
+		case _interface.GameStates._display_quit_screens:
+		case _interface.GameStates._displaying_network_game_dialogs:
+			// TODO: previously called interface_fade_finished(), but this only returns bool which is now ignored — if I can remove entirely, great, but keep this note until I do because otherwise it's hard to figure out the delta with the original code
+			poll_event = true;
+			break;
+		
+		case _interface.GameStates._close_game:
+		case _interface.GameStates._switch_demo:
+		case _interface.GameStates._revert_game:
+			poll_event = true;
+			break;
+		
+		case _interface.GameStates._quit_game:
+			alert("OK, game terminated. Still resident in JS, but you'd have to reactivate it (main_event_loop()) from the dev console.");
+			return;
+	}
+	
+	if (poll_event) {
+		shell_misc.global_idle_proc();
+		// No longer need to care about yield_time, as this is not a cooperative-multitasking environment and yielding gets forced on us regardless of what we want
+		
+		// Old code polled and then processed events in a loop; we don't need to do that because JS event handlers can (and should) directly call shell.process_event(event);
+	}
+	
+	vbl.execute_timer_tasks(cseries.machine_tick_count());
+	_interface.idle_game_state(cseries.machine_tick_count());
+	
+	let fps_target = preferences.get_fps_target();
+	if (!vbl.get_keyboard_controller_status()) {
+		fps_target = 30;
+	}
+	
+	// Cannot sleep in JS, but doesn't matter as requestAnimationFrame is automated
+	if (game_state != _interface.GameStates._game_in_progress) {
+		let last_redraw = 0;
+		if (cseries.machine_tick_count() > last_redraw + map.TICKS_PER_SECOND / 30)
 		{
-			static auto last_redraw = 0;
-			if (machine_tick_count() > last_redraw + TICKS_PER_SECOND / 30)
-			{
-				update_game_window();
-				last_redraw = machine_tick_count();
-			}
+			_interface.update_game_window();
+			last_redraw = cseries.machine_tick_count();
 		}
 	}
-*/
+	
+	requestAnimationFrame( main_event_loop );
 }
 /*
 static bool has_cheat_modifiers(void)
@@ -582,7 +559,7 @@ static void handle_game_key(const SDL_Event &event)
 			if(!player_controlling_game())
 				do_menu_item_command(mGame, iQuitGame, false);
 			else {
-				if(get_ticks_since_local_player_in_terminal() > 1 * TICKS_PER_SECOND) {
+				if(get_ticks_since_local_player_in_terminal() > 1 * map.TICKS_PER_SECOND) {
 					if(!game_is_networked) {
 						do_menu_item_command(mGame, iQuitGame, false);
 					}

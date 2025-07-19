@@ -1333,7 +1333,15 @@ static bool m1_draw_full_screen_pict_resource_from_images(int pict_resource_numb
     }
     return false;
 }
-
+*/
+export function draw_full_screen_pict_resource_from_images(pict_resource_number) {
+	// TODO: properly convert draw_full_screen_pict_resource_from_images to JS, this method at the moment is just a stub
+	let resource = get_picture_resource_from_images(pict_resource_number);
+	if (resource != null) {
+		draw_picture(resource);
+	}
+}
+/*
 void draw_full_screen_pict_resource_from_images(int pict_resource_number)
 {
 	if (m1_draw_full_screen_pict_resource_from_images(pict_resource_number))

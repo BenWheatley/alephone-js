@@ -1514,15 +1514,13 @@ static void update_screen(SDL_Rect &source, SDL_Rect &destination, bool every_ot
 	SDL_BlitSurface(s, NULL, main_surface, &destination);
 }
 
-
+*/
 //  Update game display if it was overdrawn
-
-void update_screen_window(void)
-{
-	draw_interface();
-	assert_world_color_table(interface_color_table, world_color_table);
+export function update_screen_window() {
+	// TODO: the function 'draw_interface' seems to do nothing, so I can probably remove this, but I'm too tired now to be sure I'm thinking right: draw_interface();
+	// TODO: replace this comment in CPP with JS: assert_world_color_table(interface_color_table, world_color_table);
 }
-
+/*
 
 //  Color table handling
 

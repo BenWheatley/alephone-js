@@ -244,11 +244,11 @@ struct environment_preferences_data
 
 	bool auto_play_demos;
 };
-
-static inline int16 get_fps_target() {
-	return graphics_preferences->fps_target;
+*/
+export function get_fps_target() {
+	return 60; // TODO: make sure this is unified everywhere
 }
-
+/*
 void transition_preferences(const DirectorySpecifier& legacy_prefs_dir);
 
 #include "cseries.h"
