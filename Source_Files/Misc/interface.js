@@ -151,7 +151,7 @@ const PseudoPlayers = Object.freeze({
 	NUMBER_OF_PSEUDO_PLAYERS: 5
 });
 
-const GameStates = Object.freeze({
+export const GameStates = Object.freeze({
 	_display_intro_screens: 0,
 	_display_main_menu: 1,
 	_display_chapter_heading: 2,
