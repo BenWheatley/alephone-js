@@ -43,7 +43,6 @@ export function alert_corrupted_map(error) {
 }
 
 /*
-#import <Cocoa/Cocoa.h>
 #include "cstypes.h"
 
 void system_alert_user(const char* message, short severity)
@@ -96,15 +95,9 @@ void system_launch_url_in_browser(const char *url)
 #include "sdl_dialogs.h"
 #include "sdl_widgets.h"
 
-#if defined(__WIN32__)
-#else
-#include <sys/wait.h>
-#endif
-
 //  Display alert message
 
 #ifdef __MACOSX__
-extern void system_alert_user(const char*, short);
 extern bool system_alert_choose_scenario(char *chosen_dir);
 #else
 void system_alert_user(const char* message, short severity)
@@ -165,14 +158,8 @@ bool system_alert_choose_scenario(char *chosen_dir)
 }
 #endif
 
-#ifdef __MACOSX__
-extern void system_launch_url_in_browser(const char *url);
-#else
 void system_launch_url_in_browser(const char *url)
 {
-#if defined(__WIN32__)
-	ShellExecuteW(NULL, L"open", utf8_to_wide(url).c_str(), NULL, NULL, SW_SHOWNORMAL);
-#else
 	pid_t pid = fork();
 	if (pid == 0)
 	{
@@ -186,14 +173,7 @@ void system_launch_url_in_browser(const char *url)
 		int childstatus;
 		wait(&childstatus);
 	}
-#endif
 }
-#endif
-
-const int MAX_ALERT_WIDTH = 320;
-
-extern void update_game_window(void);
-extern bool MainScreenVisible(void);
 */
 
 export function alert_user(...args) {
