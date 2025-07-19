@@ -1293,9 +1293,10 @@ void remove_timer_task(timer_task_proc proc)
 {
 	tm_func = NULL;
 }
+*/
 
-void execute_timer_tasks(uint32 time)
-{
+export function execute_timer_tasks(time) {
+/* stub. time was uint32
 	if (tm_func) {
 		if (Movie::instance()->IsRecording()) {
 			if (get_fps_target() == 0 ||
@@ -1321,6 +1322,5 @@ void execute_timer_tasks(uint32 time)
 			tm_func();
 		}
 	}
+	*/
 }
-
-*/
