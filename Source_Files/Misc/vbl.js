@@ -75,12 +75,8 @@ Aug 26, 2000 (Loren Petrich):
 Feb 20, 2002 (Woody Zenfell):
     Uses GetRealActionQueues()->enqueueActionFlags() rather than queue_action_flags().
 */
-
+/*
 #include "cseries.h"
-#include <string.h>
-#include <stdlib.h>
-
-#include <boost/algorithm/string/predicate.hpp>
 
 #include "map.h"
 #include "interface.h"
@@ -101,8 +97,6 @@ Feb 20, 2002 (Woody Zenfell):
 #include "Movie.h"
 #include "InfoTree.h"
 
-/* ---------- constants */
-
 #define RECORD_CHUNK_SIZE            (MAXIMUM_QUEUE_SIZE/2)
 #define END_OF_RECORDING_INDICATOR  (RECORD_CHUNK_SIZE+1)
 #define MAXIMUM_TIME_DIFFERENCE     15 // allowed between heartbeat_count and dynamic_world->tick_count
@@ -111,17 +105,12 @@ Feb 20, 2002 (Woody Zenfell):
 #define MAXIMUM_REPLAY_SPEED         5
 #define MINIMUM_REPLAY_SPEED        -5
 
-/* ---------- macros */
-
 #define INCREMENT_QUEUE_COUNTER(c) { (c)++; if ((c)>=MAXIMUM_QUEUE_SIZE) (c) = 0; }
 
 // LP: fake portable-files stuff
 inline short memory_error() {return 0;}
 
-/* ---------- structures */
 #include "vbl_definitions.h"
-
-/* ---------- globals */
 
 static int32 heartbeat_count;
 static bool input_task_active;
@@ -144,19 +133,6 @@ ActionQueue *get_player_recording_queue(
 }
 #endif
 
-/* ---------- private prototypes */
-static void remove_input_controller(void);
-static void save_recording_queue_chunk(short player_index);
-static void read_recording_queue_chunks(void);
-static short pull_flags_from_recording(short count);
-// LP modifications for object-oriented file handling; returns a test for end-of-file
-static bool vblFSRead(OpenedFile& File, int32 *count, void *dest, bool& HitEOF);
-static void record_action_flags(short player_identifier, const uint32 *action_flags, short count);
-static short get_recording_queue_size(short which_queue);
-
-static uint8 *unpack_recording_header(uint8 *Stream, recording_header *Objects, size_t Count);
-static uint8 *pack_recording_header(uint8 *Stream, recording_header *Objects, size_t Count);
-
 // #define DEBUG_REPLAY
 
 #ifdef DEBUG_REPLAY
@@ -165,7 +141,6 @@ static void debug_stream_of_flags(uint32 action_flag, short player_index);
 static void close_stream_file(void);
 #endif
 
-/* ---------- code */
 void initialize_keyboard_controller(
 	void)
 {
@@ -185,10 +160,10 @@ void initialize_keyboard_controller(
 	
 	atexit(remove_input_controller);
 	
-	/* Allocate the recording queues */	
+	// Allocate the recording queues
 	replay.recording_queues = new ActionQueue[MAXIMUM_NUMBER_OF_PLAYERS];
 	
-	/* Allocate the individual ones */
+	// Allocate the individual ones
 	for (player_index= 0; player_index<MAXIMUM_NUMBER_OF_PLAYERS; player_index++)
 	{
 		queue= get_player_recording_queue(player_index);
@@ -217,8 +192,6 @@ void set_keyboard_controller_status(
 		exit_mouse(input_preferences->input_device);
                 exit_joystick();
         }
-	
-	/******************************************************************************************/
 }
 
 bool get_keyboard_controller_status(
@@ -279,7 +252,7 @@ bool has_recording_file(void)
 
 bool first_frame_rendered = true;
 
-/* Called by the time manager task in vbl_macintosh.c */
+// Called by the time manager task in vbl_macintosh.c
 bool input_controller(
 	void)
 {
@@ -293,9 +266,9 @@ bool input_controller(
 			}
 			else if (replay.game_is_being_replayed) // input from recorded game file
 			{
-				static short phase= 0; /* When this gets to 0, update the world */
+				static short phase= 0; // When this gets to 0, update the world
 
-				/* Minimum replay speed is a pause. */
+				// Minimum replay speed is a pause.
 				if(replay.replay_speed != MINIMUM_REPLAY_SPEED)
 				{
 					if (replay.replay_speed > 0 || (--phase<=0))
@@ -313,12 +286,12 @@ bool input_controller(
 						}
 						else
 						{	
-							/* Increment the heartbeat.. */
+							// Increment the heartbeat..
 							heartbeat_count+= flag_count;
 						}
 	
-						/* Reset the phase-> doesn't matter if the replay speed is positive */					
-						/* +1 so that replay_speed 0 is different from replay_speed 1 */
+						// Reset the phase-> doesn't matter if the replay speed is positive
+						// +1 so that replay_speed 0 is different from replay_speed 1
 						phase= -(replay.replay_speed) + 1;
 					}
 				}
@@ -372,12 +345,8 @@ static void record_action_flags(
 	}
 }
 
-/*********************************************************************************************
- *
- * Function: save_recording_queue_chunk
- * Purpose:  saves one chunk of the queue to the recording file, using run-length encoding.
- *
- *********************************************************************************************/
+// Function: save_recording_queue_chunk
+// Purpose:  saves one chunk of the queue to the recording file, using run-length encoding.
 void save_recording_queue_chunk(
 	short player_index)
 {
@@ -448,13 +417,9 @@ void save_recording_queue_chunk(
 			count, buffer, count));
 }
 
-/*********************************************************************************************
- *
- * Function: pull_flags_from_recording
- * Purpose:  remove one flag from each queue from the recording buffer.
- * Returns:  number of flags actually pulled
- *
- *********************************************************************************************/
+// Function: pull_flags_from_recording
+// Purpose:  remove one flag from each queue from the recording buffer.
+// Returns:  number of flags actually pulled
 static short pull_flags_from_recording(
 	short count)
 {
@@ -488,7 +453,7 @@ static short get_recording_queue_size(
 	short size;
 	ActionQueue *queue= get_player_recording_queue(which_queue);
 
-	/* Note that this is a circular queue */
+	// Note that this is a circular queue
 	size= queue->write_index-queue->read_index;
 	if(size<0) size+= MAXIMUM_QUEUE_SIZE;
 	
@@ -560,7 +525,7 @@ bool setup_for_replay_from_file(
 		unpack_recording_header(Header,&replay.header,1);
 		replay.header.game_information.cheat_flags = _allow_crosshair | _allow_tunnel_vision | _allow_behindview | _allow_overlay_map;
 	
-		/* Set to the mapfile this replay came from.. */
+		// Set to the mapfile this replay came from..
 		if(use_map_file(replay.header.map_checksum))
 		{
 			replay.fsread_buffer= new char[DISK_CACHE_SIZE];
@@ -575,7 +540,7 @@ bool setup_for_replay_from_file(
 				Movie::instance()->PromptForRecording();
 			successful= true;
 		} else {
-			/* Tell them that this map wasn't found.  They lose. */
+			// Tell them that this map wasn't found.  They lose.
 			alert_user(infoError, strERRORS, cantFindReplayMap, 0);
 			replay.valid= false;
 			replay.game_is_being_replayed= false;
@@ -586,7 +551,7 @@ bool setup_for_replay_from_file(
 	return successful;
 }
 
-/* Note that we _must_ set the header information before we start recording!! */
+// Note that we _must_ set the header information before we start recording!!
 void start_recording(
 	void)
 {
@@ -598,7 +563,7 @@ void start_recording(
 
 	if (FilmFileSpec.Create(_typecode_film))
 	{
-		/* I debate the validity of fsCurPerm here, but Alain had it, and it has been working */
+		// I debate the validity of fsCurPerm here, but Alain had it, and it has been working
 		if (FilmFileSpec.Open(FilmFile,true))
 		{
 			replay.game_is_being_recorded= true;
@@ -627,7 +592,7 @@ void stop_recording(
 			save_recording_queue_chunk(player_index);
 		}
 
-		/* Rewrite the header, since it has the new length */
+		// Rewrite the header, since it has the new length
 		FilmFile.SetPosition(0);
 		byte Header[SIZEOF_recording_header];
 		pack_recording_header(Header,&replay.header,1);
@@ -652,12 +617,12 @@ void rewind_recording(
 {
 	if(replay.game_is_being_recorded)
 	{
-		/* This is unnecessary, because it is called from reset_player_queues, */
-		/* which is always called from revert_game */
-		/*
-		FilmFile.SetLength(sizeof(recording_header));
-		FilmFile.SetPosition(sizeof(recording_header));
-		*/
+		// This is unnecessary, because it is called from reset_player_queues,
+		// which is always called from revert_game
+		//
+		//FilmFile.SetLength(sizeof(recording_header));
+		//FilmFile.SetPosition(sizeof(recording_header));
+		//
 		// Alternative that does not use "SetLength", but instead creates and re-creates the file.
 		FilmFile.SetPosition(0);
 		byte Header[SIZEOF_recording_header];
@@ -755,7 +720,7 @@ void stop_replay(
 #endif
 	}
 
-	/* Unecessary, because reset_player_queues calls this. */
+	// Unecessary, because reset_player_queues calls this.
 	replay.valid= false;
 }
 
@@ -847,7 +812,7 @@ static void read_recording_queue_chunks(
 	}
 }
 
-/* This is gross, (Alain wrote it, not me!) but I don't have time to clean it up */
+// This is gross, (Alain wrote it, not me!) but I don't have time to clean it up
 static bool vblFSRead(
 	OpenedFile& File,
 	int32 *count, 
@@ -1043,9 +1008,7 @@ static struct special_flag_data special_flags[]=
 };
 
 
-/*
- *  Get FileDesc for replay, ask user if desired
- */
+//  Get FileDesc for replay, ask user if desired
 
 bool find_replay_to_use(bool ask_user, FileSpecifier &file)
 {
@@ -1056,9 +1019,7 @@ bool find_replay_to_use(bool ask_user, FileSpecifier &file)
 }
 
 
-/*
- *  Get FileDesc for default recording file
- */
+//  Get FileDesc for default recording file
 
 bool get_recording_filedesc(FileSpecifier &File)
 {
@@ -1068,9 +1029,7 @@ bool get_recording_filedesc(FileSpecifier &File)
 }
 
 
-/*
- *  Save film buffer to user-selected file
- */
+//  Save film buffer to user-selected file
 
 void move_replay(void)
 {
@@ -1109,9 +1068,7 @@ void encode_hotkey_sequence(int hotkey)
 		hotkey_used;
 }
 
-/*
- *  Poll keyboard and return action flags
- */
+//  Poll keyboard and return action flags
 
 uint32_t last_input_update;
 
@@ -1152,7 +1109,7 @@ uint32 parse_keymap(void)
 	  case _double_flag:
 	    // If this flag has a double-click flag and has been hit within
 	    // DOUBLE_CLICK_PERSISTENCE (but not at MAXIMUM_FLAG_PERSISTENCE),
-	    // mask on the double-click flag */
+	    // mask on the double-click flag
 	    if (special->persistence < MAXIMUM_FLAG_PERSISTENCE
 		&&	special->persistence > MAXIMUM_FLAG_PERSISTENCE - DOUBLE_CLICK_PERSISTENCE)
 	      flags |= special->alternate_flag;
@@ -1265,9 +1222,7 @@ uint32 parse_keymap(void)
 }
 
 extern std::vector<DirectorySpecifier> data_search_path;
-/*
- *  Get random demo replay from map
- */
+//  Get random demo replay from map
 
 bool setup_replay_from_random_resource()
 {
@@ -1316,10 +1271,7 @@ bool setup_replay_from_random_resource()
 }
 
 
-/*
- *  Periodic task management
- */
-
+//  Periodic task management
 typedef bool (*timer_func)(void);
 
 static timer_func tm_func = NULL;	// The installed timer task
@@ -1370,4 +1322,4 @@ void execute_timer_tasks(uint32 time)
 	}
 }
 
-
+*/
