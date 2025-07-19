@@ -44,6 +44,8 @@ const PREFERENCES_NAME_LENGTH = 32;
 /*
  *  shell.cpp - Main game loop and input handling
  */
+ 
+import * as shell_misc from './shell_misc.js';
 
 import * as xml from './XML/xml.js';
 import * as cseries from './CSeries/cseries.js';
@@ -62,20 +64,17 @@ import * as SoundManager from './Sound/SoundManager.js';
 import * as screen from './RenderOther/screen.js';
 import { Music } from './Sound/Music.js';
 import * as images from './RenderOther/images.js';
-/*
-#include "vbl.h"
-*/
+import * as vbl from './Misc/vbl.js';
 import * as preferences from './Misc/preferences.js';
 /*
 #include "tags.h" // for scenario file type..
 */
 import * as mouse from './Input/mouse.js';
 import * as joystick from './Input/joystick.js';
-import * as screen_drawing from "./RenderOther/screen_drawing.h"
+import * as screen_drawing from "./RenderOther/screen_drawing.js"
 /*
 #include "computer_interface.h"
 #include "game_wad.h" // yuck...
-#include "game_window.h" // for draw_interface()
 #include "extensions.h"
 #include "items.h"
 */

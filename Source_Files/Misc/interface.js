@@ -20,6 +20,7 @@ INTERFACE.H
 */
 
 import * as cseries from '../CSeries/cseries.js';
+import * as Logging from './Logging.js';
 
 export const strFILENAMES = 129;
 export const filenameSHAPES8 = 0;
@@ -212,9 +213,7 @@ import * as shell from '../shell.js';
 #include "game_errors.h"
 */
 import { Music } from '../Sound/Music.js';
-/*
-#include "images.h"
-*/
+import * as images from '../RenderOther/images.js';
 import * as screen from '../RenderOther/screen.js';
 /*
 #include "vbl.h"
