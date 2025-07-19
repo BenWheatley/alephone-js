@@ -27,7 +27,7 @@ using std::vector;
 
 // ---------- constants
 */
-const TICKS_PER_SECOND = 30;
+export const TICKS_PER_SECOND = 30;
 const TICKS_PER_MINUTE = (60 * TICKS_PER_SECOND);
 
 const MAP_INDEX_BUFFER_SIZE = 8192;
