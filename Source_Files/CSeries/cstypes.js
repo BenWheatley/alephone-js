@@ -37,4 +37,11 @@ export const MEG = 0x100000;
 export const KILO = 0x400;
 
 // Construct four-character-code
-/*#define FOUR_CHARS_TO_INT(a,b,c,d) (((uint32)(a) << 24) | ((uint32)(b) << 16) | ((uint32)(c) << 8) | (uint32)(d))*/
+export function FOUR_CHARS_TO_INT(str) {
+	return (
+		(str.charCodeAt(0) << 24) |
+		(str.charCodeAt(1) << 16) |
+		(str.charCodeAt(2) << 8)  |
+		(str.charCodeAt(3))
+	) >>> 0; // Ensure unsigned 32-bit
+}
