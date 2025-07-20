@@ -47,16 +47,26 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		height: 100vh;
+	}
+	
+	#canvasContainer {
+		position: relative;
+		width: 800px;
+		height: 600px;
 	}
 	
 	canvas {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 		display: block;
-		width: 800px;
-		height: 600px;
-		background-color: #040;
-		color: #0f0;
 		text-align: center;
 		font-size: 1rem;
+		background-color: #040;
+		color: #0f0;
 	}
 	
 	.game_frame {
@@ -70,6 +80,15 @@
 	
 	a:hover {
 		text-decoration: underline;
+	}
+	
+	#glCanvas {
+		z-index: 0;
+	}
+	
+	#2DCanvas {
+		z-index: 1;
+		pointer-events: none;
 	}
 	
 	#terminal {
@@ -147,9 +166,12 @@
 </head>
 <body>
   <main>
-    <canvas id="glCanvas" class="game_frame" width="800" height="600">
+    <div id='canvasContainer' class="game_frame">
+      <canvas id="glCanvas" width="800" height="600">
     Your browser does not support HTML5 Canvas or it has JavaScript/WebGL disabled. Please use a modern browser or enable JavaScript.
-    </canvas>
+      </canvas>
+      <canvas id="2DCanvas" width="800" height="600"></canvas>
+    </div>
     
     <div id="terminal">
       <div class="terminal_header">
