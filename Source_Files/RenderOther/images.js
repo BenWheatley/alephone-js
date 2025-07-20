@@ -50,6 +50,9 @@ const _images_file_delta32 = 2000;
 const _scenario_file_delta16 = 10000;
 const _scenario_file_delta32 = 20000;
 
+const _PICT = cseries.FOUR_CHARS_TO_INT('PICT');
+const _pict = cseries.FOUR_CHARS_TO_INT('pict');
+
 class image_file_t {
 	constructor() {
 		this.rsrc_file = null; // Original type: OpenedResourceFile
