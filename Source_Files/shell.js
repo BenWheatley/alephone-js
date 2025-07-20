@@ -173,7 +173,8 @@ bool handle_open_document(const std::string& filename)
 	return done;
 }
 */
-export async function initialize_application() {
+
+function initialize_glCanvas() {
 	const canvas = document.getElementById("glCanvas");
 	
 	if (!canvas) {
@@ -186,6 +187,26 @@ export async function initialize_application() {
 		console.error("Unable to initialize WebGL.");
 		return;
 	}
+}
+
+function initialize_2dCanvas() {
+	const canvas = document.getElementById("2DCanvas");
+	
+	if (!canvas) {
+		console.error("Canvas element with id '2DCanvas' not found.");
+		return;
+	}
+	
+	window._2DContext = canvas.getContext("2d");
+	if (!window._2DContext) {
+		console.error("Unable to initialize 2DCanvas.");
+		return;
+	}
+}
+
+export async function initialize_application() {
+	initialize_glCanvas();
+	initialize_2dCanvas();
 	
 	scenario_dir = a1_getenv("ALEPHONE_DEFAULT_DATA") + shell_options.shell_options.scenario_name + "/";
 	
