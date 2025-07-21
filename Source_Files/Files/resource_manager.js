@@ -27,8 +27,8 @@
 
 import * as Logging from '../Misc/Logging.js';
 
-export function is_applesingle(data, rsrc_fork) {
-	const dv = new DataView(data.buffer, data.byteOffset, data.byteLength);
+export function is_applesingle(dataView, rsrc_fork) {
+	const dv = dataView;
 	
 	// Check header
 	const id = dv.getUint32(0, false);      // Big-endian
@@ -57,7 +57,7 @@ export function is_macbinary(data) {
 	// This recognizes up to macbinary III (0x81)
 	if (data.length < 128) return null;
 
-	const header = data.subarray(0, 128);
+	const header = new Uint8Array(data.buffer, data.byteOffset, Math.min(128, data.byteLength));
 	if (header[0] !== 0 || header[1] > 63 || header[74] !== 0 || header[123] > 0x81) {
 		return null;
 	}

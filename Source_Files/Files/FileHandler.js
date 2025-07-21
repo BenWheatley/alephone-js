@@ -209,7 +209,7 @@ struct dir_entry {
 export class FileSpecifier {
 	constructor(url) {
 		this.url = url;
-		this.data = null; // Will hold Uint8Array of raw bytes
+		this.data = null; // Will hold DataView
 		this.is_forked = false;
 		this.fork_offset = 0;
 		this.fork_length = 0;
@@ -221,7 +221,7 @@ export class FileSpecifier {
 			const response = await fetch(this.url);
 			if (!response.ok) return false;
 			const buffer = await response.arrayBuffer();
-			this.data = new Uint8Array(buffer);
+			this.data = new DataView(buffer);
 		} catch (e) {
 			return false;
 		}
