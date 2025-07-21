@@ -17,17 +17,13 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
-import * as FileHandler from '../Files/FileHandler.js';
-
 // Select what resource file is to be the source of the color table;
 // this is for the benefit of resource-file 
 export const CLUTSource_Images = 0;
 export const CLUTSource_Scenario = 1;
 
 import * as cseries from '../CSeries/cseries.js';
-/*
-#include "FileHandler.h"
-*/
+import * as FileHandler from '../Files/FileHandler.js';
 import * as _interface from '../Misc/interface.js';
 import * as shell from '../shell.js';
 import * as screen from './screen.js';
