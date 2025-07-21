@@ -843,9 +843,13 @@ SDL_Surface *tile_surface(SDL_Surface *s, int width, int height)
 
 	return s2;
 }
-
+*/
 //  Draw picture resource centered on screen
-
+function draw_picture_surface(picture) {
+	// TODO: replace this stub into a complete conversion of the cpp in the following comment
+	window._2DContext.drawImage(picture);
+}
+/*
 static void draw_picture_surface(std::shared_ptr<SDL_Surface> s)
 {
 	if (!s)
