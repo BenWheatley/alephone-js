@@ -82,8 +82,9 @@ class image_file_t {
 	}
 	
 	is_open() {
-		// TODO: Not sure yet if I want this or not, given nature of JS/webapp
-		return false; 
+		// TODO: refactor this out
+		// it's redundant in JS, the old callbacks were ~ "do you have a file handler"
+		return true;
 	}
 
 	determine_pict_resource_id(base_id, delta16, delta32) {
