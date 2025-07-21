@@ -107,19 +107,19 @@ class image_file_t {
 		return false;
 	}
 
-	get_clut(id, rsrc) { // original used a pointer: LoadedResource &rsrc
+	get_clut(id) { // original used a pointer: LoadedResource &rsrc
 		// TODO: Load clut resource
-		return false;
+		return null;
 	}
 
-	get_snd(id, rsrc) { // original used a pointer: LoadedResource &rsrc
+	get_snd(id) { // original used a pointer: LoadedResource &rsrc
 		// TODO: Load sound resource
-		return false;
+		return null;
 	}
 
-	get_text(id, rsrc) { // original used a pointer: LoadedResource &rsrc
+	get_text(id) { // original used a pointer: LoadedResource &rsrc
 		// TODO: Load text resource
-		return false;
+		return null;
 	}
 
 	has_rsrc(rsrc_type, wad_type, id) {
