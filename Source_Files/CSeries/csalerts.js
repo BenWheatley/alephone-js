@@ -195,15 +195,6 @@ export function launch_url_in_browser(urlString) {
 /*
 extern "C" void debugger(const char *message);
 
-//  Jump into debugger (and return)
-
-void pause_debug(void)
-{
-        logNote("pause_debug called");
-	fprintf(stderr, "pause\n");
-}
-
-
 //  Display message
 
 void vpause(const char *message)
