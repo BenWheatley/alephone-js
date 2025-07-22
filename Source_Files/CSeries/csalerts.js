@@ -195,18 +195,6 @@ export function launch_url_in_browser(urlString) {
 /*
 extern "C" void debugger(const char *message);
 
-//  Jump into debugger (and don't return)
-
-void halt(void)
-{
-        logFatal("halt called");
-	fprintf(stderr, "halt\n");
-	abort();
-}
-
-
-//  Display message and halt
-
 extern void stop_recording();
 extern void shutdown_application();
 
