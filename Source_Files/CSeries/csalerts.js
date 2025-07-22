@@ -193,10 +193,6 @@ export function launch_url_in_browser(urlString) {
 }
 
 /*
-extern "C" void debugger(const char *message);
-
-extern void stop_recording();
-extern void shutdown_application();
 
 void vhalt(const char *message)
 {
