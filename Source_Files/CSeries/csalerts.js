@@ -181,12 +181,6 @@ function alert_user_4(severity, resid, item, error) {
 	}
 	alert_user(msg, severity);
 }
-/*
-bool alert_choose_scenario(char *chosen_dir)
-{
-	return system_alert_choose_scenario(chosen_dir);
-}
-*/
 
 export function launch_url_in_browser(urlString) {
 	window.open(urlString, '_blank');
