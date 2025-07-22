@@ -82,12 +82,6 @@ bool system_alert_choose_scenario(char *chosen_dir)
 	return [[[panel URL] path] getCString:chosen_dir maxLength:256 encoding:NSUTF8StringEncoding];
 }
 
-void system_launch_url_in_browser(const char *url)
-{
-	NSURL *urlref = [NSURL URLWithString:[NSString stringWithUTF8String:url]];
-	[[NSWorkspace sharedWorkspace] openURL:urlref];
-}
-
 #include "cseries.h"
 
 #include "Logging.h"
@@ -158,22 +152,6 @@ bool system_alert_choose_scenario(char *chosen_dir)
 }
 #endif
 
-void system_launch_url_in_browser(const char *url)
-{
-	pid_t pid = fork();
-	if (pid == 0)
-	{
-		// try xdg-open first, fallback to sensible-browser
-		execlp("xdg-open", "xdg-open", url, NULL);
-		execlp("sensible-browser", "sensible-browser", url, NULL);
-		exit(0);  // in case exec fails
-	}
-	else if (pid > 0)
-	{
-		int childstatus;
-		wait(&childstatus);
-	}
-}
 */
 
 export function alert_user(...args) {
@@ -208,14 +186,13 @@ bool alert_choose_scenario(char *chosen_dir)
 {
 	return system_alert_choose_scenario(chosen_dir);
 }
+*/
 
-void launch_url_in_browser(const char *url)
-{
-	fprintf(stderr, "System launch url: %s\n", url);
-	system_launch_url_in_browser(url);
+export function launch_url_in_browser(urlString) {
+	window.open(urlString, '_blank');
 }
 
-
+/*
 extern "C" void debugger(const char *message);
 
 //  Jump into debugger (and return)
