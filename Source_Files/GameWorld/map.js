@@ -21,8 +21,6 @@
 #include "world.h"
 #include "dynamic_limits.h"
 
-#include <vector>
-
 using std::vector;
 
 // ---------- constants
@@ -1399,12 +1397,6 @@ void reset_mml_texture_loading();
 #include "Console.h"
 #include "InfoTree.h"
 #include "flood_map.h"
-
-#include <string.h>
-#include <stdlib.h>
-#include <limits.h>
-
-#include <list>
 
 // ---------- constants
 

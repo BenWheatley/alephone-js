@@ -167,7 +167,6 @@ import * as cseries from '../CSeries/cseries.js';
 #include "FontHandler.h"
 
 #include "sdl_fonts.h"
-#include <string.h>
 
 #include <SDL2/SDL_ttf.h>
 #include "preferences.h"
