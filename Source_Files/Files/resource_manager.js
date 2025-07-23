@@ -25,6 +25,7 @@
 #include "FileHandler.h"
 */
 
+import * as FileHandler from './FileHandler.js';
 import * as Logging from '../Misc/Logging.js';
 
 export function is_applesingle(dataView, rsrc_fork) {
