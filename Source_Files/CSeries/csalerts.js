@@ -45,24 +45,6 @@ export function alert_corrupted_map(error) {
 /*
 #include "cstypes.h"
 
-void system_alert_user(const char* message, short severity)
-{
-	NSAlert *alert = [NSAlert new];
-	if (severity == infoError) 
-	{
-		[alert setMessageText: @"Warning"];
-		[alert setAlertStyle: NSWarningAlertStyle];
-	}
-	else
-	{
-		[alert setMessageText: @"Error"];
-		[alert setAlertStyle: NSCriticalAlertStyle];
-	}
-	[alert setInformativeText: [NSString stringWithUTF8String: message]];
-	[alert runModal];
-	[alert release];
-}
-
 #include "cseries.h"
 
 #include "Logging.h"
@@ -74,20 +56,6 @@ void system_alert_user(const char* message, short severity)
 
 #ifdef __MACOSX__
 #else
-void system_alert_user(const char* message, short severity)
-{
-#if defined(__WIN32__)
-	UINT type;
-	if (severity == infoError) {
-		type = MB_ICONWARNING|MB_OK;
-	} else {
-		type = MB_ICONERROR|MB_OK;
-	}
-	MessageBoxW(NULL, utf8_to_wide(message).c_str(), severity == infoError ? L"Warning" : L"Error", type);
-#else
-	fprintf(stderr, "%s: %s\n", severity == infoError ? "INFO" : "FATAL", message);
-#endif	
-}
 
 #if defined(__WIN32__)
 // callback to set starting location for Win32 "choose scenario" dialog
@@ -151,7 +119,7 @@ void vhalt(const char *message)
         logFatal("vhalt: %s", message);
 	GetCurrentLogger()->flush();
 	shutdown_application();
-	system_alert_user(message, fatalError);
+	alert(message + ", " + fatalError);
 	abort();
 }
 
