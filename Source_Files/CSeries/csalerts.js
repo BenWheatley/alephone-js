@@ -63,25 +63,6 @@ void system_alert_user(const char* message, short severity)
 	[alert release];
 }
 
-bool system_alert_choose_scenario(char *chosen_dir)
-{
-	NSOpenPanel *panel = [NSOpenPanel openPanel];
-	[panel setCanChooseFiles:NO];
-	[panel setCanChooseDirectories:YES];
-	[panel setAllowsMultipleSelection:NO];
-	[panel setTitle:@"Choose Scenario"];
-	[panel setMessage:@"Select a scenario to play:"];
-	[panel setPrompt:@"Choose"];
-	
-	if (!chosen_dir)
-		return false;
-	
-	if ([panel runModal] != NSFileHandlingPanelOKButton)
-		return false;
-	
-	return [[[panel URL] path] getCString:chosen_dir maxLength:256 encoding:NSUTF8StringEncoding];
-}
-
 #include "cseries.h"
 
 #include "Logging.h"
@@ -92,7 +73,6 @@ bool system_alert_choose_scenario(char *chosen_dir)
 //  Display alert message
 
 #ifdef __MACOSX__
-extern bool system_alert_choose_scenario(char *chosen_dir);
 #else
 void system_alert_user(const char* message, short severity)
 {
@@ -127,29 +107,6 @@ static int CALLBACK browse_callback_proc(HWND hwnd, UINT msg, LPARAM lparam, LPA
 }
 #endif
 
-bool system_alert_choose_scenario(char *chosen_dir)
-{
-#if defined(__WIN32__)
-	BROWSEINFOW bi = { 0 };
-	wchar_t path[MAX_PATH];
-	bi.lpszTitle = L"Select a scenario to play:";
-	bi.pszDisplayName = path;
-	bi.lpfn = browse_callback_proc;
-	bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | 0x00000200; // no "New Folder" button
-	LPITEMIDLIST pidl = SHBrowseForFolderW(&bi);
-	if (pidl)
-	{
-		SHGetPathFromIDListW(pidl, path);
-		const int chars_written = WideCharToMultiByte(CP_UTF8, 0, path, -1, chosen_dir, 256, NULL, NULL);
-		LPMALLOC pMalloc = NULL;
-		SHGetMalloc(&pMalloc);
-		pMalloc->Free(pidl);
-		pMalloc->Release();
-		return chars_written > 0;
-	}
-#endif
-	return false;
-}
 #endif
 
 */
