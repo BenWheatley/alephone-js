@@ -277,9 +277,6 @@ void transition_preferences(const DirectorySpecifier& legacy_prefs_dir);
 #include "tags.h"
 #include "Logging.h"
 
-#include <string.h>
-#include <stdlib.h>
-
 #include "sdl_dialogs.h"
 #include "sdl_fonts.h"
 #include "sdl_widgets.h"
@@ -293,24 +290,10 @@ void transition_preferences(const DirectorySpecifier& legacy_prefs_dir);
 #include "HTTP.h"
 #include "alephversion.h"
 
-#include <cmath>
-#include <sstream>
-#include <boost/algorithm/hex.hpp>
-
 #include "shell_options.h"
 #include "OpenALManager.h"
 #include "resource_manager.h"
 #include "XML_LevelScript.h"
-
-#ifdef HAVE_UNISTD_H
-#include <unistd.h>
-#endif
-
-#ifdef __WIN32__
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h> // for GetUserName()
-#include <lmcons.h>
-#endif
 
 // 8-bit support is still here if you undefine this, but you'll need to fix it
 // #define TRUE_COLOR_ONLY 1
