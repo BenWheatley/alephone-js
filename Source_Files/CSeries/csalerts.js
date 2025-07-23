@@ -51,32 +51,6 @@ export function alert_corrupted_map(error) {
 
 #include "sdl_dialogs.h"
 #include "sdl_widgets.h"
-
-//  Display alert message
-
-#ifdef __MACOSX__
-#else
-
-#if defined(__WIN32__)
-// callback to set starting location for Win32 "choose scenario" dialog
-static int CALLBACK browse_callback_proc(HWND hwnd, UINT msg, LPARAM lparam, LPARAM lpdata)
-{
-	WCHAR wcwd[MAX_PATH];
-	switch (msg)
-	{
-		case BFFM_INITIALIZED:
-			if (GetCurrentDirectoryW(MAX_PATH, wcwd))
-			{
-				SendMessageW(hwnd, BFFM_SETEXPANDED, TRUE, (LPARAM)wcwd);
-				SendMessageW(hwnd, BFFM_SETSELECTIONW, TRUE, (LPARAM)wcwd);
-			}
-	}
-	return 0;
-}
-#endif
-
-#endif
-
 */
 
 export function alert_user(...args) {
