@@ -1,6 +1,4 @@
-/*
-
-	Copyright (C) 1991-2001 and beyond by Bo Lindbergh
+/*	Copyright (C) 1991-2001 and beyond by Bo Lindbergh
 	and the "Aleph One" developers.
  
 	This program is free software; you can redistribute it and/or modify
@@ -16,10 +14,11 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
 */
 
 import * as cstrings from './csstrings.js';
+import * as cseries from './cseries.js';
+import * as Logging from '../Misc/Logging.js';
 
 export const infoError = 0;
 export const fatalError = 1;
@@ -41,14 +40,6 @@ export function alert_bad_extra_file(error) {
 export function alert_corrupted_map(error) {
 	alert_user_fatal(128, 23, error);
 }
-
-/*
-#include "cstypes.h"
-
-#include "cseries.h"
-
-#include "Logging.h"
-*/
 
 export function alert_user(...args) {
 	if (args.length === 2) {
