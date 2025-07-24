@@ -951,7 +951,6 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 		fprintf(stderr, "Can't open video display (%s)\n", SDL_GetError());
 		fprintf(stderr, "ERROR: Unable to find working display mode");
 		logWarning("Unable to find working display mode; exiting");
-		vhalt("Cannot find a working video mode.");
 	}
 	if (!context_created && !nogl) {
 		SDL_GL_CreateContext(main_screen);

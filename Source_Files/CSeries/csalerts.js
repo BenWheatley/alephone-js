@@ -84,17 +84,3 @@ function alert_user_4(severity, resid, item, error) {
 export function launch_url_in_browser(urlString) {
 	window.open(urlString, '_blank');
 }
-
-/*
-
-void vhalt(const char *message)
-{
-	stop_recording();
-        logFatal("vhalt: %s", message);
-	GetCurrentLogger()->flush();
-	shutdown_application();
-	alert(message + ", " + fatalError);
-	abort();
-}
-
-*/

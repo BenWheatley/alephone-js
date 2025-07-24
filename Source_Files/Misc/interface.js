@@ -2340,7 +2340,7 @@ static void finish_game(
 			break;
 
 		default:
-			vhalt(csprintf(temporary, "What is user %d?", game_state.user));
+			logAnomaly(csprintf(temporary, "What is user %d?", game_state.user));
 			break;
 	}
 	Movie::instance()->StopRecording();
