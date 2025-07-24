@@ -48,9 +48,6 @@ export function alert_corrupted_map(error) {
 #include "cseries.h"
 
 #include "Logging.h"
-
-#include "sdl_dialogs.h"
-#include "sdl_widgets.h"
 */
 
 export function alert_user(...args) {
