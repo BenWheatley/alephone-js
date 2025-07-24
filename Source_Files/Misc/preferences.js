@@ -25,9 +25,6 @@
 #include "shell.h"
 #include "SoundManager.h"
 
-// New preferences junk
-const float DEFAULT_MONITOR_REFRESH_FREQUENCY = 60;	// 60 Hz
-
 enum {
 	_sw_alpha_off,
 	_sw_alpha_fast,
