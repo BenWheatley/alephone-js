@@ -4,6 +4,7 @@ I would like to learn several things:
 
 * Old-school first-person game engines
 * JavaScript
+* Modern-ish GLSL
 * AI based software development
 
 So I'm planning to combine all three by converting this into JavaScript.
