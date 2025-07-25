@@ -7,7 +7,7 @@ I would like to learn several things:
 * Modern-ish GLSL
 * AI based software development
 
-So I'm planning to combine all three by converting this into JavaScript.
+So I'm planning to combine all ~~three~~ four by converting this into JavaScript.
 
 As for why Marathon: we have DOOM on enough platforms already, why not give the 90s Mac equivalent some love?
 
