@@ -231,6 +231,18 @@ class res_file_t {
     }
 }
 
+// List of open resource files
+const res_file_list = [];
+let cur_res_file_t = null;
+
+function find_res_file_t(f) {
+    for (let i = 0; i < res_file_list.length; ++i) {
+        if (res_file_list[i].f === f)
+            return i;
+    }
+    return -1;
+}
+
 // TODO: Translate remaining global functions and state
 // Summary of blockers:
 // - FileSpecifier must be ported
