@@ -235,12 +235,9 @@ class res_file_t {
 // Summary of blockers:
 // - FileSpecifier must be ported
 // - LoadedResource must be ported
-// - Logging.js and related context/logNote/etc. must be ported
 // - Full file manager (res_file_list, cur_res_file_t, open/close logic) still needed
 
 // Everything else from the C++ is directly portable and being translated in order
-
-
 
 
 
