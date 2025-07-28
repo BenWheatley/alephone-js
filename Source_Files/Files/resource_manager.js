@@ -2,9 +2,7 @@
 // Converted from resource_manager.cpp
 // NOTE: This file uses direct translations from C++ to JS. No idiomatic JS changes have been applied.
 
-import fs from 'fs';
-import path from 'path';
-import { logNote, logAnomaly, logTrace, logDump, logContext } from './Logging.js';
+import { logNote, logAnomaly, logTrace, logDump, logContext } from '../Misc/Logging.js';
 import { LoadedResource } from './LoadedResource.js'; // JS class for holding loaded data
 
 export function is_applesingle(dataView, rsrc_fork) {
