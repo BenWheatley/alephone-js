@@ -3,7 +3,7 @@
 // NOTE: This file uses direct translations from C++ to JS. No idiomatic JS changes have been applied.
 
 import { logNote, logAnomaly, logTrace, logDump, logContext } from '../Misc/Logging.js';
-import { LoadedResource } from './LoadedResource.js'; // JS class for holding loaded data
+import { LoadedResource } from './FileHandler.js';
 
 export function is_applesingle(dataView, rsrc_fork) {
     const dv = dataView;
