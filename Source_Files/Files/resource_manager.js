@@ -243,28 +243,118 @@ function find_res_file_t(f) {
     return -1;
 }
 
-// TODO: Translate remaining global functions and state
-// Summary of blockers:
-// - FileSpecifier must be ported
-// - LoadedResource must be ported
-// - Full file manager (res_file_list, cur_res_file_t, open/close logic) still needed
+// external resources: terminals for Marathon 1
+const ExternalResources = new OpenedResourceFile();
 
-// Everything else from the C++ is directly portable and being translated in order
+function set_external_resources_file(f) {
+    f.Open(ExternalResources);
+}
 
+// Arg was SDL_RWops, so should now be DataView
+function open_res_file_from_rwops(f) {
+    if (f) {
+        const r = new res_file_t(f);
+        if (r.read_map()) {
+            res_file_list.push(r);
+            cur_res_file_t = res_file_list.length - 1;
+            logNote("success, using this resource data (file is %p)", f);
+        } else {
+            // Error reading resource map, but this wasn't logged in original, just cleaned up memory
+            return null;
+        }
+    } else {
+        logNote("file could not be opened");
+    }
+    return f;
+}
 
+async function open_res_file_from_path(inPath) {
+	const url = inPath;
+	const response = await fetch(url);
+	if (!response.ok) {
+		throw new Error(`Failed to fetch resource file from ${url}: ${response.status}`);
+	}
+	const buffer = await response.arrayBuffer();
+	const dataView = new DataView(buffer);
+	const file = {
+		data: new Uint8Array(buffer),
+		dataView: dataView
+	};
+	return new res_file_t(file);
+}
 
+// Original arg type {FileSpecifier: file}
+function open_res_file(file) {
+    logContext(`opening resource file ${file.GetPath()}`);
 
+    const rsrc_file_name = file.GetPath() + ".rsrc";
+    const resources_file_name = file.GetPath() + ".resources";
+    const darwin_rsrc_file_name = file.GetPath() + "/..namedfork/rsrc";
 
+    // Open file, try <name>.rsrc first, then <name>.resources, then <name>/rsrc then <name>
+    let f = open_res_file_from_path(rsrc_file_name);
+    if (!f) f = open_res_file_from_path(resources_file_name);
+    if (!f) f = open_res_file_from_path(file.GetPath());
+    if (!f) f = open_res_file_from_path(darwin_rsrc_file_name);
 
+    return f;
+}
 
+function close_res_file(file) {
+    if (!file) return;
+    const i = find_res_file_t(file);
+    if (i !== -1) {
+        res_file_list.splice(i, 1);
+        cur_res_file_t = res_file_list.length ? res_file_list.length - 1 : null;
+    }
+}
 
+// Returns DataView for current resource file
+function cur_res_file() {
+    const r = res_file_list[cur_res_file_t];
+    if (!(r)) logError(`Expected to get something from cur_res_file(), actually got ${r} when accessing ${res_file_list} with index ${cur_res_file_t}`);
+    return r.f;
+}
 
+function use_res_file(file) {
+    const i = find_res_file_t(file);
+    assert(i !== -1);
+    cur_res_file_t = i;
+}
 
+function count_1_resources(type) {
+    return res_file_list[cur_res_file_t].count_resources(type);
+}
 
+function get_resource_id_list(type, ids) {
+    ids.length = 0;
+    if (!res_file_list.length) return;
+    for (let i = cur_res_file_t; i >= 0; --i)
+        res_file_list[i].get_resource_id_list(type, ids);
+}
 
+function get_1_resource(type, id, rsrc) {
+    return res_file_list[cur_res_file_t].get_resource(type, id, rsrc);
+}
 
+function get_resource(type, id, rsrc) {
+    if (!res_file_list.length) return false;
+    for (let i = cur_res_file_t; i >= 0; --i) {
+        if (res_file_list[i].get_resource(type, id, rsrc))
+            return true;
+    }
+    return false;
+}
 
+function has_1_resource(type, id) {
+    return res_file_list[cur_res_file_t].has_resource(type, id);
+}
 
-
-
-
+function has_resource(type, id) {
+    if (!res_file_list.length) return false;
+    for (let i = cur_res_file_t; i >= 0; --i) {
+        if (res_file_list[i].has_resource(type, id))
+            return true;
+    }
+    return false;
+}
