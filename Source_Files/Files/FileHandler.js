@@ -101,7 +101,10 @@ public:
 private:
 	OpenedFile& f;
 };
+*/
 
+export class LoadedResource { /* stub, not actual conversion */ }
+/*
 // Abstraction for loaded resources; this object will release that resource when it finishes. MacOS resource handles will be assumed to be locked.
 class LoadedResource
 {
