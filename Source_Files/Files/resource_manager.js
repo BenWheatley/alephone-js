@@ -2,8 +2,8 @@
 // Converted from resource_manager.cpp
 // NOTE: This file uses direct translations from C++ to JS. No idiomatic JS changes have been applied.
 
-import { LoadedResource } from './FileHandler.js';
 import { logNote, logAnomaly, logTrace, logDump } from '../Misc/Logging.js';
+import { LoadedResource } from './FileHandler.js'; // All (and only) args/vars named rsrc, are of type LoadedResource
 
 export function is_applesingle(dataView, rsrc_fork) {
     const dv = dataView;
