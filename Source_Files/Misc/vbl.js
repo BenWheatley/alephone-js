@@ -728,7 +728,7 @@ void stop_replay(
 static void read_recording_queue_chunks(
 	void)
 {
-	logContext("reading recording queue chunks");
+	logTrace("reading recording queue chunks");
 
 	int32 i, sizeof_read;
 	uint32 action_flags; 
