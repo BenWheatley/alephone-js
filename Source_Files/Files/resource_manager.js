@@ -3,7 +3,7 @@
 // NOTE: This file uses direct translations from C++ to JS. No idiomatic JS changes have been applied.
 
 import { logNote, logAnomaly, logTrace, logDump } from '../Misc/Logging.js';
-import { LoadedResource } from './FileHandler.js'; // All (and only) args/vars named rsrc, are of type LoadedResource
+import { LoadedResource, OpenedResourceFile } from './FileHandler.js'; // All (and only) args/vars named rsrc, are of type LoadedResource
 
 export function is_applesingle(dataView, rsrc_fork) {
     const dv = dataView;
@@ -239,13 +239,6 @@ function find_res_file_t(f) {
             return i;
     }
     return -1;
-}
-
-// external resources: terminals for Marathon 1
-const ExternalResources = new OpenedResourceFile();
-
-function set_external_resources_file(f) {
-    f.Open(ExternalResources);
 }
 
 // Arg was SDL_RWops, so should now be DataView
