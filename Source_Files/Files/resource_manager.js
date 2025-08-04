@@ -2,7 +2,7 @@
 // Converted from resource_manager.cpp
 // NOTE: This file uses direct translations from C++ to JS. No idiomatic JS changes have been applied.
 
-import { logNote, logAnomaly, logTrace, logDump } from '../Misc/Logging.js';
+import { logNote, logAnomaly, logTrace, logDump, logError } from '../Misc/Logging.js';
 import { LoadedResource, OpenedResourceFile } from './FileHandler.js'; // All (and only) args/vars named rsrc, are of type LoadedResource
 
 export function is_applesingle(dataView, rsrc_fork) {
@@ -275,7 +275,7 @@ async function open_res_file_from_path(inPath) {
 }
 
 // Original arg type {FileSpecifier: file}
-function open_res_file(file) {
+export function open_res_file(file) {
     logTrace(`opening resource file ${file.GetPath()}`);
 
     const rsrc_file_name = file.GetPath() + ".rsrc";
@@ -301,7 +301,7 @@ function close_res_file(file) {
 }
 
 // Returns DataView for current resource file
-function cur_res_file() {
+export function cur_res_file() {
     const r = res_file_list[cur_res_file_t];
     if (!(r)) logError(`Expected to get something from cur_res_file(), actually got ${r} when accessing ${res_file_list} with index ${cur_res_file_t}`);
     return r.f;
