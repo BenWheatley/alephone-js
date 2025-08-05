@@ -263,7 +263,7 @@ async function open_res_file_from_path(inPath) {
 	const url = inPath;
 	const response = await fetch(url);
 	if (!response.ok) {
-		throw new Error(`Failed to fetch resource file from ${url}: ${response.status}`);
+		logError(`Failed to fetch resource file from ${url}: ${response.status}`);
 	}
 	const buffer = await response.arrayBuffer();
 	const dataView = new DataView(buffer);
