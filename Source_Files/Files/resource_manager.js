@@ -235,7 +235,7 @@ let cur_res_file_t = null;
 
 function find_res_file_t(f) {
     for (let i = 0; i < res_file_list.length; ++i) {
-        if (res_file_list[i].f === f)
+        if (res_file_list[i].f === f.f)
             return i;
     }
     return -1;
