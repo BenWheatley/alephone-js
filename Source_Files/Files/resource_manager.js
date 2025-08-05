@@ -275,7 +275,7 @@ async function open_res_file_from_path(inPath) {
 }
 
 // Original arg type {FileSpecifier: file}
-export function open_res_file(file) {
+export async function open_res_file(file) {
     logTrace(`opening resource file ${file.GetPath()}`);
 
     const rsrc_file_name = file.GetPath() + ".rsrc";
@@ -283,10 +283,10 @@ export function open_res_file(file) {
     const darwin_rsrc_file_name = file.GetPath() + "/..namedfork/rsrc";
 
     // Open file, try <name>.rsrc first, then <name>.resources, then <name>/rsrc then <name>
-    let f = open_res_file_from_path(rsrc_file_name);
-    if (!f) f = open_res_file_from_path(resources_file_name);
-    if (!f) f = open_res_file_from_path(file.GetPath());
-    if (!f) f = open_res_file_from_path(darwin_rsrc_file_name);
+    let f = await open_res_file_from_path(rsrc_file_name);
+    if (!f) f = await open_res_file_from_path(resources_file_name);
+    if (!f) f = await open_res_file_from_path(file.GetPath());
+    if (!f) f = await open_res_file_from_path(darwin_rsrc_file_name);
 
     return f;
 }
