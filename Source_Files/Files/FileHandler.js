@@ -45,6 +45,8 @@ March 18, 2002 (Br'fin (Jeremy Parsons)):
 	Added FileSpecifier::SetParentToResources for Carbon
 */
 
+import * as resource_manager from './resource_manager.js';
+
 /*
 // For the filetypes
 #include "tags.h"
@@ -54,6 +56,12 @@ March 18, 2002 (Br'fin (Jeremy Parsons)):
 // Returned by .GetError() for unknown errors
 constexpr int unknown_filesystem_error = -1;
 
+*/
+
+export class OpenedFile {
+	// Stub
+}
+/*
 // Abstraction for opened files; it does reading, writing, and closing of such files, without doing anything to the files' specifications
 class OpenedFile
 {
@@ -103,7 +111,12 @@ private:
 };
 */
 
-export class LoadedResource { /* stub, not actual conversion */ }
+export class LoadedResource {
+	/* stub, not actual conversion */
+	Unload() {
+		this.p = null;
+	}
+}
 /*
 // Abstraction for loaded resources; this object will release that resource when it finishes. MacOS resource handles will be assumed to be locked.
 class LoadedResource
