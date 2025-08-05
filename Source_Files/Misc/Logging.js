@@ -42,7 +42,11 @@ export let loggingThreshhold = Level.note; // log messages at or above this leve
 export function logMessage(level, file, line, message, ...args) {
 	// TODO: rm `file`, `line` as not sensible in JS land, but only after app actually runs
 	if (level < loggingThreshhold) {
-		console.log(message, args); // We don't *actually need* a real formatter for this, it's debug info, it doesn't need to be pretty
+		let logFunction = console.log;
+		if (level <= Level.error) {
+			logFunction = console.error;
+		}
+		logFunction(message, args); // We don't *actually need* a real formatter for this, it's debug info, it doesn't need to be pretty
     }
 }
 
