@@ -154,46 +154,87 @@ public:
 	size_t size;	// Size of data
 };
 
+*/
 
-// Abstraction for opened resource files: it does opening, setting, and closing of such files; also getting "LoadedResource" objects that return pointers
-class OpenedResourceFile
-{
-	// This class will need to set the refnum and error value appropriately 
-	friend class FileSpecifier;
+export class OpenedResourceFile {
+	constructor(dataView = null) {
+		this.err = 0;
+		this.f = dataView; // DataView
+		this.saved_f = null; // DataView
+	}
 	
-public:
-	
-	// Pushing and popping the current file -- necessary in the MacOS version,
-	// since resource forks are globally open with one of them the current top one.
-	// Push() saves the earlier top one makes the current one the top one,
-	// while Pop() restores the earlier top one.
-	// Will leave SetResLoad in the state of true.
-	bool Push();
-	bool Pop();
-
+	// TODO: when everything works, see if I can get rid of push/pop because I started this about 24 years after resource forks became obsolete
+	// TODO: confusing comments for original Push/Pop:
+	// Pushing and popping the current file -- necessary in the MacOS version, since resource forks are globally open with one of them the current top one.
+	// vs.
 	// Pushing and popping are unnecessary for the MacOS versions of Get() and Check()
-	// Check simply checks if a resource is present; returns whether it is or not
-	// Get loads a resource; returns whether or not one had been successfully loaded
-	// CB: added functions that take 4 characters instead of uint32, which is more portable
-	bool Check(uint32 Type, int16 ID);
-	bool Check(uint8 t1, uint8 t2, uint8 t3, uint8 t4, int16 ID) {return Check(FOUR_CHARS_TO_INT(t1, t2, t3, t4), ID);}
-	bool Get(uint32 Type, int16 ID, LoadedResource& Rsrc);
-	bool Get(uint8 t1, uint8 t2, uint8 t3, uint8 t4, int16 ID, LoadedResource& Rsrc) {return Get(FOUR_CHARS_TO_INT(t1, t2, t3, t4), ID, Rsrc);}
 
-	bool IsOpen();
-	bool Close();
+	Push() {
+		this.saved_f = resource_manager.cur_res_file();
+		if (this.saved_f !== this.f)
+			resource_manager.use_res_file(this.f);
+		this.err = 0;
+		return true;
+	}
 	
-	OpenedResourceFile();
-	~OpenedResourceFile() {Close();}	// Auto-close when destroying
+	Pop() {
+		if (this.f !== this.saved_f) {
+			resource_manager.use_res_file(this.saved_f);
+		}
+		this.err = 0;
+		return true;
+	}
 
-	int GetError() {return err;}
+	// Check simply checks if a resource is present; returns whether it is or not
+	// id is 4-bytes from FOUR_CHARS_TO_INT
+	Check(Type, ID) {
+		this.Push();
+		const result = resource_manager.has_1_resource(Type, ID);
+		this.err = result ? 0 : ENOENT;
+		this.Pop();
+		return result;
+	}
 
-private:
-	int err;		// Error code
-	SDL_RWops *f, *saved_f;
-};
+	// Get loads a resource; returns what used to be stored in rsrc ptr, !=null -> success
+	Get(Type, ID, rsrc) {
+		this.Push();
+		const result = resource_manager.get_1_resource(Type, ID, rsrc);
+		this.err = (result != null) ? 0 : ENOENT;
+		this.Pop();
+		return result;
+	}
+	
+	// Overload with 4 characters
+	GetChars(t1, t2, t3, t4, id, rsrc) {
+		return this.Get(FOUR_CHARS_TO_INT(t1, t2, t3, t4), id, rsrc);
+	}
 
+	// Whether file is open
+	IsOpen() {
+		return this.f != null;
+	}
 
+	// Close the file
+	Close() {
+		this.f = null;
+		this.err = 0;
+		return true;
+	}
+
+	// TODO: implement according to original
+	Open(dataView) {
+		this.f = dataView;
+		this._isOpen = true;
+		return true;
+	}
+
+	// Return current error code
+	GetError() {
+		return this.err;
+	}
+}
+
+/*
 // Directories are treated like files
 #define DirectorySpecifier FileSpecifier
 
@@ -231,8 +272,18 @@ export class FileSpecifier {
 		this.fork_length = 0;
 	}
 
-	// replaces FileSpecifier::Open(OpenedFile &OFile, bool Writable)
-	async Open() {
+	async Open(OFile) {
+		if (OFile instanceof OpenedResourceFile) {
+			return await this.Open_OpenedResourceFile(OFile);
+		} else if (OFile instanceof OpenedFile) {
+			return await this.Open_OpenedFile(OFile);
+		} else {
+			throw new TypeError("OFile must be an instance of OpenedFile or OpenedResourceFile");
+		}
+	}
+	
+	// FileSpecifier::Open(OpenedFile &OFile, bool Writable)
+	async Open_OpenedFile() {
 		try {
 			const response = await fetch(this.url);
 			if (!response.ok) return false;
@@ -263,6 +314,30 @@ export class FileSpecifier {
 		// Default case: start at beginning
 		this.fork_offset = 0;
 		this.fork_length = this.data.length;
+		return true;
+	}
+	
+	// FileSpecifier::Open(OpenedResourceFile &OFile, bool Writable)
+	async Open_OpenedResourceFile(OFile) {
+		OFile.Close();
+		
+		const f = await resource_manager.open_res_file(this); // this = FileSpecifier instance
+		OFile.f = f;
+		
+		this.err = f ? 0 : 'unknown_filesystem_error';
+		return !!f;
+	}
+	
+	GetPath() {
+		return this.url;
+	}
+	
+	IsOpen() {
+		return this.f != null;
+	}
+	
+	Close() {
+		this.f = null;
 		return true;
 	}
 }
@@ -340,8 +415,6 @@ public:
 
 	// hide extensions known to Aleph One
 	static std::string HideExtension(const std::string& filename);
-	
-	const char *GetPath(void) const {return name.c_str();}
 
 	FileSpecifier();
 	FileSpecifier(const string &s) : name(s), err(0) {canonicalize_path();}
@@ -404,9 +477,6 @@ private:
 };
 
 #include "cseries.h"
-*/
-import * as resource_manager from './resource_manager.js';
-/*
 #include "shell.h"
 #include "interface.h"
 #include "screen.h"
@@ -663,24 +733,6 @@ bool OpenedResourceFile::Pop()
 		use_res_file(saved_f);
 	err = 0;
 	return true;
-}
-
-bool OpenedResourceFile::Check(uint32 Type, int16 ID)
-{
-	Push();
-	bool result = has_1_resource(Type, ID);
-	err = result ? 0 : ENOENT;
-	Pop();
-	return result;
-}
-
-bool OpenedResourceFile::Get(uint32 Type, int16 ID, LoadedResource &Rsrc)
-{
-	Push();
-	bool success = get_1_resource(Type, ID, Rsrc);
-	err = success ? 0 : ENOENT;
-	Pop();
-	return success;
 }
 
 bool OpenedResourceFile::IsOpen()

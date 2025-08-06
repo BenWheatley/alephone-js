@@ -267,14 +267,17 @@ async function open_res_file_from_path(inPath) {
 	}
 	const buffer = await response.arrayBuffer();
 	const dataView = new DataView(buffer);
-	const file = {
-		data: new Uint8Array(buffer),
-		dataView: dataView
-	};
-	return new res_file_t(file);
+	
+	const r = new res_file_t(dataView);
+	if (!r.read_map()) return null;
+	res_file_list.push(r);
+	cur_res_file_t = res_file_list.length - 1;
+	
+	return dataView;
 }
 
 // Original arg type {FileSpecifier: file}
+// Should return DataView
 export async function open_res_file(file) {
     logTrace(`opening resource file ${file.GetPath()}`);
 
@@ -307,9 +310,9 @@ export function cur_res_file() {
     return r.f;
 }
 
-function use_res_file(file) {
+export function use_res_file(file) {
     const i = find_res_file_t(file);
-    assert(i !== -1);
+    if (i == -1) { logError("Assertion failure: find_res_file_t returned -1"); }
     cur_res_file_t = i;
 }
 
@@ -324,7 +327,7 @@ function get_resource_id_list(type, ids) {
         res_file_list[i].get_resource_id_list(type, ids);
 }
 
-function get_1_resource(type, id, rsrc) {
+export function get_1_resource(type, id, rsrc) {
     return res_file_list[cur_res_file_t].get_resource(type, id, rsrc);
 }
 

@@ -51,16 +51,18 @@ const _pict = cseries.FOUR_CHARS_TO_INT('pict');
 
 class image_file_t {
 	constructor() {
-		this.rsrc_file = null; // Original type: OpenedResourceFile
-		this.wad_file = null;  // Original type: OpenedFile
-		this.wad_hdr = null;   // Original type: wad_header
+		this.rsrc_file = new FileHandler.OpenedResourceFile();
+		this.wad_file = new FileHandler.OpenedFile();
+		this.wad_hdr = null; // TODO = new FileHandler.wad_header();
+		
+		this.file = null;
 	}
 
 	//  Open/close image file
 	async open_file(url) {
 		// Try to open as a resource file
-		const file = new FileHandler.FileSpecifier(url);
-		const was_opened = await file.Open();
+		this.file = new FileHandler.FileSpecifier(url);
+		const was_opened = await this.file.Open(this.rsrc_file);
 		/*
 		if (!was_opened) {
 			// This failed, maybe it's a wad file (M2 Win95 style)
@@ -103,8 +105,10 @@ class image_file_t {
 	}
 
 	get_pict(id, rsrc) { // original used a pointer: LoadedResource &rsrc
-		// TODO: Load pict resource
-		return false;
+		let result = this.get_rsrc(_PICT, _PICT, id, rsrc)
+			|| this.get_rsrc(_PICT, _pict, id, rsrc);
+		
+		return result;
 	}
 
 	get_clut(id) { // original used a pointer: LoadedResource &rsrc
@@ -128,8 +132,58 @@ class image_file_t {
 	}
 
 	get_rsrc(rsrc_type, wad_type, id, rsrc) { // original used a pointer: LoadedResource &rsrc
-		// TODO: Generic resource loader
-		return false;
+		// Get resource from resource file
+		let result = null;
+		if (this.rsrc_file.IsOpen()) this.rsrc_file.Get(rsrc_type, id, rsrc);
+		if (result != null) return result;
+		
+		// Get resource from wad file
+/* TODO: continue converting this CPP into JS
+		wad_data *d = read_indexed_wad_from_file(wad_file, &wad_hdr, id, true);
+		if (d) {
+			bool success = false;
+			size_t raw_length;
+			void *raw = extract_type_from_wad(d, wad_type, &raw_length);
+			if (raw)
+			{
+				if (rsrc_type == FOUR_CHARS_TO_INT('P','I','C','T'))
+				{
+					if (wad_type == FOUR_CHARS_TO_INT('P','I','C','T'))
+					{
+						void *pict_data = malloc(raw_length);
+						memcpy(pict_data, raw, raw_length);
+						rsrc.SetData(pict_data, raw_length);
+						success = true;
+					}
+					else
+					{
+						size_t clut_length;
+						void *clut_data = extract_type_from_wad(d, FOUR_CHARS_TO_INT('c','l','u','t'), &clut_length);
+						success = make_rsrc_from_pict(raw, raw_length, rsrc, clut_data, clut_length);
+					}
+				}
+				else if (rsrc_type == FOUR_CHARS_TO_INT('c','l','u','t'))
+					success = make_rsrc_from_clut(raw, raw_length, rsrc);
+				else if (rsrc_type == FOUR_CHARS_TO_INT('s','n','d',' '))
+				{
+					void *snd_data = malloc(raw_length);
+					memcpy(snd_data, raw, raw_length);
+					rsrc.SetData(snd_data, raw_length);
+					success = true;
+				}
+				else if (rsrc_type == FOUR_CHARS_TO_INT('T','E','X','T'))
+				{
+					void *text_data = malloc(raw_length);
+					memcpy(text_data, raw, raw_length);
+					rsrc.SetData(text_data, raw_length);
+					success = true;
+				}
+			}
+			return success;
+		}
+*/
+		
+		return result;
 	}
 
 	make_rsrc_from_pict(data, length, rsrc, clut_data, clut_length) { // original used a pointer: LoadedResource &rsrc
@@ -992,7 +1046,8 @@ export async function initialize_images_manager() {
 
 	file = new URL(shell.scenario_dir + cseries.getcstr(_interface.strFILENAMES, _interface.filenameIMAGES));
 	
-	if (!ImagesFile.open_file(file)) {
+	let opened = await ImagesFile.open_file(file);
+	if (!opened) {
         alert("Images file could not be opened");
 	}
 }
@@ -1076,70 +1131,6 @@ bool image_file_t::has_clut(int id)
 	return has_rsrc(FOUR_CHARS_TO_INT('c','l','u','t'), FOUR_CHARS_TO_INT('c','l','u','t'), id);
 }
 
-bool image_file_t::get_rsrc(uint32 rsrc_type, uint32 wad_type, int id, LoadedResource &rsrc)
-{
-	// Get resource from resource file
-	if (rsrc_file.IsOpen())
-	{
-		if (rsrc_file.Get(rsrc_type, id, rsrc))
-			return true;
-	}
-	
-	// Get resource from wad file
-	if (wad_file.IsOpen()) {
-		wad_data *d = read_indexed_wad_from_file(wad_file, &wad_hdr, id, true);
-		if (d) {
-			bool success = false;
-			size_t raw_length;
-			void *raw = extract_type_from_wad(d, wad_type, &raw_length);
-			if (raw)
-			{
-				if (rsrc_type == FOUR_CHARS_TO_INT('P','I','C','T'))
-				{
-					if (wad_type == FOUR_CHARS_TO_INT('P','I','C','T'))
-					{
-						void *pict_data = malloc(raw_length);
-						memcpy(pict_data, raw, raw_length);
-						rsrc.SetData(pict_data, raw_length);
-						success = true;
-					}
-					else
-					{
-						size_t clut_length;
-						void *clut_data = extract_type_from_wad(d, FOUR_CHARS_TO_INT('c','l','u','t'), &clut_length);
-						success = make_rsrc_from_pict(raw, raw_length, rsrc, clut_data, clut_length);
-					}
-				}
-				else if (rsrc_type == FOUR_CHARS_TO_INT('c','l','u','t'))
-					success = make_rsrc_from_clut(raw, raw_length, rsrc);
-				else if (rsrc_type == FOUR_CHARS_TO_INT('s','n','d',' '))
-				{
-					void *snd_data = malloc(raw_length);
-					memcpy(snd_data, raw, raw_length);
-					rsrc.SetData(snd_data, raw_length);
-					success = true;
-				}
-				else if (rsrc_type == FOUR_CHARS_TO_INT('T','E','X','T'))
-				{
-					void *text_data = malloc(raw_length);
-					memcpy(text_data, raw, raw_length);
-					rsrc.SetData(text_data, raw_length);
-					success = true;
-				}
-			}
-			free_wad(d);
-			return success;
-		}
-	}
-	
-	return false;
-}
-
-bool image_file_t::get_pict(int id, LoadedResource &rsrc)
-{
-	return get_rsrc(FOUR_CHARS_TO_INT('P','I','C','T'), FOUR_CHARS_TO_INT('P','I','C','T'), id, rsrc) || get_rsrc(FOUR_CHARS_TO_INT('P','I','C','T'), FOUR_CHARS_TO_INT('p','i','c','t'), id, rsrc);
-}
-
 bool image_file_t::get_clut(int id, LoadedResource &rsrc)
 {
 	return get_rsrc(FOUR_CHARS_TO_INT('c','l','u','t'), FOUR_CHARS_TO_INT('c','l','u','t'), id, rsrc);
@@ -1157,21 +1148,21 @@ bool image_file_t::get_text(int id, LoadedResource &rsrc)
 */
 //  Get/draw image from Images file
 
-export function get_picture_resource_from_images(base_resource) {
+export function get_picture_resource_from_images(base_resource, PictRsrc) {
 /* TODO: all branches needs testing */
 	if (ImagesFile.is_open()) {
 		const id = ImagesFile.determine_pict_resource_id(base_resource, _images_file_delta16, _images_file_delta32);
-		let result = ImagesFile.get_pict(id);
+		let result = ImagesFile.get_pict(id, PictRsrc);
 		if (result != null) return result;
 	}
 
 	if (ExternalResourcesFile.is_open()) {
-		let result = ExternalResourcesFile.get_pict(base_resource);
+		let result = ExternalResourcesFile.get_pict(base_resource, PictRsrc);
 		if (result != null) return result;
 	}
 
 	if (ShapesImagesFile.is_open()) {
-		let result = ShapesImagesFile.get_pict(base_resource);
+		let result = ShapesImagesFile.get_pict(base_resource, PictRsrc);
 		if (result != null) return result;
 	}
 	return null;
@@ -1340,7 +1331,8 @@ static bool m1_draw_full_screen_pict_resource_from_images(int pict_resource_numb
 */
 export function draw_full_screen_pict_resource_from_images(pict_resource_number) {
 	// TODO: properly convert draw_full_screen_pict_resource_from_images to JS, this method at the moment is just a stub
-	let resource = get_picture_resource_from_images(pict_resource_number);
+	let PictRsrc = new FileHandler.LoadedResource();
+	let resource = get_picture_resource_from_images(pict_resource_number, PictRsrc);
 	if (resource != null) {
 		draw_picture(resource);
 	}
