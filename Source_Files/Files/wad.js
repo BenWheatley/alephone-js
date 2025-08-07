@@ -16,6 +16,9 @@
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
 */
+
+import { DataViewReader } from '../Misc/DataViewReader.js';
+
 /*
 #include "tags.h"
 
