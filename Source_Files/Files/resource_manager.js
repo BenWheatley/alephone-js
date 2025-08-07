@@ -340,7 +340,7 @@ function get_resource(type, id, rsrc) {
     return false;
 }
 
-function has_1_resource(type, id) {
+export function has_1_resource(type, id) {
     return res_file_list[cur_res_file_t].has_resource(type, id);
 }
 
