@@ -111,50 +111,47 @@ private:
 };
 */
 
+// Abstraction for loaded resources; this object will release that resource when it finishes. MacOS resource handles will be assumed to be locked.
 export class LoadedResource {
-	/* stub, not actual conversion */
+	constructor() {
+		this.p = null;
+		this.size = 0;
+	}
+	
+	IsLoaded() {
+		return this.p != null;
+	}
+	
 	Unload() {
 		this.p = null;
+		this.size = 0;
 	}
+	
+	GetLength() {
+		return this.size;
+	}
+	
+	GetPointer(DoDetach) {
+		let ret = this.p;
+		if (DoDetach)
+			this.Detach();
+		return ret;
+	}
+	
+	// C++ says: Make resource from raw resource data; the caller gives up ownership of the pointed to memory block
+	SetData(data, length) {
+		this.Unload();
+		this.p = data;
+		this.size = length;
+	}
+	
+	// C++ says: Detaches an allocated resource from this object (keep private to avoid memory leaks)
+	Detach() {
+		this.p = null;
+		this.size = 0;
+	}
+
 }
-/*
-// Abstraction for loaded resources; this object will release that resource when it finishes. MacOS resource handles will be assumed to be locked.
-class LoadedResource
-{
-	// This class grabs a resource to be loaded into here
-	friend class OpenedResourceFile;
-	
-public:
-	// Resource loaded?
-	bool IsLoaded();
-	
-	// Unloads the resource
-	void Unload();
-	
-	// Get size of loaded resource
-	size_t GetLength();
-	
-	// Get pointer (always present)
-	void *GetPointer(bool DoDetach = false);
-
-	// Make resource from raw resource data; the caller gives up ownership
-	// of the pointed to memory block
-	void SetData(void *data, size_t length);
-	
-	LoadedResource();
-	~LoadedResource() {Unload();}	// Auto-unload when destroying
-
-private:
-	// Detaches an allocated resource from this object
-	// (keep private to avoid memory leaks)
-	void Detach();
-
-public:
-	void *p;		// Pointer to resource data (malloc()ed)
-	size_t size;	// Size of data
-};
-
-*/
 
 export class OpenedResourceFile {
 	constructor(dataView = null) {
@@ -668,51 +665,6 @@ std::streampos opened_file_device::seek(io::stream_offset off, std::ios_base::se
 
 	return pos - static_cast<std::streampos>(f.fork_offset);
 }
-
-// Loaded resource
-
-LoadedResource::LoadedResource() : p(NULL), size(0) {}
-
-bool LoadedResource::IsLoaded()
-{
-	return p != NULL;
-}
-
-void LoadedResource::Unload()
-{
-	if (p) {
-		free(p);
-		p = NULL;
-		size = 0;
-	}
-}
-
-size_t LoadedResource::GetLength()
-{
-	return size;
-}
-
-void *LoadedResource::GetPointer(bool DoDetach)
-{
-	void *ret = p;
-	if (DoDetach)
-		Detach();
-	return ret;
-}
-
-void LoadedResource::SetData(void *data, size_t length)
-{
-	Unload();
-	p = data;
-	size = length;
-}
-
-void LoadedResource::Detach()
-{
-	p = NULL;
-	size = 0;
-}
-
 
 // Opened resource file
 
