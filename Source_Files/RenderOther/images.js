@@ -90,13 +90,51 @@ class image_file_t {
 	}
 
 	determine_pict_resource_id(base_id, delta16, delta32) {
-		// TODO: Implement ID calculation logic
-		return -1;
+		let actual_id = base_id;
+		let done = false;
+		let bit_depth = 32;
+		
+		while (!done) {
+			let next_bit_depth;
+			
+			actual_id = base_id;
+			switch (bit_depth) {
+				case 8:
+					next_bit_depth = 0;
+					break;
+				
+				case 16:
+					next_bit_depth = 8;
+					actual_id += delta16;
+					break;
+				
+				case 32:
+					next_bit_depth = 16;
+					actual_id += delta32;
+					break;
+				
+				default:
+					throw new Error("Invalid bit depth in determine_pict_resource_id");
+			}
+			
+			if (this.has_pict(actual_id))
+				done = true;
+			
+			if (!done) {
+				if (next_bit_depth)
+					bit_depth = next_bit_depth;
+				else {
+					// Didn't find it. Return the 8 bit version and bail..
+					done = true;
+				}
+			}
+		}
+		
+		return actual_id;
 	}
 
 	has_pict(id) {
-		// TODO: Check presence of pict resource
-		return false;
+		return this.has_rsrc(_PICT, _PICT, id) || this.has_rsrc(_PICT, _pict, id);
 	}
 
 	has_clut(id) {
@@ -130,7 +168,30 @@ class image_file_t {
 		// TODO: Generic check for resource presence
 		return false;
 	}
-
+	
+	has_rsrc(rsrc_type, wad_type, id) {
+		// Check for resource in resource file
+		if (this.rsrc_file.IsOpen()) {
+			if (this.rsrc_file.Check(rsrc_type, id))
+				return true;
+		}
+		
+		// Check for resource in wad file
+		if (this.wad_file.IsOpen()) {
+		// Note: original used &wad_hdr, so be sure of return-by-mutation-value here
+			const d = read_indexed_wad_from_file(this.wad_file, this.wad_hdr, id, true);
+			if (d) {
+				let success = false;
+				let len; // Note: original used &len, hence these shenanigans. I don't think I need it?
+				if (wad.extract_type_from_wad(d, wad_type, (l) => { len = l; }))
+					success = true;
+				return success;
+			}
+		}
+		
+		return false;
+	}
+	
 	get_rsrc(rsrc_type, wad_type, id, rsrc) { // original used a pointer: LoadedResource &rsrc
 		// Get resource from resource file
 		let result = null;
