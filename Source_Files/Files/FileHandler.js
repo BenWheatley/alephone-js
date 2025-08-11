@@ -131,7 +131,7 @@ export class LoadedResource {
 		return this.size;
 	}
 	
-	GetPointer(DoDetach) {
+	GetPointer(DoDetach = false) {
 		let ret = this.p;
 		if (DoDetach)
 			this.Detach();
