@@ -676,6 +676,7 @@ async function picture_to_surface(rsrc) {
 				
 				// Allocate surface for picture. Always 32 bit in JS-land.
 				let bm = new Uint8ClampedArray(width * height * 4);
+				bm.fill(255); // The original in this case had no alpha channel here, this has the same effect
 				
 				// 2. ColorTable
 				let colors = null;
