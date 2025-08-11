@@ -1,5 +1,4 @@
 /*
-
 	Copyright (C) 1991-2001 and beyond by Bo Lindbergh
 	and the "Aleph One" developers.
  
@@ -16,48 +15,36 @@
 	This license is contained in the file "COPYING",
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
-
 */
 
-#include "cseries.h"
-#include "byte_swapping.h"
+export const _2byte = -2;
+export const _4byte = -4;
 
-
-#ifdef ALEPHONE_LITTLE_ENDIAN
-
-// Fieldcount is "int" because it can become negative in the code
-void byte_swap_memory(
-	void *memory,
-	_bs_field type,
-	int fieldcount)
-{
-	uint8 *walk;
-	int tmp;
-
-	walk=(uint8 *)memory;
+export function byte_swap_memory(memory, type, fieldcount) {
+	let walk = new Uint8Array(memory.buffer, memory.byteOffset, memory.length);
+	let tmp;
+	
 	switch (type) {
-	case _2byte:
-		while (fieldcount>0) {
-			tmp=walk[0];
-			walk[0]=walk[1];
-			walk[1]=tmp;
-			walk+=2;
-			fieldcount--;
-		}
-		break;
-	case _4byte:
-		while (fieldcount>0) {
-			tmp=walk[0];
-			walk[0]=walk[3];
-			walk[3]=tmp;
-			tmp=walk[1];
-			walk[1]=walk[2];
-			walk[2]=tmp;
-			walk+=4;
-			fieldcount--;
-		}
-		break;
+		case _2byte:
+			while (fieldcount > 0) {
+				tmp = walk[0];
+				walk[0] = walk[1];
+				walk[1] = tmp;
+				walk = walk.subarray(2);
+				fieldcount--;
+			}
+			break;
+		case _4byte:
+			while (fieldcount > 0) {
+				tmp = walk[0];
+				walk[0] = walk[3];
+				walk[3] = tmp;
+				tmp = walk[1];
+				walk[1] = walk[2];
+				walk[2] = tmp;
+				walk = walk.subarray(4);
+				fieldcount--;
+			}
+			break;
 	}
 }
-
-#endif
