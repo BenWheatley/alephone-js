@@ -28,6 +28,12 @@ export class DataViewReader {
     this.offset += 2;
     return val;
   }
+  
+  readInt32() {
+    const val = this.dataView.getInt32(this.offset, this.littleEndian);
+    this.offset += 4;
+    return val;
+  }
 
   readUint16() {
     const val = this.dataView.getUint16(this.offset, this.littleEndian);
@@ -39,6 +45,13 @@ export class DataViewReader {
     const val = this.dataView.getUint32(this.offset, this.littleEndian);
     this.offset += 4;
     return val;
+  }
+  
+  // Caution: this presumes you're giving a valid length, your own problem if you don't
+  readBytes(length) {
+    const bytes = new Uint8Array(this.dataView.buffer, this.dataView.byteOffset + this.offset, length);
+    this.offset += length;
+    return bytes;
   }
 
   // Add more methods as needed...
