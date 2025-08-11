@@ -114,7 +114,7 @@ private:
 // Abstraction for loaded resources; this object will release that resource when it finishes. MacOS resource handles will be assumed to be locked.
 export class LoadedResource {
 	constructor() {
-		this.p = null;
+		this.p = null; // Byte array? Original is `void *`
 		this.size = 0;
 	}
 	
