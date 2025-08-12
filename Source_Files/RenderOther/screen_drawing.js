@@ -114,13 +114,18 @@ enum { // Fonts for the interface et al..
 	_net_stats_font,
 	NUMBER_OF_INTERFACE_FONTS
 };
-
+*/
 // Structure for portable rectangles.  notice it is exactly same as Rect
-struct screen_rectangle {
-	short top, left;
-	short bottom, right;
-};
-typedef struct screen_rectangle screen_rectangle;
+export class screen_rectangle {
+	// Note for any byte-level access, in original C++ these were all "short"
+	constructor(top = 0, left = 0, bottom = 0, right = 0) {
+		this.top = top;
+		this.left = left;
+		this.bottom = bottom;
+		this.right = right;
+	}
+}
+/*
 
 struct world_point2d;
 
@@ -315,12 +320,12 @@ static SDL_Surface *old_draw_surface = NULL;
 // used in computer_interface.cpp
 extern font_info *GetInterfaceFont(short font_index);
 extern uint16 GetInterfaceStyle(short font_index);
-
-bool draw_clip_rect_active = false;			// Flag: clipping rect active
-screen_rectangle draw_clip_rect;			// Current clipping rectangle
-
+*/
+export let draw_clip_rect_active = false;			// Flag: clipping rect active
+export let draw_clip_rect = screen_rectangle();		// Current clipping rectangle
+/*
 // From screen_sdl.cpp
-extern SDL_Surface *world_pixels, *HUD_Buffer, *Term_Buffer, *Intro_Buffer, *Map_Buffer;
+extern SDL_Surface *world_pixels, *HUD_Buffer, *Term_Buffer, *Map_Buffer;
 extern bool intro_buffer_changed;
 
 // Prototypes
@@ -348,25 +353,11 @@ void _set_port_to_HUD(void)
 	draw_surface = HUD_Buffer;
 }
 
-void _restore_port(void)
-{
-	draw_surface = old_draw_surface;
-	old_draw_surface = NULL;
-}
-
 void _set_port_to_term(void)
 {
 	assert(old_draw_surface == NULL);
 	old_draw_surface = draw_surface;
 	draw_surface = Term_Buffer;
-}
-
-void _set_port_to_intro(void)
-{
-	assert(old_draw_surface == NULL);
-	old_draw_surface = draw_surface;
-	draw_surface = Intro_Buffer;
-	intro_buffer_changed = true;
 }
 
 void _set_port_to_map(void)

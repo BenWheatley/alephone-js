@@ -148,7 +148,6 @@ SDL_Surface *world_pixels = NULL;
 SDL_Surface *world_pixels_corrected = NULL;
 SDL_Surface *HUD_Buffer = NULL;
 SDL_Surface *Term_Buffer = NULL;
-SDL_Surface *Intro_Buffer = NULL; // intro screens, main menu, chapters, credits, etc.
 SDL_Surface *Intro_Buffer_corrected = NULL;
 bool intro_buffer_changed = false;
 SDL_Surface *Map_Buffer = NULL;
@@ -219,9 +218,6 @@ void Screen::Initialize(screen_mode_data* mode)
 		pf = SDL_AllocFormat(SDL_PIXELFORMAT_ARGB8888);
 		pixel_format_32 = *pf;
 		SDL_FreeFormat(pf);
-
-		Intro_Buffer = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 480, 32, pixel_format_32.Rmask, pixel_format_32.Gmask, pixel_format_32.Bmask, 0);
-		Intro_Buffer_corrected = SDL_CreateRGBSurface(SDL_SWSURFACE, 640, 480, 32, pixel_format_32.Rmask, pixel_format_32.Gmask, pixel_format_32.Bmask, 0);
 
 		SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
 

@@ -30,9 +30,7 @@ import * as shell from '../shell.js';
 import * as screen from './screen.js';
 import * as wad from '../Files/wad.js';
 import { DataViewReader } from '../Misc/DataViewReader.js';
-/*
-#include "screen_drawing.h"
-*/
+import * as screen_drawing from './screen_drawing.js';
 import * as Logging from '../Misc/Logging.js';
 /*
 #include "render.h"
@@ -918,50 +916,43 @@ SDL_Surface *tile_surface(SDL_Surface *s, int width, int height)
 */
 //  Draw picture resource centered on screen
 function draw_picture_surface(picture) {
-	// TODO: replace this stub into a complete conversion of the cpp in the following comment
 	if (!picture) return;
 	
-	const canvasWidth = window._2DContext.canvas.width;
-	const canvasHeight = window._2DContext.canvas.height;
-	const x = (canvasWidth - picture.width) / 2;
-	const y = (canvasHeight - picture.height) / 2;
-	window._2DContext.putImageData(picture, x, y);
-}
-/*
-static void draw_picture_surface(std::shared_ptr<SDL_Surface> s)
-{
-	if (!s)
-		return;
-	_set_port_to_intro();
-	SDL_Surface *video = draw_surface;
+	const ctx = window._2DContext;
+	const canvas = ctx.canvas;
 
 	// Default source rectangle
-	SDL_Rect src_rect = {0, 0, MIN(s->w, 640), MIN(s->h, 480)};
+	let src_x = 0;
+	let src_y = 0;
+	let src_w = Math.min(picture.width, 640);
+	let src_h = Math.min(picture.height, 480);
 
 	// Center picture on screen
-	SDL_Rect dst_rect = {(video->w - src_rect.w) / 2, (video->h - src_rect.h) / 2, s->w, s->h};
-	if (dst_rect.x < 0)
-		dst_rect.x = 0;
-	if (dst_rect.y < 0)
-		dst_rect.y = 0;
+	let dst_x = Math.floor((canvas.width - src_w) / 2);
+	let dst_y = Math.floor((canvas.height - src_h) / 2);
+	if (dst_x < 0) dst_x = 0;
+	if (dst_y < 0) dst_y = 0;
 
-	// Clip if desired (only used for menu buttons)
-	if (draw_clip_rect_active) {
-		src_rect.w = dst_rect.w = draw_clip_rect.right - draw_clip_rect.left;
-		src_rect.h = dst_rect.h = draw_clip_rect.bottom - draw_clip_rect.top;
-		src_rect.x = draw_clip_rect.left - (640 - s->w) / 2;
-		src_rect.y = draw_clip_rect.top - (480 - s->h) / 2;
-		dst_rect.x += draw_clip_rect.left- (640 - s->w) / 2;
-		dst_rect.y += draw_clip_rect.top - (480 - s->h) / 2;
+	// Clip if desired (used for menu buttons)
+	if (screen_drawing.draw_clip_rect_active) {
+		const draw_clip_rect = screen_drawing.draw_clip_rect;
+		src_w = draw_clip_rect.right - draw_clip_rect.left;
+		src_h = draw_clip_rect.bottom - draw_clip_rect.top;
+		const centerOffsetX = (640 - picture.width) / 2;
+		const centerOffsetY = (480 - picture.height) / 2;
+		src_x = r.left - centerOffsetX;
+		src_y = r.top - centerOffsetY;
+		dst_x += r.left - centerOffsetX;
+		dst_y += r.top - centerOffsetY;
 	} else {
-			// Clear destination to black
-			SDL_FillRect(video, NULL, SDL_MapRGB(video->format, 0, 0, 0));
+		// Clear destination to black
+		ctx.fillStyle = 'black';
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	}
 	
-	SDL_BlitSurface(s.get(), &src_rect, video, &dst_rect);
-	_restore_port();
+	ctx.putImageData(picture, dst_x, dst_y, src_x, src_y, src_w, src_h);
 }
-*/
+
 async function draw_picture(rsrc) {
 	draw_picture_surface(await picture_to_surface(rsrc));
 }
