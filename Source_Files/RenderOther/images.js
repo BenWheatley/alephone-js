@@ -357,11 +357,7 @@ function uncompress_rle16(src, row_bytes, dst /*Uint8Array*/, dst_pitch, height)
 }
 
 function copy_component_into_surface(src, dst, count, component) {
-	if (true /*PlatformIsLittleEndian()*/) {
-		dst = dst.subarray(2 - component);
-	} else {
-		dst = dst.subarray(component + 1);
-	}
+	dst = dst.subarray(component); // Completely different byte order to original
 	while (count--) {
 		dst[0] = src[0];
 		src = src.subarray(1);
