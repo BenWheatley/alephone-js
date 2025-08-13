@@ -23,52 +23,53 @@
 #include "sdl_fonts.h"
 
 struct rgb_color;
-
+*/
 // Rectangles for the interface, etc..
 // rectangle id's
-enum {
-	// game window rectangles
-	_player_name_rect= 0,
-	_oxygen_rect,
-	_shield_rect,
-	_motion_sensor_rect,
-	_microphone_rect,
-	_inventory_rect,
-	_weapon_display_rect,
-	
-	// interface rectangles
-	START_OF_MENU_INTERFACE_RECTS,
-	_new_game_button_rect = 7,
-	_load_game_button_rect,
-	_gather_button_rect,
-	_join_button_rect,
-	_prefs_button_rect,
-	_replay_last_button_rect,
-	_save_last_button_rect,
-	_replay_saved_button_rect,
-	_credits_button_rect,
-	_quit_button_rect,
-	_center_button_rect,
-	_singleton_game_button_rect,
-	_about_alephone_rect,
-	END_OF_MENU_INTERFACE_RECTS,
-	
-	// Marathon compatibility rectangles
-	_terminal_screen_rect = 20,
-	_terminal_header_rect,
-	_terminal_footer_rect,
-	_terminal_full_text_rect,
-	_terminal_left_rect,
-	_terminal_right_rect,
-	_terminal_logon_graphic_rect,
-	_terminal_logon_title_rect,
-	_terminal_logon_location_rect,
-	_respawn_indicator_rect,
-	_blinker_rect,
-	
-	NUMBER_OF_INTERFACE_RECTANGLES
-};
+export const rectangle_ids = Object.freeze({
+    // game window rectangles
+    _player_name_rect: 0,
+    _oxygen_rect: 1,
+    _shield_rect: 2,
+    _motion_sensor_rect: 3,
+    _microphone_rect: 4,
+    _inventory_rect: 5,
+    _weapon_display_rect: 6,
 
+    // interface rectangles
+    START_OF_MENU_INTERFACE_RECTS: 7,
+    _new_game_button_rect: 7, // Yes really same as START_OF_MENU_INTERFACE_RECTS
+    _load_game_button_rect: 8,
+    _gather_button_rect: 9,
+    _join_button_rect: 10,
+    _prefs_button_rect: 11,
+    _replay_last_button_rect: 12,
+    _save_last_button_rect: 13,
+    _replay_saved_button_rect: 14,
+    _credits_button_rect: 15,
+    _quit_button_rect: 16,
+    _center_button_rect: 17,
+    _singleton_game_button_rect: 18,
+    _about_alephone_rect: 19,
+    END_OF_MENU_INTERFACE_RECTS: 20,
+
+    // Marathon compatibility rectangles
+    _terminal_screen_rect: 20, // Yes really same as END_OF_MENU_INTERFACE_RECTS
+    _terminal_header_rect: 21,
+    _terminal_footer_rect: 22,
+    _terminal_full_text_rect: 23,
+    _terminal_left_rect: 24,
+    _terminal_right_rect: 25,
+    _terminal_logon_graphic_rect: 26,
+    _terminal_logon_title_rect: 27,
+    _terminal_logon_location_rect: 28,
+    _respawn_indicator_rect: 29,
+    _blinker_rect: 30,
+
+    NUMBER_OF_INTERFACE_RECTANGLES: 31
+});
+
+/*
 // Colors for drawing..
 enum {
 	_energy_weapon_full_color,
@@ -322,7 +323,7 @@ extern font_info *GetInterfaceFont(short font_index);
 extern uint16 GetInterfaceStyle(short font_index);
 */
 export let draw_clip_rect_active = false;			// Flag: clipping rect active
-export let draw_clip_rect = screen_rectangle();		// Current clipping rectangle
+export let draw_clip_rect = new screen_rectangle();		// Current clipping rectangle
 /*
 // From screen_sdl.cpp
 extern SDL_Surface *world_pixels, *HUD_Buffer, *Term_Buffer, *Map_Buffer;

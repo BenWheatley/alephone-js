@@ -206,7 +206,9 @@ import * as shell from '../shell.js';
 /*
 #include "player.h"
 #include "network.h"
-#include "screen_drawing.h"
+*/
+import * as screen_drawing from '../RenderOther/screen_drawing.js';
+/*
 #include "SoundManager.h"
 #include "fades.h"
 #include "game_window.h"
@@ -391,10 +393,12 @@ static struct color_table *current_picture_clut= NULL;
 */
 
 function get_screen_data(index) {
-	if (index < 0 || index >= NUMBER_OF_SCREENS) {
+	if (index < 0 || index >= GameStates.NUMBER_OF_SCREENS) {
 		throw new Error(`Invalid screen index: ${index}`);
 	}
-	return shapes_file_is_m1() ? m1_display_screens[index] : display_screens[index];
+	return display_screens[index];
+	// TODO: I am not yet ready to load the shapes file, when I am this return value needs to become:
+	//	return shapes_file_is_m1() ? m1_display_screens[index] : display_screens[index];
 }
 
 export function initialize_game_state() {
@@ -945,34 +949,23 @@ void draw_menu_button_for_command(
 	draw_intro_screen();
 }
 */
+
 function update_interface_display() {
-	// TODO: convert the real cpp update_interface_display func below into JS, replacing this entirely
-	images.draw_full_screen_pict_resource_from_images(screen_definitions.MAIN_MENU_BASE + 0);
+    let data = get_screen_data(game_state.state);
+
+    // Use this to avoid the fade..
+    images.draw_full_screen_pict_resource_from_images(data.screen_base + game_state.current_screen);
+
+    if (game_state.state === GameStates._display_main_menu) {
+        if (game_state.highlighted_main_menu_item >= 0) {
+            draw_button(game_state.highlighted_main_menu_item + screen_drawing.rectangle_ids.START_OF_MENU_INTERFACE_RECTS - 1, true);
+        }
+        draw_powered_by_aleph_one(game_state.highlighted_main_menu_item === iAbout);
+    }
+
+    draw_intro_screen();
 }
 
-/*
-void update_interface_display(
-	void)
-{
-	struct screen_data *data;
-
-	data= get_screen_data(game_state.state);
-	
-	//  Use this to avoid the fade.. 
-	draw_full_screen_pict_resource_from_images(data->screen_base+game_state.current_screen);
-
-	if (game_state.state == _display_main_menu)
-	{
-		if (game_state.highlighted_main_menu_item >= 0)
-		{
-			draw_button(game_state.highlighted_main_menu_item + START_OF_MENU_INTERFACE_RECTS - 1, true);
-		}
-		draw_powered_by_aleph_one(game_state.highlighted_main_menu_item == iAbout);
-	}
-
-	draw_intro_screen();
-}
-*/
 let last_heartbeat_fraction = -1.0;
 let is_network_pregame = false;
 
@@ -1063,11 +1056,11 @@ export function idle_game_state(/*uint32*/ time) {
 				case GameStates._begin_display_of_epilogue:
 					display_epilogue();
 					break;
-
+					
 				case GameStates._game_in_progress:
 					game_state.phase = 15 * cseries.MACHINE_TICKS_PER_SECOND;
 					break;
-
+					
 				case GameStates._change_level:
 				case GameStates._displaying_network_game_dialogs:
 					break;
@@ -1079,7 +1072,7 @@ export function idle_game_state(/*uint32*/ time) {
 		}
 		game_state.last_ticks_on_idle = cseries.machine_tick_count();
 	}
-
+	
 	// if we’re not paused and there’s something to draw (i.e., anything different from last time), render a frame
 	if (game_state.state == GameStates._game_in_progress) {
 	/* TODO: convert this CPP into JS
