@@ -131,10 +131,6 @@ extern struct color_table *world_color_table, *visible_color_table, *interface_c
 #include "Movie.h"
 #include "shell_options.h"
 
-#if (defined(__MACH__) && defined(__APPLE__))
-#define MUST_RELOAD_VIEW_CONTEXT
-#endif
-
 // Global variables
 static SDL_Surface *main_surface;	// Main (display) surface
 static SDL_Window *main_screen;
@@ -649,11 +645,7 @@ void enter_screen(void)
 	change_screen_mode(_screentype_level);
 	PrevFullscreen = screen_mode.fullscreen;
 
-#if !defined(MUST_RELOAD_VIEW_CONTEXT)
-	// if MUST_RELOAD_VIEW_CONTEXT, we know this just happened in
-	// change_screen_mode
 	OGL_StartRun();
-#endif
 
 	// Reset modifier key status
 	SDL_SetModState(KMOD_NONE);
@@ -966,10 +958,6 @@ static void change_screen_mode(int width, int height, int depth, bool nogl, bool
 	if (!main_surface) {
 		main_surface = SDL_CreateRGBSurface(SDL_SWSURFACE, vmode_width, vmode_height, 32, pixel_format_32.Rmask, pixel_format_32.Gmask, pixel_format_32.Bmask, 0);
 	}
-#ifdef MUST_RELOAD_VIEW_CONTEXT
-	if (!nogl) 
-		ReloadViewContext();
-#endif
 	if (depth == 8) {
 	        SDL_Color colors[256];
 		build_sdl_color_table(interface_color_table, colors);
