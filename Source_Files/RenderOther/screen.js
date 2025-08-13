@@ -87,8 +87,6 @@ enum // screen selection based on game state
 	_screentype_chapter
 };
 
-// ---------- globals
-
 extern struct color_table *world_color_table, *visible_color_table, *interface_color_table;
 
 // SB: Custom Blizzard-style overlays
