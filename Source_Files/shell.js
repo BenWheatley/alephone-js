@@ -120,11 +120,10 @@ import * as shell_options from './shell_options.js';
 
 export let scenario_dir = ""; // TODO: any ref to searching within a data_search_path array, just directly go here without search
 
-/*
 // cross-platform static variables
-short vidmasterStringSetID = -1; // can be set with MML
-short vidmasterLevelOffset = 1; // can be set with MML
-*/
+export let vidmasterStringSetID = -1; // can be set with MML
+export let vidmasterLevelOffset = 1; // can be set with MML
+
 function a1_getenv(name) {
 	// Return the base URL of the hosting index page plus the supplied folder name
 	const base = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
