@@ -1145,7 +1145,6 @@ void set_game_focus_gained()
 }
 
 extern SDL_Surface *draw_surface;	// from screen_drawing.cpp
-//void draw_intro_screen(void);		// from screen.cpp
 
 static SDL_Surface *powered_by_alephone_surface[] = {nullptr, nullptr};
 #include "powered_by_alephone.h"
