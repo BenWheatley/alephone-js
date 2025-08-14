@@ -1527,43 +1527,36 @@ void process_main_menu_highlight_select(bool cheatkeys_down)
 	do_menu_item_command(mInterface, game_state.highlighted_main_menu_item, cheatkeys_down);
 	
 }
-
-bool enabled_item(
-	short item)
-{
-	bool enabled= true;
-
-	switch(item)
-	{
-		case iNewGame:
-		case iLoadGame:
-		case iPlaySingletonLevel:
-		case iPreferences:
-		case iReplaySavedFilm:
-		case iCredits:
-		case iQuit:
-		case iAbout:
-		case iCenterButton:
+*/
+function enabled_item(item) {
+	let enabled = true;
+	
+	switch (item) {
+		case interface_menus.iNewGame:
+		case interface_menus.iLoadGame:
+		case interface_menus.iPlaySingletonLevel:
+		case interface_menus.iPreferences:
+		case interface_menus.iReplaySavedFilm:
+		case interface_menus.iCredits:
+		case interface_menus.iQuit:
+		case interface_menus.iAbout:
+		case interface_menus.iCenterButton:
 			break;
+			/* TODO: do I want these?
+		case interface_menus.iReplayLastFilm:
+		case interface_menus.iSaveLastFilm:
+			enabled = has_recording_file();
+			break; */
 			
-		case iReplayLastFilm:
-		case iSaveLastFilm:
-			enabled= has_recording_file();
-			break;
-
-		case iGatherGame:
-		case iJoinGame:
-			enabled= networking_available();
-			break;
-			
-		default:
-			assert(false);
+		case interface_menus.iGatherGame:
+		case interface_menus.iJoinGame:
+			enabled = networking_available();
 			break;
 	}
 	
 	return enabled;
 }
-
+/*
 void paint_window_black(
 	void)
 {
