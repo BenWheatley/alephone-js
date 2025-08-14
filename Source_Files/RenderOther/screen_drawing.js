@@ -370,21 +370,28 @@ void _set_port_to_custom(SDL_Surface *surface)
 	old_draw_surface = draw_surface;
 	draw_surface = surface;
 }
-
-void set_drawing_clip_rectangle(short top, short left, short bottom, short right)
-{
-	if (top < 0)
+*/
+export function set_drawing_clip_rectangle(top, left, bottom, right) {
+	const ctx = window._2DContext;
+	
+	if (top < 0) {
 		draw_clip_rect_active = false;
-	else {
+		ctx.restore(); // Restore to state before clipping
+	} else {
 		draw_clip_rect_active = true;
 		draw_clip_rect.top = top;
 		draw_clip_rect.left = left;
 		draw_clip_rect.bottom = bottom;
 		draw_clip_rect.right = right;
+
+		ctx.save(); // Save state before clipping
+		ctx.beginPath();
+		ctx.rect(left, top, right - left, bottom - top);
+		ctx.clip();
 	}
 }
 
-
+/*
 void _draw_screen_shape(shape_descriptor shape_id, screen_rectangle *destination, screen_rectangle *source)
 {
 	// Convert rectangles
