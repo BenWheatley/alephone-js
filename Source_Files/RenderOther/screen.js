@@ -1745,11 +1745,6 @@ void clear_screen_margin()
         SDL_FillRect(main_surface, &r, SDL_MapRGB(main_surface->format, 0, 0, 0));
     }
 }
-
-bool MainScreenVisible()
-{
-	return (main_screen != NULL);
-}
 int MainScreenLogicalWidth()
 {
 	return (main_surface ? main_surface->w : 0);
