@@ -273,8 +273,7 @@ export function shutdown_application()
 	*/
 }
 
-function networking_available()
-{
+function networking_available() {
 	return false;
 }
 
