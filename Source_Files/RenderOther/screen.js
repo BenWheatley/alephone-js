@@ -120,12 +120,11 @@ export class Screen {
 	}
 }
 
-enum // screen selection based on game state
-{
-	_screentype_level,
-	_screentype_menu,
-	_screentype_chapter
-};
+export const screentype = Object.freeze({
+	level: 0,
+	menu: 1,
+	chapter: 2
+});
 
 
 /*
@@ -640,7 +639,7 @@ void enter_screen(void)
 	
 	// Set screen to selected size
 	in_game = true;
-	change_screen_mode(_screentype_level);
+	change_screen_mode(screen.screentype.level);
 	PrevFullscreen = screen_mode.fullscreen;
 
 	OGL_StartRun();
@@ -1056,7 +1055,7 @@ void change_screen_mode(short screentype)
 	
 	short w = std::max(mode->width, static_cast<short>(640));
 	short h = std::max(mode->height, static_cast<short>(480));
-	if (screentype == _screentype_menu)
+	if (screentype == screen.screentype.menu)
 	{
 		w = 640;
 		h = 480;
@@ -1064,7 +1063,7 @@ void change_screen_mode(short screentype)
 	else
 		get_auto_resolution_size(&w, &h, mode);
 	
-	bool force_menu_size = (screentype == _screentype_menu || screentype == _screentype_chapter);
+	bool force_menu_size = (screentype == screen.screentype.menu || screentype == screen.screentype.chapter);
 	change_screen_mode(w, h, mode->bit_depth, false, force_menu_size);
 	clear_screen();
 

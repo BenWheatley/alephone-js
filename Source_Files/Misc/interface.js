@@ -1193,7 +1193,7 @@ function display_main_menu() {
 	
 	/* TODO: this block
 	Plugins.instance().set_mode(Plugins.kMode_Menu);
-	change_screen_mode(_screentype_menu);
+	change_screen_mode(screen.screentype.menu);
 	display_screen(MAIN_MENU_BASE);
 	*/
 	//  Start up the song! 
@@ -2368,7 +2368,7 @@ static void finish_game(
 		//  Don't update the screen, etc.. 
 		game_state.state= _displaying_network_game_dialogs;
 
-		change_screen_mode(_screentype_menu);
+		change_screen_mode(screen.screentype.menu);
 		force_system_colors(false);
 		display_net_game_stats();
 		exit_networking();
@@ -2776,7 +2776,7 @@ static void try_and_display_chapter_screen(
 			paint_window_black();
 		}
 
-		change_screen_mode(_screentype_chapter);
+		change_screen_mode(screen.screentype.chapter);
 		
 		//  Fade the screen to black.. 
 		assert(!current_picture_clut);
@@ -3042,7 +3042,7 @@ void show_movie(short index)
 
 	if (!File) return;
 
-	change_screen_mode(_screentype_chapter);
+	change_screen_mode(screen.screentype.chapter);
 
 	SoundManager::Pause pauseSoundManager;
 
