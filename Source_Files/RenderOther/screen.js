@@ -28,7 +28,7 @@ export class Screen {
 		this.m_initialized = false;
 		this.m_viewport_rect = null; // SDL_Rect stub
 		this.m_ortho_rect = null;	// SDL_Rect stub
-		this.m_modes = [];
+		this.m_modes = [[800, 600]];
 		
 		// These were SDL_Rect in C++
 		this.lua_clip_rect = null;
@@ -67,24 +67,31 @@ export class Screen {
 	}
 	
 	height() {
+		return MainScreenLogicalHeight();
 	}
 	
 	width() {
+		return MainScreenLogicalWidth();
 	}
 	
 	pixel_scale() {
+		return MainScreenPixelScale();
 	}
 	
 	window_height() {
+		return this.screen_mode.height;
 	}
 	
 	window_width() {
+		return this.screen_mode.width;
 	}
 	
 	hud() {
+		return this.screen_mode.hud;
 	}
 	
 	lua_hud() {
+		return this.screen_mode.hud && LuaHUDRunning();
 	}
 	
 	// 3D view + interface
@@ -105,18 +112,46 @@ export class Screen {
 	}
 	
 	OpenGLViewPort() {
+		return this.m_viewport_rect;
 	}
 	
 	bound_screen(in_game = true) {
+		// Stub. I don't think this function's point is a good fit with what I'm now doing in JS.
+		// TODO: remove when everything works
 	}
 	
 	bound_screen_to_rect(r, in_game = true) {
+		// Stub. I don't think this function's point is a good fit with what I'm now doing in JS.
+		// TODO: remove when everything works
 	}
 	
 	scissor_screen_to_rect(r) {
+		// Stub. Only used by Lua HUD, and I think I don't want to use any of the GLCanvas for that anyway.
+		// TODO: remove when everything works
 	}
 	
+	// Note: C++ args were &, that's not available in JS, so it now returns {x, y} pair
 	window_to_screen(x, y) {
+		let winw = MainScreenWindowWidth();
+		let winh = MainScreenWindowHeight();
+		let virw = 640;
+		let virh = 480;
+		
+		let wina = winw / winh;
+		let vira = virw / virh;
+		
+		if (wina >= vira) {
+			let scale = winh / virh;
+			x -= (winw - (virw * scale)) / 2;
+			x /= scale;
+			y /= scale;
+		} else {
+			let scale = winw / virw;
+			y -= (winh - (virh * scale)) / 2;
+			x /= scale;
+			y /= scale;
+		}
+		return {x, y};
 	}
 }
 
@@ -211,10 +246,6 @@ static bool passed_shader = false;      // remember when we passed Shader tests
 */
 import * as screen_shared from './screen_shared.js';
 /*
-using namespace alephone;
-
-Screen Screen::m_instance;
-
 SDL_PixelFormat pixel_format_16, pixel_format_32;
 
 static bitmap_definition_buffer bitmap_definition_of_sdl_surface(const SDL_Surface* surface)
@@ -278,21 +309,6 @@ void Screen::Initialize(screen_mode_data* mode)
 		world_view->vertical_scale = 1;
 		world_view->tunnel_vision_active = false;
 		
-		m_modes.clear();
-		SDL_DisplayMode desktop;
-		if (SDL_GetDesktopDisplayMode(0, &desktop) == 0)
-		{
-			if (desktop.w >= 640 && desktop.h >= 480)
-			{
-				m_modes.push_back(std::pair<int, int>(desktop.w, desktop.h));
-			}
-		}
-		if (m_modes.empty())
-		{
-			// assume a decent screen size
-			m_modes.push_back(std::pair<int, int>(1600, 900));
-		}
-		
 		// these are not validated in graphics prefs because
 		// SDL is not initialized yet when prefs load, so
 		// validate them here
@@ -319,41 +335,6 @@ void Screen::Initialize(screen_mode_data* mode)
 
 }
 
-int Screen::height()
-{
-	return MainScreenLogicalHeight();
-}
-
-int Screen::width()
-{
-	return MainScreenLogicalWidth();
-}
-
-float Screen::pixel_scale()
-{
-	return MainScreenPixelScale();
-}
-
-int Screen::window_height()
-{
-	return std::max(static_cast<short>(480), screen_mode.height);
-}
-
-int Screen::window_width()
-{
-	return std::max(static_cast<short>(640), screen_mode.width);
-}
-
-bool Screen::hud()
-{
-	return screen_mode.hud;
-}
-
-bool Screen::lua_hud()
-{
-	return screen_mode.hud && LuaHUDRunning();
-}
-
 SDL_Rect Screen::window_rect()
 {
 	SDL_Rect r;
@@ -362,11 +343,6 @@ SDL_Rect Screen::window_rect()
 	r.x = (width() - r.w) / 2;
 	r.y = (height() - r.h) / 2;
 	return r;
-}
-
-SDL_Rect Screen::OpenGLViewPort()
-{
-	return m_viewport_rect;
 }
 
 SDL_Rect Screen::view_rect()
@@ -494,82 +470,6 @@ SDL_Rect Screen::hud_rect()
 	return r;
 }
 
-void Screen::bound_screen(bool in_game)
-{
-	SDL_Rect r = { 0, 0, in_game ? window_width() : 640, in_game ? window_height() : 480 };
-	bound_screen_to_rect(r, in_game);
-}
-
-void Screen::bound_screen_to_rect(SDL_Rect &r, bool in_game)
-{
-	if (MainScreenIsOpenGL())
-	{
-		int pixw = MainScreenPixelWidth();
-		int pixh = MainScreenPixelHeight();
-		int virw = in_game ? window_width() : 640;
-		int virh = in_game ? window_height() : 480;
-		
-		float vscale = MIN(pixw / static_cast<float>(virw), pixh / static_cast<float>(virh));
-		int vpw = static_cast<int>(r.w * vscale + 0.5f);
-		int vph = static_cast<int>(r.h * vscale + 0.5f);
-		int vpx = static_cast<int>(pixw/2.0f - (virw * vscale)/2.0f + (r.x * vscale) + 0.5f);
-		int vpy = static_cast<int>(pixh/2.0f - (virh * vscale)/2.0f + (r.y * vscale) + 0.5f);
-
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glViewport(vpx, pixh - vph - vpy, vpw, vph);
-		m_viewport_rect.x = vpx;
-		m_viewport_rect.y = pixh - vph - vpy;
-		m_viewport_rect.w = vpw;
-		m_viewport_rect.h = vph;
-		glOrtho(0, r.w, r.h, 0, -1.0, 1.0);
-		m_ortho_rect.x = m_ortho_rect.y = 0;
-		m_ortho_rect.w = r.w;
-		m_ortho_rect.h = r.h;
-	}
-}
-
-void Screen::scissor_screen_to_rect(SDL_Rect &r)
-{
-	if (MainScreenIsOpenGL())
-	{
-		glEnable(GL_SCISSOR_TEST);
-		glScissor(m_viewport_rect.x + (r.x * m_viewport_rect.w/m_ortho_rect.w),
-				  m_viewport_rect.y + ((m_ortho_rect.h - r.y - r.h) * m_viewport_rect.h/m_ortho_rect.h),
-				  r.w * m_viewport_rect.w/m_ortho_rect.w,
-				  r.h * m_viewport_rect.h/m_ortho_rect.h);
-	}
-}
-*/
-void Screen::window_to_screen(int &x, int &y)
-{
-	if (MainScreenIsOpenGL())
-	{
-		int winw = MainScreenWindowWidth();
-		int winh = MainScreenWindowHeight();
-		int virw = 640;
-		int virh = 480;
-		
-		float wina = winw / static_cast<float>(winh);
-		float vira = virw / static_cast<float>(virh);
-
-		if (wina >= vira)
-		{
-			float scale = winh / static_cast<float>(virh);
-			x -= (winw - (virw * scale))/2;
-			x /= scale;
-			y /= scale;
-		}
-		else
-		{
-			float scale = winw / static_cast<float>(virw);
-			y -= (winh - (virh * scale))/2;
-			x /= scale;
-			y /= scale;
-		}
-	}
-}
-/*
 //  (Re)allocate off-screen buffer
 
 static void reallocate_world_pixels(int width, int height)
@@ -1737,9 +1637,9 @@ void DrawSurface(SDL_Surface *s, SDL_Rect &dest_rect, SDL_Rect &src_rect)
 			SDL_FreeSurface(surface);
 	}
 }
-
-void draw_intro_screen(void)
-{
+*/
+export function draw_intro_screen() {
+/* TODO: stub
 	if (fade_blacked_screen())
 		return;
 	
@@ -1771,8 +1671,9 @@ void draw_intro_screen(void)
 		DrawSurface(s, dst_rect, src_rect);
 		intro_buffer_changed = false;
 	}
+*/
 }
-
+/*
 //  Clear screen
 
 void clear_screen(bool update)
