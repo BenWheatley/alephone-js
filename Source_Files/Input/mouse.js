@@ -110,7 +110,7 @@ fixed_yaw_pitch pull_mouselook_delta()
 	return delta;
 }
 */
-let currentMouseButtons = 0;
+export let currentMouseButtons = 0;
 /*
 void
 mouse_buttons_become_keypresses(Uint8* ioKeyMap)
@@ -139,34 +139,39 @@ export function show_cursor() {
 	document.body.style.cursor = 'default';
 }
 
-export function mouse_scroll(up) {
+export function mouse_scroll(event) {
+	let up = e.deltaY < 0;
 	snapshot_delta_scrollwheel += up ? 1 : -1;
 	console.log(snapshot_delta_scrollwheel);
+	shell.process_event(event);
 }
 
-export function mouse_moved(delta_x, delta_y) {
-	snapshot_delta_x += delta_x;
-	snapshot_delta_y += delta_y;
+export function mouse_moved(event) {
+	snapshot_delta_x += event.movementX;
+	snapshot_delta_y += event.movementY;
 	console.log(snapshot_delta_x + ", "+ snapshot_delta_y);
+	shell.process_event(event);
 }
 
 // === DOM Event Bindings ===
 
 window.addEventListener("mousemove", (e) => {
 	if (!mouse_active || document.pointerLockElement !== document.body) return;
-	mouse_moved(e.movementX, e.movementY);
+	mouse_moved(e);
 });
 
 window.addEventListener("wheel", (e) => {
-	mouse_scroll(e.deltaY < 0);
+	mouse_scroll(e);
 });
 
 window.addEventListener("mousedown", e => {
 	currentMouseButtons |= (1 << e.button);
+	shell.process_event(e);
 });
 
 window.addEventListener("mouseup", e => {
 	currentMouseButtons &= ~(1 << e.button);
+	shell.process_event(e);
 });
 
 window.addEventListener('click', async () => {
