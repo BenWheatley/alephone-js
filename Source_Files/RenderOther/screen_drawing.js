@@ -181,46 +181,45 @@ import * as cseries from '../CSeries/cseries.js';
 #define finfFONTS 128
 
 extern TextSpec *_get_font_spec(short font_index);
-
+*/
 // LP change: hardcoding this quantity since we know how many we need
 // Putting in the Moo definitions
-static screen_rectangle interface_rectangles[NUMBER_OF_INTERFACE_RECTANGLES] = 
-{
-	{326, 300, 338, 473},
-	{464, 398, 475, 578},
-	{464, 181, 475, 361},
-	{338, 17, 0, 0},
-	{0, 0, 0, 0},
-	{352, 204, 454, 384},
-	{352, 384, 454, 596},
-	{179, 101, 210, 268},
-	{221, 25, 253, 238},
-	{263, 11, 294, 223},
-	{301, 38, 333, 236},
-	{304, 421, 331, 563},
-	{386, 231, 413, 406},
-	{345, 363, 372, 516},
-	{344, 83, 374, 271},
-	{206, 246, 347, 382},
-	// {264, 522, 291, 588}, // inf's bounds
-	// {263, 497, 294, 565}, // m2's bounds
-	{263, 500, 294, 585}, // adjusted to work with both m2 and inf
-      	{0,0,0,0},
-	{0, 0, 0, 0},
-	{0, 0, 0, 0},
-	{0, 0, 320, 640},
-	{0, 0, 18, 640},
-	{302, 0, 320, 640},
-	{27, 72, 293, 568},
-	{27, 9, 293, 316},
-	{27, 324, 293, 631},
-	{27, 9, 293, 631},
-	{0, 0, 0, 0},
-	{0, 0, 0, 0},
-	{0, 0, 0, 0},
-	{0, 0, 0, 0}
-};
-
+const interface_rectangles/*[NUMBER_OF_INTERFACE_RECTANGLES]*/ = Object.freeze([
+	new screen_rectangle(326, 300, 338, 473),
+	new screen_rectangle(464, 398, 475, 578),
+	new screen_rectangle(464, 181, 475, 361),
+	new screen_rectangle(338, 17, 0, 0),
+	new screen_rectangle(0, 0, 0, 0),
+	new screen_rectangle(352, 204, 454, 384),
+	new screen_rectangle(352, 384, 454, 596),
+	new screen_rectangle(179, 101, 210, 268),
+	new screen_rectangle(221, 25, 253, 238),
+	new screen_rectangle(263, 11, 294, 223),
+	new screen_rectangle(301, 38, 333, 236),
+	new screen_rectangle(304, 421, 331, 563),
+	new screen_rectangle(386, 231, 413, 406),
+	new screen_rectangle(345, 363, 372, 516),
+	new screen_rectangle(344, 83, 374, 271),
+	new screen_rectangle(206, 246, 347, 382),
+	// [264, 522, 291, 588], // inf's bounds
+	// [263, 497, 294, 565], // m2's bounds
+	new screen_rectangle(263, 500, 294, 585), // adjusted to work with both m2 and inf
+      	new screen_rectangle(0,0,0,0),
+	new screen_rectangle(0, 0, 0, 0),
+	new screen_rectangle(0, 0, 0, 0),
+	new screen_rectangle(0, 0, 320, 640),
+	new screen_rectangle(0, 0, 18, 640),
+	new screen_rectangle(302, 0, 320, 640),
+	new screen_rectangle(27, 72, 293, 568),
+	new screen_rectangle(27, 9, 293, 316),
+	new screen_rectangle(27, 324, 293, 631),
+	new screen_rectangle(27, 9, 293, 631),
+	new screen_rectangle(0, 0, 0, 0),
+	new screen_rectangle(0, 0, 0, 0),
+	new screen_rectangle(0, 0, 0, 0),
+	new screen_rectangle(0, 0, 0, 0)
+]);
+/*
 void set_about_alephone_rect(int width, int height)
 {
 	if (!width || !height) return;
@@ -231,7 +230,6 @@ void set_about_alephone_rect(int width, int height)
 	interface_rectangles[_about_alephone_rect].right = 640;
 }
 
-// static screen_rectangle *interface_rectangles;
 // static CTabHandle screen_colors;
 // LP change: now hardcoded and XML-changeable
 
@@ -291,13 +289,11 @@ static rgb_color InterfaceColors[NumInterfaceColors] =
 export function initialize_screen_drawing() {
 	// TODO: everything stripped out of this method. Is it safe to remove?
 }
-/*
-screen_rectangle *get_interface_rectangle(short index)
-{
-	assert(index>=0 && index<NUMBER_OF_INTERFACE_RECTANGLES);
-	return interface_rectangles + index;
-}
 
+export function get_interface_rectangle(index) {
+	return interface_rectangles[index];
+}
+/*
 rgb_color &get_interface_color(short index)
 {
 	assert(index>=0 && index<NumInterfaceColors);
