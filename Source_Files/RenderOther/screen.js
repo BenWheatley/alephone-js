@@ -1745,26 +1745,23 @@ void clear_screen_margin()
         SDL_FillRect(main_surface, &r, SDL_MapRGB(main_surface->format, 0, 0, 0));
     }
 }
-int MainScreenLogicalWidth()
-{
-	return (main_surface ? main_surface->w : 0);
+*/
+function MainScreenLogicalWidth() {
+	return MainScreenWindowWidth();
 }
-int MainScreenLogicalHeight()
-{
-	return (main_surface ? main_surface->h : 0);
+
+function MainScreenLogicalHeight() {
+	return MainScreenWindowHeight();
 }
-int MainScreenWindowWidth()
-{
-	int w = 0;
-	SDL_GetWindowSize(main_screen, &w, NULL);
-	return w;
+
+function MainScreenWindowWidth() {
+    return window._2DContext.canvas.width;
 }
-int MainScreenWindowHeight()
-{
-	int h = 0;
-	SDL_GetWindowSize(main_screen, NULL, &h);
-	return h;
+
+function MainScreenWindowHeight() {
+    return window._2DContext.canvas.height;
 }
+/*
 int MainScreenPixelWidth()
 {
 	int w = 0;
