@@ -16,68 +16,108 @@
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
 */
-/*
-namespace alephone
-{
-	class Screen
-	{
-	public:
-		static inline Screen* instance() {
-			return &m_instance;
-		}
 
-		void Initialize(screen_mode_data* mode);
-		const std::vector<std::pair<int, int> >& GetModes() { return m_modes; };
-		int FindMode(int width, int height) {
-			for (int i = 0; i < m_modes.size(); ++i)
-			{
-				if (m_modes[i].first == width &&
-				    m_modes[i].second == height)
-				{
-					return i;
-				}
-			}
-			return -1;
-		}
-		int ModeHeight(int mode) { return m_modes[mode].second; }
-		int ModeWidth(int mode) { return m_modes[mode].first; }
-
-		int height();
-		int width();
-		float pixel_scale();
-		int window_height();
-		int window_width();
-		bool hud();
-		bool lua_hud();
-		SDL_Rect window_rect(); // 3D view + interface
-		SDL_Rect view_rect(); // main 3D view
-		SDL_Rect map_rect();
-		SDL_Rect term_rect();
-		SDL_Rect hud_rect();
-		SDL_Rect OpenGLViewPort();
-
-		void bound_screen(bool in_game = true);
-		void bound_screen_to_rect(SDL_Rect &r, bool in_game = true);
-		void scissor_screen_to_rect(SDL_Rect &r);
-		void window_to_screen(int &x, int &y);
+export class Screen {
+	static m_instance = new Screen();
+	
+	static instance() {
+		return Screen.m_instance;
+	}
+	
+	constructor() {
+		this.m_initialized = false;
+		this.m_viewport_rect = null; // SDL_Rect stub
+		this.m_ortho_rect = null;	// SDL_Rect stub
+		this.m_modes = [];
 		
-		SDL_Rect lua_clip_rect;
-		SDL_Rect lua_view_rect;
-		SDL_Rect lua_map_rect;
-		SDL_Rect lua_term_rect;
-
-		// TODO: the HUD should really draw messages / fps / input line itself
-		Rect lua_text_margins;
-
-	private:
-		Screen() : m_initialized(false) { }
-		static Screen m_instance;
-		bool m_initialized;
-		SDL_Rect m_viewport_rect;
-		SDL_Rect m_ortho_rect;
-
-		std::vector<std::pair<int, int> > m_modes;
-	};
+		// These were SDL_Rect in C++
+		this.lua_clip_rect = null;
+		this.lua_view_rect = null;
+		this.lua_map_rect = null;
+		this.lua_term_rect = null;
+		
+		// This was Rect in C++
+		this.lua_text_margins = null;
+	}
+	
+	Initialize(mode) {
+		// screen_mode_data* mode stub
+	}
+	
+	GetModes() {
+		return this.m_modes;
+	}
+	
+	FindMode(width, height) {
+		for (let i = 0; i < this.m_modes.length; ++i) {
+			if (this.m_modes[i][0] === width &&
+				this.m_modes[i][1] === height) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	ModeHeight(mode) {
+		return this.m_modes[mode][1];
+	}
+	
+	ModeWidth(mode) {
+		return this.m_modes[mode][0];
+	}
+	
+	height() {
+	}
+	
+	width() {
+	}
+	
+	pixel_scale() {
+	}
+	
+	window_height() {
+	}
+	
+	window_width() {
+	}
+	
+	hud() {
+	}
+	
+	lua_hud() {
+	}
+	
+	// 3D view + interface
+	window_rect() {
+	}
+	
+	// main 3D view
+	view_rect() {
+	}
+	
+	map_rect() {
+	}
+	
+	term_rect() {
+	}
+	
+	hud_rect() {
+	}
+	
+	OpenGLViewPort() {
+	}
+	
+	bound_screen(in_game = true) {
+	}
+	
+	bound_screen_to_rect(r, in_game = true) {
+	}
+	
+	scissor_screen_to_rect(r) {
+	}
+	
+	window_to_screen(x, y) {
+	}
 }
 
 enum // screen selection based on game state
@@ -87,6 +127,8 @@ enum // screen selection based on game state
 	_screentype_chapter
 };
 
+
+/*
 extern struct color_table *world_color_table, *visible_color_table, *interface_color_table;
 
 // SB: Custom Blizzard-style overlays
@@ -499,7 +541,7 @@ void Screen::scissor_screen_to_rect(SDL_Rect &r)
 				  r.h * m_viewport_rect.h/m_ortho_rect.h);
 	}
 }
-
+*/
 void Screen::window_to_screen(int &x, int &y)
 {
 	if (MainScreenIsOpenGL())
@@ -528,7 +570,7 @@ void Screen::window_to_screen(int &x, int &y)
 		}
 	}
 }
-
+/*
 //  (Re)allocate off-screen buffer
 
 static void reallocate_world_pixels(int width, int height)

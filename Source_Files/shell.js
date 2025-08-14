@@ -473,14 +473,14 @@ static bool event_has_cheat_modifiers(const SDL_Event &event)
 	return (m & KMOD_SHIFT) && (m & KMOD_CTRL) && !(m & KMOD_ALT) && !(m & KMOD_GUI);
 #endif
 }
-
+*/
 static void process_screen_click(const SDL_Event &event)
 {
 	int x = event.button.x, y = event.button.y;
 	alephone::Screen::instance()->window_to_screen(x, y);
 	portable_process_screen_click(x, y, has_cheat_modifiers());
 }
-
+/*
 static void handle_game_key(const SDL_Event &event)
 {
 	SDL_Keycode key = event.key.keysym.sym;
