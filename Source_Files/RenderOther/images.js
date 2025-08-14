@@ -940,10 +940,10 @@ function draw_picture_surface(picture) {
 		src_h = draw_clip_rect.bottom - draw_clip_rect.top;
 		const centerOffsetX = (640 - picture.width) / 2;
 		const centerOffsetY = (480 - picture.height) / 2;
-		src_x = r.left - centerOffsetX;
-		src_y = r.top - centerOffsetY;
-		dst_x += r.left - centerOffsetX;
-		dst_y += r.top - centerOffsetY;
+		src_x = draw_clip_rect.left - centerOffsetX;
+		src_y = draw_clip_rect.top - centerOffsetY;
+		dst_x += draw_clip_rect.left - centerOffsetX;
+		dst_y += draw_clip_rect.top - centerOffsetY;
 	} else {
 		// Clear destination to black
 		ctx.fillStyle = 'black';
