@@ -177,10 +177,30 @@ window.addEventListener("mouseup", event => {
 window.addEventListener('click', async () => {
 	await audioContext.resume();
 	try {
-		const canvas = document.getElementById("glCanvas");
+		const canvas = document.getElementById("canvasContainer");
 		await canvas.requestFullscreen();
-		canvas.classList.remove('game_frame');
 	} catch (err) {
 		console.error(`Error enabling fullscreen: ${err.message}`);
 	};
 }, { once: true });
+
+document.addEventListener('fullscreenchange', () => {
+	const canvas = document.getElementById("canvasContainer");
+	
+	if (document.fullscreenElement === canvas) {
+		// TODO: figure out how to actually change resolution and not just scale this container to fit
+		//setCanvasContainerSize(window.screen.width, window.screen.height);
+		canvas.classList.remove('game_frame');
+	} else {
+		setCanvasContainerSize(800, 600);
+		canvas.classList.add('game_frame');
+	}
+});
+
+function setCanvasContainerSize(width, height) {
+	const list = ["canvasContainer", "glCanvas", "2DCanvas"].map(item => document.getElementById(item));
+	canvas.width = width;
+	canvas.height = height;
+	canvas.style.width = `${canvas.width}px`;
+	canvas.style.height = `${canvas.height}px`;
+}
