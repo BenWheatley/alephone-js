@@ -922,18 +922,20 @@ void pause_game(
 	show_cursor();
 	if (!game_is_networked && OpenALManager::Get()) OpenALManager::Get()->Pause(true);
 }
+*/
 
-void resume_game(
-	void)
-{
+export function resume_game() {
+	/* TODO: this
 	hide_cursor();
 	if (OGL_IsActive())
 		OGL_Blitter::BoundScreen(true);
 	validate_world_window();
 	set_keyboard_controller_status(true);
 	if (OpenALManager::Get()) OpenALManager::Get()->Pause(false);
+	*/
 }
 
+/*
 void draw_menu_button_for_command(
 	short index)
 {
@@ -1152,8 +1154,9 @@ static SDL_Surface *powered_by_alephone_surface[] = {nullptr, nullptr};
 
 extern void set_about_alephone_rect(int width, int height);
 
-static void draw_powered_by_aleph_one(bool pressed)
-{
+*/
+function draw_powered_by_aleph_one(pressed) {
+/* TODO: stub
 	if (!powered_by_alephone_surface[0])
 	{
 		SDL_RWops *rw = SDL_RWFromConstMem(powered_by_alephone_bmp, sizeof(powered_by_alephone_bmp));
@@ -1178,8 +1181,8 @@ static void draw_powered_by_aleph_one(bool pressed)
 	_set_port_to_intro();
 	SDL_BlitSurface(powered_by_alephone_surface[i], NULL, draw_surface, &rect);
 	_restore_port();
+	*/
 }
-*/
 
 function display_main_menu() {
 	game_state.state = GameStates._display_main_menu;
@@ -1211,6 +1214,7 @@ function display_main_menu() {
 static void ForceRepaintMenuDisplay()
 {
 }
+*/
 
 
 void do_menu_item_command(
