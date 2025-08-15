@@ -176,6 +176,7 @@ window.addEventListener("mouseup", event => {
 
 window.addEventListener('click', async () => {
 	await audioContext.resume();
+return; // TODO: re-enable full screen after debugging, it's annoying to have to exit immediately all the tiime
 	try {
 		const canvas = document.getElementById("canvasContainer");
 		await canvas.requestFullscreen();
