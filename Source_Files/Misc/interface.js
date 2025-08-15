@@ -1430,7 +1430,7 @@ void portable_process_screen_click(
 			break;
 
 		case _display_main_menu:
-			handle_interface_menu_screen_click(x, y, cheatkeys_down);
+			handle_interface_menu_screen_click(x, y);
 			break;
 		
 		default:
@@ -1519,7 +1519,7 @@ void process_main_menu_highlight_advance(bool reverse)
 	draw_button(game_state.highlighted_main_menu_item + START_OF_MENU_INTERFACE_RECTS - 1, true);
 }
 
-void process_main_menu_highlight_select(bool cheatkeys_down)
+void process_main_menu_highlight_select()
 {
 	if (get_game_state() != _display_main_menu)
 		return;
@@ -1527,7 +1527,7 @@ void process_main_menu_highlight_select(bool cheatkeys_down)
 		return;
 	if (!enabled_item(game_state.highlighted_main_menu_item))
 		return;
-	do_menu_item_command(mInterface, game_state.highlighted_main_menu_item, cheatkeys_down);
+	do_menu_item_command(mInterface, game_state.highlighted_main_menu_item);
 	
 }
 */
