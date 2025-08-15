@@ -18,29 +18,25 @@
 */
 
 // Menus available during the game
-const mGame = 128;
-const iPause = 1;
-const iSave = 2;
-const iRevert = 3;
-const iCloseGame = 4;
-const iQuitGame = 5;
+export const mGame = 128;
+export const iPause = 1;
+export const iSave = 2;
+export const iRevert = 3;
+export const iCloseGame = 4;
+export const iQuitGame = 5;
 
 // Menu interface...
-const mInterface = 129;
-const iNewGame = 1;
-const iLoadGame = 2;
-const iGatherGame = 3;
-const iJoinGame = 4;
-const iPreferences = 5;
-const iReplayLastFilm = 6;
-const iSaveLastFilm = 7;
-const iReplaySavedFilm = 8;
-const iCredits = 9;
-const iQuit = 10;
-const iCenterButton = 11;
-const iPlaySingletonLevel = 12;
-const iAbout = 13;
-
-/* This is the menu with nothing in the title, so that it doesn't show up */
-/* when the menu bar is drawn atexit.. */
-const mFakeEmptyMenu = 130;
+export const mInterface = 129;
+export const iNewGame = 1;
+export const iLoadGame = 2;
+export const iGatherGame = 3;
+export const iJoinGame = 4;
+export const iPreferences = 5;
+export const iReplayLastFilm = 6;
+export const iSaveLastFilm = 7;
+export const iReplaySavedFilm = 8;
+export const iCredits = 9;
+export const iQuit = 10;
+export const iCenterButton = 11;
+export const iPlaySingletonLevel = 12;
+export const iAbout = 13;
