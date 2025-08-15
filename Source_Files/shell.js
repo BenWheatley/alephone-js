@@ -381,6 +381,11 @@ short get_level_number_from_user(void)
 // Constants
 const TICKS_BETWEEN_EVENT_POLL = 16; // ~60Hz
 
+let events = [];
+export function push_event(event) {
+	events.push(event);
+}
+
 let last_event_poll = 0;
 let game_state;
 export function main_event_loop() {
@@ -429,7 +434,9 @@ export function main_event_loop() {
 		shell_misc.global_idle_proc();
 		// No longer need to care about yield_time, as this is not a cooperative-multitasking environment and yielding gets forced on us regardless of what we want
 		
-		// Old code polled and then processed events in a loop; we don't need to do that because JS event handlers can (and should) directly call shell.process_event(event);
+		while (events.length > 0) {
+			process_event(events.pop());
+		}
 	}
 	
 	vbl.execute_timer_tasks(cseries.machine_tick_count());

@@ -140,38 +140,38 @@ export function show_cursor() {
 }
 
 export function mouse_scroll(event) {
-	let up = e.deltaY < 0;
+	let up = event.deltaY < 0;
 	snapshot_delta_scrollwheel += up ? 1 : -1;
 	console.log(snapshot_delta_scrollwheel);
-	shell.process_event(event);
+	shell.push_event(event);
 }
 
 export function mouse_moved(event) {
 	snapshot_delta_x += event.movementX;
 	snapshot_delta_y += event.movementY;
 	console.log(snapshot_delta_x + ", "+ snapshot_delta_y);
-	shell.process_event(event);
+	shell.push_event(event);
 }
 
 // === DOM Event Bindings ===
 
-window.addEventListener("mousemove", (e) => {
+window.addEventListener("mousemove", (event) => {
 	if (!mouse_active || document.pointerLockElement !== document.body) return;
-	mouse_moved(e);
+	mouse_moved(event);
 });
 
-window.addEventListener("wheel", (e) => {
-	mouse_scroll(e);
+window.addEventListener("wheel", (event) => {
+	mouse_scroll(event);
 });
 
-window.addEventListener("mousedown", e => {
-	currentMouseButtons |= (1 << e.button);
-	shell.process_event(e);
+window.addEventListener("mousedown", event => {
+	currentMouseButtons |= (1 << event.button);
+	shell.push_event(event);
 });
 
-window.addEventListener("mouseup", e => {
-	currentMouseButtons &= ~(1 << e.button);
-	shell.process_event(e);
+window.addEventListener("mouseup", event => {
+	currentMouseButtons &= ~(1 << event.button);
+	shell.push_event(event);
 });
 
 window.addEventListener('click', async () => {
