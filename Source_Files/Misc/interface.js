@@ -953,7 +953,7 @@ void draw_menu_button_for_command(
 function update_interface_display() {
     let data = get_screen_data(game_state.state);
 
-    // Use this to avoid the fade..
+    // Use this to avoid the fade
     images.draw_full_screen_pict_resource_from_images(data.screen_base + game_state.current_screen);
 
     if (game_state.state === GameStates._display_main_menu) {
