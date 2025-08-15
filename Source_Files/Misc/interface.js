@@ -960,10 +960,10 @@ function update_interface_display() {
         if (game_state.highlighted_main_menu_item >= 0) {
             draw_button(game_state.highlighted_main_menu_item + screen_drawing.rectangle_ids.START_OF_MENU_INTERFACE_RECTS - 1, true);
         }
-        draw_powered_by_aleph_one(game_state.highlighted_main_menu_item === iAbout);
+        draw_powered_by_aleph_one(game_state.highlighted_main_menu_item === interface_menus.iAbout);
     }
 
-    draw_intro_screen();
+    screen.draw_intro_screen();
 }
 
 let last_heartbeat_fraction = -1.0;
