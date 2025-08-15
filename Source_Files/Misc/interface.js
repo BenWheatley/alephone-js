@@ -21,6 +21,7 @@ INTERFACE.H
 
 import * as cseries from '../CSeries/cseries.js';
 import * as Logging from './Logging.js';
+import * as mouse from '../Input/mouse.js';
 
 export const strFILENAMES = 129;
 export const filenameSHAPES8 = 0;
