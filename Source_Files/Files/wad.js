@@ -21,18 +21,18 @@ import { DataViewReader } from '../Misc/DataViewReader.js';
 
 /*
 #include "tags.h"
+*/
+export const PRE_ENTRY_POINT_WADFILE_VERSION = 0;
+export const WADFILE_HAS_DIRECTORY_ENTRY = 1;
+export const WADFILE_SUPPORTS_OVERLAYS = 2;
+export const WADFILE_HAS_INFINITY_STUFF = 4;
+export const CURRENT_WADFILE_VERSION = (WADFILE_HAS_INFINITY_STUFF);
 
-#define PRE_ENTRY_POINT_WADFILE_VERSION 0
-#define WADFILE_HAS_DIRECTORY_ENTRY 1
-#define WADFILE_SUPPORTS_OVERLAYS 2
-#define WADFILE_HAS_INFINITY_STUFF 4
-#define CURRENT_WADFILE_VERSION (WADFILE_HAS_INFINITY_STUFF)
-
-#define MAXIMUM_DIRECTORY_ENTRIES_PER_FILE 64
-#define MAXIMUM_WADFILE_NAME_LENGTH 64
-#define MAXIMUM_UNION_WADFILES 16
-#define MAXIMUM_OPEN_WADFILES 3
-
+export const MAXIMUM_DIRECTORY_ENTRIES_PER_FILE = 64;
+export const MAXIMUM_WADFILE_NAME_LENGTH = 64;
+export const MAXIMUM_UNION_WADFILES = 16;
+export const MAXIMUM_OPEN_WADFILES = 3;
+/*
 typedef uint32 WadDataType;
 
 // ------------- file structures
@@ -49,8 +49,9 @@ struct wad_header { // 128 bytes
 	uint32 parent_checksum;	// If non-zero, this is the checksum of our parent, and we are simply modifications!
 	int16 unused[20];
 };
-const int SIZEOF_wad_header = 128;	// don't trust sizeof()
-
+*/
+const SIZEOF_wad_header = 128;	// don't trust sizeof()
+/*
 struct old_directory_entry { // 8 bytes
 	int32 offset_to_start; // From start of file
 	int32 length; // Of total level 
@@ -62,8 +63,9 @@ struct directory_entry { // >=10 bytes
 	int32 length; // Of total level
 	int16 index; // For inplace modification of the wadfile!
 };
-const int SIZEOF_directory_entry = 10;
-
+*/
+const SIZEOF_directory_entry = 10;
+/*
 struct old_entry_header { // 12 bytes
 	WadDataType tag;
 	int32 next_offset; // From current file location-> ie directory_entry.offset_to_start+next_offset
@@ -73,8 +75,9 @@ struct old_entry_header { // 12 bytes
 	
 	// Data follows
 };
-const int SIZEOF_old_entry_header = 12;
-
+*/
+const SIZEOF_old_entry_header = 12;
+/*
 struct entry_header { // 16 bytes
 	WadDataType tag;
 	int32 next_offset; // From current file location-> ie directory_entry.offset_to_start+next_offset
@@ -85,8 +88,9 @@ struct entry_header { // 16 bytes
 	
 	// Data follows
 };
-const int SIZEOF_entry_header = 16;
-
+*/
+const SIZEOF_entry_header = 16;
+/*
 // ---------- Memory Data structures ------------
 struct tag_data {
 	WadDataType tag;		// What type of data is this?
