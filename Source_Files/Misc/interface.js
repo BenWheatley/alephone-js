@@ -2852,10 +2852,9 @@ static void update_interface_fades(
 		}
 	}
 }
-
-void stop_interface_fade(
-	void)
-{
+*/
+function stop_interface_fade() {
+/* TODO: stub
 	if(interface_fade_in_progress)
 	{
 		stop_fade();
@@ -2870,8 +2869,9 @@ void stop_interface_fade(
 			show_cursor();
 		}
 	}
+	*/
 }
-
+/*
 //  Called right before we start a game.. 
 void interface_fade_out(
 	short pict_resource_number,
