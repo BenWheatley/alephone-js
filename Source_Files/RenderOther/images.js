@@ -1291,9 +1291,9 @@ static void create_m1_menu_surfaces(void)
     
     m1_menu_pressed = std::move(s);
 }
-
-static bool m1_draw_full_screen_pict_resource_from_images(int pict_resource_number)
-{
+*/
+function m1_draw_full_screen_pict_resource_from_images(pict_resource_number) {
+/* TODO: stub
     if (!shapes_file_is_m1())
         return false;
     if (pict_resource_number == MAIN_MENU_BASE)
@@ -1308,11 +1308,14 @@ static bool m1_draw_full_screen_pict_resource_from_images(int pict_resource_numb
         draw_picture_surface(m1_menu_pressed);
         return true;
     }
+    */
     return false;
 }
-*/
+
 export function draw_full_screen_pict_resource_from_images(pict_resource_number) {
-	// TODO: properly convert draw_full_screen_pict_resource_from_images to JS, this method at the moment is just a stub
+	if (m1_draw_full_screen_pict_resource_from_images(pict_resource_number))
+		return;
+	
 	let PictRsrc = new FileHandler.LoadedResource();
 	let result = get_picture_resource_from_images(pict_resource_number, PictRsrc);
 	if (PictRsrc != null) {
@@ -1320,16 +1323,6 @@ export function draw_full_screen_pict_resource_from_images(pict_resource_number)
 	}
 }
 /*
-void draw_full_screen_pict_resource_from_images(int pict_resource_number)
-{
-	if (m1_draw_full_screen_pict_resource_from_images(pict_resource_number))
-		return;
-    
-    LoadedResource PictRsrc;
-    if (get_picture_resource_from_images(pict_resource_number, PictRsrc))
-        draw_picture(PictRsrc);
-}
-
 //  Get/draw image from scenario
 
 bool get_picture_resource_from_scenario(int base_resource, LoadedResource &PictRsrc)
