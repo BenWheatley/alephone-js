@@ -459,27 +459,7 @@ export function main_event_loop() {
 	
 	requestAnimationFrame( main_event_loop );
 }
-/*
-static bool has_cheat_modifiers(void)
-{
-	SDL_Keymod m = SDL_GetModState();
-#if (defined(__APPLE__) && defined(__MACH__))
-	return ((m & KMOD_SHIFT) && (m & KMOD_CTRL)) || ((m & KMOD_ALT) && (m & KMOD_GUI));
-#else
-	return (m & KMOD_SHIFT) && (m & KMOD_CTRL) && !(m & KMOD_ALT) && !(m & KMOD_GUI);
-#endif
-}
 
-static bool event_has_cheat_modifiers(const SDL_Event &event)
-{
-	Uint16 m = event.key.keysym.mod;
-#if (defined(__APPLE__) && defined(__MACH__))
-	return ((m & KMOD_SHIFT) && (m & KMOD_CTRL)) || ((m & KMOD_ALT) && (m & KMOD_GUI));
-#else
-	return (m & KMOD_SHIFT) && (m & KMOD_CTRL) && !(m & KMOD_ALT) && !(m & KMOD_GUI);
-#endif
-}
-*/
 static void process_screen_click(const SDL_Event &event)
 {
 	int x = event.button.x, y = event.button.y;
