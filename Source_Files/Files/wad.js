@@ -111,13 +111,11 @@ struct wad_data {
 
 #include "cseries.h"
 
-#include <string.h>
-#include <stdlib.h>
-
-#include "wad.h"
 #include "tags.h"
 #include "crc.h"
-#include "game_errors.h"
+*/
+import * as game_errors from '../Misc/game_errors.js';
+/*
 #include "interface.h" // for strERRORS
 
 #include "FileHandler.h"
@@ -1494,8 +1492,6 @@ static uint8 *pack_entry_header(uint8 *Stream, entry_header *Objects, size_t Cou
 #include "cseries.h"
 #include "FileHandler.h"
 #include "find_files.h"
-
-#include <SDL2/SDL_endian.h>
 
 #ifdef HAVE_STEAM
 #include "steamshim_child.h"
