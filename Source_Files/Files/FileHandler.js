@@ -58,6 +58,8 @@ constexpr int unknown_filesystem_error = -1;
 
 */
 
+export const ENOENT = 2;
+
 export class OpenedFile {
 	// Stub
 }
