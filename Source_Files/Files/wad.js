@@ -118,9 +118,9 @@ import * as game_errors from '../Misc/game_errors.js';
 import * as FileHandler from './FileHandler.js';
 /*
 #include "Packing.h"
-
+*/
 const memory_error = 0; // Was function in C++, always returned 0
-
+/*
 // Export this
 bool read_wad_header(
 	OpenedFile& OFile, 
