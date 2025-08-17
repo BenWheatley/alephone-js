@@ -18,10 +18,8 @@
 */
 
 import { DataViewReader } from '../Misc/DataViewReader.js';
+import * as tags from  './tags.js';
 
-/*
-#include "tags.h"
-*/
 export const PRE_ENTRY_POINT_WADFILE_VERSION = 0;
 export const WADFILE_HAS_DIRECTORY_ENTRY = 1;
 export const WADFILE_SUPPORTS_OVERLAYS = 2;
