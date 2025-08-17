@@ -961,31 +961,14 @@ static void process_event(const SDL_Event &event)
 		
 	case SDL_WINDOWEVENT:
 		switch (event.window.event) {
-			case SDL_WINDOWEVENT_FOCUS_LOST:
+			case SDL_WINDOWEVENT_FOCUS_LOST: // TODO: this but in JS
 				if (get_game_state() == _game_in_progress && get_keyboard_controller_status() && !Movie::instance()->IsRecording()) {
 					pause_game();
 				}
 
 				set_game_focus_lost();
 				break;
-			case SDL_WINDOWEVENT_FOCUS_GAINED:
-#if (defined(__APPLE__) && defined(__MACH__))
-    			// work around Mojave issue
-				static bool gFirstWindow = true;
-				if (gFirstWindow) {
-					gFirstWindow = false;
-					SDL_Window *win = SDL_GetWindowFromID(event.window.windowID);
-					if (!MainScreenIsOpenGL() && (SDL_GetWindowFlags(win) & SDL_WINDOW_FULLSCREEN_DESKTOP)) {
-						SDL_SetWindowFullscreen(win, 0);
-						SDL_SetWindowFullscreen(win, SDL_WINDOW_FULLSCREEN_DESKTOP);
-					} else {
-						SDL_Window *w2 = SDL_CreateWindow("Loading", 0, 0, 100, 100, 0);
-						SDL_RaiseWindow(w2);
-						SDL_RaiseWindow(win);
-						SDL_DestroyWindow(w2);
-					}
-				}
-#endif
+			case SDL_WINDOWEVENT_FOCUS_GAINED: // TODO: this but in JS
 				set_game_focus_gained();
 				break;
 		}
