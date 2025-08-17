@@ -974,7 +974,7 @@ let is_network_pregame = false;
 
 export function idle_game_state(/*uint32*/ time) {
 	let machine_ticks_elapsed = time - game_state.last_ticks_on_idle;
-
+	
 	if (machine_ticks_elapsed || game_state.phase==0) {
 		if (game_state.phase != INDEFINATE_TIME_DELAY) {
 			game_state.phase -= machine_ticks_elapsed;
@@ -990,7 +990,7 @@ export function idle_game_state(/*uint32*/ time) {
 				case GameStates._display_credits:
 					next_game_screen();
 					break;
-
+					
 				case GameStates._display_intro_screens_for_demo:
 				case GameStates._display_main_menu:
 				/* TODO: convert this to JS:
@@ -1003,11 +1003,11 @@ export function idle_game_state(/*uint32*/ time) {
 					}
 					*/
 					break;
-
+					
 				case GameStates._close_game:
 					display_main_menu();
 					break;
-
+					
 				case GameStates._switch_demo:
 					//  This is deferred to the idle task because it 
 					//   occurs at interrupt time.. 
@@ -1031,11 +1031,11 @@ export function idle_game_state(/*uint32*/ time) {
 				case GameStates._display_chapter_heading:
 					Logging.logNote("Chapter heading...");
 					break;
-
+					
 				case GameStates._quit_game:
 					//  About to quit, but can still hit this through order of ops.. 
 					break;
-
+					
 				case GameStates._revert_game:
 					//  Reverting while in the update loop sounds sketchy.. 
 					/* TODO: convert this to JS:
@@ -1256,7 +1256,7 @@ void do_menu_item_command(
 							break;
 					}
 					break;
-
+					
 				case iSave:
 					switch(game_state.user)
 					{
