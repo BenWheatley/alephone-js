@@ -135,7 +135,7 @@ bool read_wad_header(
 	
 	if(error)
 	{
-		set_game_error(systemError, error);
+		set_game_error(game_errors.systemError, error);
 		success= false;
 	} else {
 		// Thomas Herzog made this error checking more careful
@@ -148,110 +148,74 @@ bool read_wad_header(
 	
 	return success;
 }
-
-// Export this
-struct wad_data *read_indexed_wad_from_file(
-	OpenedFile& OFile, 
-	struct wad_header *header, 
-	short index,
-	bool read_only)
-{
-	struct wad_data *read_wad= (struct wad_data *) NULL;
-	uint8 *raw_wad = NULL;
-     int32 length = 0;
-	int error = 0;
-
-	// if(file_id>=0) // NOT a union wadfile
-	{
-		if (size_of_indexed_wad(OFile, header, index, &length))
-		{
-			// The padding is so that one can use later-Marathon entry-header reading
-			// on Marathon 1 wadfiles, which have a shorter entry header
-			int32 padded_length = length + (SIZEOF_entry_header-SIZEOF_old_entry_header);
-			
-			raw_wad = (uint8 *) level_transition_malloc(padded_length);
-			
-			if(raw_wad)
-			{
-				// Read into the buffer
-				if (read_indexed_wad_from_file_into_buffer(OFile, header, index, raw_wad, &length))
-				{
-					// Got the raw wad. Convert it into our internal representation
-					if(read_only)
-					{
-						read_wad= convert_wad_from_raw(header, raw_wad, 0, length);
-					} else {
-						read_wad= convert_wad_from_raw_modifiable(header, raw_wad, length);
-					}
-					if(!read_wad)
-					{
-						error= memory_error;
-					}
-					if(!read_wad || !read_only)
-					{
-						free(raw_wad);
-						raw_wad = NULL;
-					}
-				}
-				else
-				{
-					free(raw_wad);
-					raw_wad = NULL;
-				}
+*/
+export function read_indexed_wad_from_file(OFile, header, index, read_only) {
+	let read_wad = null; // original type: wad_data*
+	let raw_wad = null; // original type: uint8*
+	let length = 0;
+	let error = 0;
+	
+	if (size_of_indexed_wad(OFile, header, index, (len) => { length = len; })) {
+		// The padding is so that one can use later-Marathon entry-header reading
+		// on Marathon 1 wadfiles, which have a shorter entry header
+		let padded_length = length + (SIZEOF_entry_header - SIZEOF_old_entry_header);
+		
+		raw_wad = new Uint8Array(padded_length);
+		
+		// Read into the buffer
+		if (read_indexed_wad_from_file_into_buffer(OFile, header, index, raw_wad, (len) => { length = len; })) {
+			// Got the raw wad. Convert it into our internal representation
+			if (read_only) {
+				read_wad = convert_wad_from_raw(header, raw_wad, 0, length);
 			} else {
-				error= memory_error;
+				read_wad = convert_wad_from_raw_modifiable(header, raw_wad, length);
 			}
+			if (!read_wad) {
+				error = memory_error;
+			}
+			if (!read_wad || !read_only) {
+				raw_wad = null;
+			}
+		} else {
+			raw_wad = null;
 		}
 	}
 
-	if(error)
-	{
-		set_game_error(systemError, error);
+	if (error) {
+		game_errors.set_game_error(game_errors.systemError, error);
 	}
-	
+
 	return read_wad;
 }
 
-// Export this
-void *extract_type_from_wad(
-	struct wad_data *wad,
-	WadDataType type, 
-	size_t *length)
-{
-	void *return_value= NULL;
-	short index;
+export function extract_type_from_wad(wad /* wad_data */, type /* WadDataType */, length) {
+	let return_value = null;
+	let index;
 	
-	*length= 0;
+	length(0);
 	
-	assert(wad);
-	for(index= 0; index<wad->tag_count; ++index)
-	{
-		if(wad->tag_data[index].tag==type)
-		{
-			return_value= wad->tag_data[index].data;
-			*length= wad->tag_data[index].length;
-			assert(wad->tag_data[index].length >= 0);
+	for (index = 0; index < wad.tag_count; ++index) {
+		if (wad.tag_data[index].tag === type) {
+			return_value = wad.tag_data[index].data;
+			length(wad.tag_data[index].length);
 			break;
 		}
 	}
 	
 	return return_value;
 }
-// export this
-bool wad_file_has_checksum(
-	FileSpecifier& File, 
-	uint32 checksum)
-{
-	bool has_checksum= false;
 
-	if(checksum==read_wad_file_checksum(File))
-	{
-		has_checksum= true;
+export function wad_file_has_checksum(/*FileSpecifier*/ File, checksum) {
+	let has_checksum = false;
+
+	if (checksum == read_wad_file_checksum(File)) {
+		has_checksum = true;
 	}
 	
 	return has_checksum;
 }
 
+/*
 // Export this
 uint32 read_wad_file_checksum(FileSpecifier& File)
 {
@@ -862,62 +826,43 @@ struct wad_data *inflate_flat_data(
 	
 	return wad;
 }
-
-// Export this
-bool create_wadfile(FileSpecifier& File, Typecode Type)
-{
+*/
+export function create_wadfile(/*FileSpecifier*/ File, /*Typecode*/ Type) {
 	return File.Create(Type);
 }
 
-static bool open_wad_file_or_set_error(FileSpecifier& File, OpenedFile& OFile, bool Writable)
-{
-	if (!File.Open(OFile, Writable))
-	{
-		set_game_error(systemError, File.GetError());
+function open_wad_file_or_set_error(/*FileSpecifier*/ File, /*OpenedFile*/ OFile, Writable) {
+	if (!File.Open(OFile, Writable)) {
+		game_errors.set_game_error(systemError, File.GetError());
 		return false;
 	}
 	return true;
 }
 
-// Export this
-bool open_wad_file_for_reading(FileSpecifier& File, OpenedFile& OFile)
-{
+export function open_wad_file_for_reading(/*FileSpecifier*/ File, /*OpenedFile*/ OFile) {
 	return open_wad_file_or_set_error(File, OFile, false);
 }
 
-// Export this
-bool open_wad_file_for_writing(FileSpecifier& File, OpenedFile& OFile)
-{
+export function open_wad_file_for_writing(/*FileSpecifier*/ File, /*OpenedFile*/ OFile) {
 	return open_wad_file_or_set_error(File, OFile, true);
 }
 
-// Export this
-void close_wad_file(OpenedFile& File)
-{
+export function close_wad_file(/*OpenedFile&*/File) {
 	File.Close();
 }
 
-//  Private Code, no need to export
-static bool size_of_indexed_wad(
-	OpenedFile& OFile, 
-	struct wad_header *header, 
-	short index, 
-	int32 *length)
-{
-	struct directory_entry entry;
-	// FileError error;
+export function size_of_indexed_wad(OFile /* OpenedFile */, header /* wad_header */, index, length) {
+	let entry = null; // directory_entry
 	
-	// assert(file_id>=0); // No union wads!
-	
-	if (read_indexed_directory_data(OFile, header, index, &entry))
-	{
-		*length= entry.length;
+	if (read_indexed_directory_data(OFile, header, index, entry)) {
+		length(entry.length); // Callback instead of &
+	} else {
+		return false;
 	}
-	else return false;
 	
 	return true;
 }
-
+/*
 static int32 calculate_directory_offset(
 	struct wad_header *header, 
 	short index)
@@ -1077,40 +1022,32 @@ static bool read_indexed_directory_data(
 	// Not found
 	return false;
 }
+*/
 
-static bool read_indexed_wad_from_file_into_buffer(
-	OpenedFile& OFile, 
-	struct wad_header *header, 
-	short index,
-	void *buffer,
-	int32 *length) // Length of maximum buffer on entry, actual length on return
-{
-	struct directory_entry entry;
-	bool success = false;
+function read_indexed_wad_from_file_into_buffer(
+	OFile /* OpenedFile */, 
+	header /* struct wad_header */, 
+	index /* short */,
+	buffer /* void* */,
+	length /* int32* */ // C++ says "Length of maximum buffer on entry, actual length on return", I think it never uses initial value
+) {
+	let entry; // type {directory_entry}
+	let success = false;
 
 	// Read the directory entry first
-	if (read_indexed_directory_data(OFile, header, index, &entry))
-	{
-		// Some sanity checks
-		assert(*length<=entry.length);
-		assert(buffer);
-		
+	if (read_indexed_directory_data(OFile, header, index, (e) => { entry = e; })) {
 		// Set the length
-		*length= entry.length;
+		length(entry.length);
 
 		// Read into it
 		if (entry.length > 0) {
 			success = read_from_file(OFile, entry.offset_to_start, buffer, entry.length);
-
-			// Veracity Check
-			// ! an error, it has a length non-zero and calculated != actual
-			assert(entry.length==calculate_raw_wad_length(header, (uint8 *)buffer));
 		}
 	}
-	
+
 	return success;
 }
-
+/*
 // This *MUST* be a base wad
 static struct wad_data *convert_wad_from_raw(
 	struct wad_header *header, 
@@ -1284,27 +1221,28 @@ static int32 calculate_raw_wad_length(
 
 	return length;
 }
-
-static bool write_to_file(
-	OpenedFile& OFile, 
-	int32 offset, 
-	void *data, 
-	int32 length)
-{
+*/
+function write_to_file(
+	OFile /* OpenedFile */, 
+	offset /* int32 */, 
+	data /* void* */, 
+	length /* int32 */
+) {
 	if (!OFile.SetPosition(offset)) return false;
 	return OFile.Write(length, data);
 }
 
-static bool read_from_file(
-	OpenedFile& OFile, 
-	int32 offset, 
-	void *data, 
-	int32 length)
-{
+function read_from_file(
+	OFile /* OpenedFile */, 
+	offset /* int32 */, 
+	data /* void* */, 
+	length /* int32 */
+) {
 	if (!OFile.SetPosition(offset)) return false;
 	return OFile.Read(length, data);
 }
 
+/*
 static uint8 *unpack_wad_header(uint8 *Stream, wad_header *Objects, size_t Count)
 {
 	uint8* S = Stream;
