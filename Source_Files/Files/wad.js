@@ -109,7 +109,6 @@ struct wad_data {
 
 #include "cseries.h"
 
-#include "tags.h"
 #include "crc.h"
 */
 import * as game_errors from '../Misc/game_errors.js';
