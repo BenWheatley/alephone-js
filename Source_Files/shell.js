@@ -959,13 +959,6 @@ static void process_event(const SDL_Event &event)
 		}
 		break;
 		
-	case SDL_QUIT:
-		if (get_game_state() == _game_in_progress)
-			do_menu_item_command(mGame, iQuitGame, false);
-		else
-			set_game_state(_quit_game);
-		break;
-
 	case SDL_WINDOWEVENT:
 		switch (event.window.event) {
 			case SDL_WINDOWEVENT_FOCUS_LOST:
