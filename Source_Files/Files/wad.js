@@ -114,8 +114,9 @@ struct wad_data {
 import * as game_errors from '../Misc/game_errors.js';
 /*
 #include "interface.h" // for strERRORS
-
-#include "FileHandler.h"
+*/
+import * as FileHandler from './FileHandler.js';
+/*
 #include "Packing.h"
 
 const memory_error = 0; // Was function in C++, always returned 0
