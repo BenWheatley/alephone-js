@@ -88,23 +88,26 @@ struct entry_header { // 16 bytes
 };
 */
 const SIZEOF_entry_header = 16;
-/*
+
 // ---------- Memory Data structures ------------
-struct tag_data {
-	WadDataType tag;		// What type of data is this?
-	byte *data; 			// Offset into the wad
-	int32 length;			// Length of the data
-	int32 offset;			// Offset for patches
-};
+class tag_data {
+	constructor() {
+		this.tag = 0;     // WadDataType - What type of data is this?
+		this.data = null; // byte* - Offset into the wad
+		this.length = 0;  // int32 - Length of the data
+		this.offset = 0;  // int32 - Offset for patches
+	}
+}
 
 // This is what a wad * actually is
-struct wad_data {
-	short tag_count;			// Tag count
-	short padding;
-	byte *read_only_data;		// If this is non NULL, we are read only
-	struct tag_data *tag_data;	// Tag data array
-};
-
+export class wad_data {
+	constructor() {
+		this.tag_count = 0;           // short
+		this.padding = 0;             // short
+		this.tag_data = [];           // struct tag_data* - Tag data array
+	}
+}
+/*
 // Note that level_transition_malloc is specific to marathon...
 
 #include "cseries.h"
