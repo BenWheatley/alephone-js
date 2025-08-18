@@ -488,7 +488,6 @@ struct wad_data *append_data_to_wad(
 
 	assert(size); // You can't append zero length data anymore!
 	assert(wad);
-	assert(!wad->read_only_data);
 
 	// Find the index to replace
 	for(index= 0; index<wad->tag_count; ++index)
@@ -550,7 +549,6 @@ void remove_tag_from_wad(
 	short index;
 
 	assert(wad);
-	assert(!wad->read_only_data);
 
 	// Find the index to replace
 	for(index= 0; index<wad->tag_count; ++index)
@@ -620,7 +618,6 @@ bool write_wad(
 	int32 running_offset= 0l;
 
 	assert(wad);
-	assert(!wad->read_only_data);
 
 	for(index=0; !error && index<wad->tag_count; ++index)
 	{
