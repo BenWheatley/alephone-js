@@ -1047,141 +1047,98 @@ function read_indexed_wad_from_file_into_buffer(
 
 	return success;
 }
-/*
-// This *MUST* be a base wad
-static struct wad_data *convert_wad_from_raw(
-	struct wad_header *header, 
-	uint8 *data,
-	int32 wad_start_offset,
-	int32 raw_length)
-{
-	struct wad_data *wad;
-	uint8 *raw_wad;
 
+// This *MUST* be a base wad
+function convert_wad_from_raw(/* struct wad_header* */ header, /* uint8* -> Uint8Array */ data, wad_start_offset, raw_length) {
+	let wad = new wad_data();
+	
 	// In case we are somewhere else, like, for example, in a net transferred level
-	raw_wad= data+wad_start_offset;
+	const data_view = new DataView(data.buffer, data.byteOffset + wad_start_offset);
+	let raw_wad = new DataViewReader(data_view, 0, true /* Marathon file data is little-endian */);
 	
-	wad= (struct wad_data *) malloc(sizeof(struct wad_data));
-	if(wad)
-	{
-		short tag_count;
-
-		// Clear it
-		obj_clear(*wad);
-
-		// If the wad is of non-zero length
-		if(raw_length) 
-		{
-			// Count the tags
-			tag_count= count_raw_tags(raw_wad);
+	// If the wad is of non-zero length
+	if (raw_length) {
+		// Count the tags
+		let tag_count = count_raw_tags(raw_wad);
+		
+		// Allocate the tags
+		wad.tag_count = tag_count;
+		wad.tag_data = Array.from({ length: tag_count }, () => new tag_data());
+		
+		let entry_header_size = get_entry_header_length(header);
+		let wad_entry_header = new entry_header();
+		let raw_wad_entry_header = 0;
+		raw_wad.seek(raw_wad_entry_header);
+		
+		// Will work OK for Marathon 1
+		unpack_entry_header(raw_wad, wad_entry_header, 1);
+		
+		for (let index = 0; index<tag_count; ++index) {
+			wad.tag_data[index].tag = wad_entry_header.tag;
+			wad.tag_data[index].length = wad_entry_header.length;
+			wad.tag_data[index].offset = 0;
+			wad.tag_data[index].data = data.subarray(wad_start_offset + raw_wad_entry_header + entry_header_size)
 			
-			// Allocate the tags
-			wad->tag_count= tag_count;
-			wad->tag_data= (struct tag_data *) malloc(tag_count * sizeof(struct tag_data));
-			if(wad->tag_data)
-			{
-				short index;
-				short entry_header_size;
+			raw_wad_entry_header = wad_entry_header.next_offset;
+			raw_wad.seek(raw_wad_entry_header);
 			
-				// Clear it
-				objlist_clear(wad->tag_data, tag_count);
-				
-				entry_header_size= get_entry_header_length(header);
-				entry_header wad_entry_header;
-				uint8 *raw_wad_entry_header = raw_wad;
-				// Will work OK for Marathon 1
-				unpack_entry_header(raw_wad_entry_header, &wad_entry_header, 1);
-				
-				// Note that this is a read only wad
-				wad->read_only_data= data;
-	
-				for(index= 0; index<tag_count; ++index)
-				{
-					assert(header->version<WADFILE_SUPPORTS_OVERLAYS || wad_entry_header.offset == 0);
-					wad->tag_data[index].tag = wad_entry_header.tag;
-					wad->tag_data[index].length = wad_entry_header.length;
-					wad->tag_data[index].offset = 0;
-					wad->tag_data[index].data = raw_wad_entry_header + entry_header_size;
-
-					raw_wad_entry_header = raw_wad + wad_entry_header.next_offset;
-					// Will work OK for Marathon 1
-					unpack_entry_header(raw_wad_entry_header, &wad_entry_header, 1);
-				} 
-			} else {
-				alert_out_of_memory();
-			}
+			// Will work OK for Marathon 1
+			unpack_entry_header(raw_wad, wad_entry_header, 1);
 		}
 	}
 	
 	return wad;
 }
 
-// This *MUST* be a base wad
-static struct wad_data *convert_wad_from_raw_modifiable(
-	struct wad_header *header, 
-	uint8 *raw_wad,
-	int32 raw_length)
-{
-	struct wad_data *wad;
-
-	wad= (struct wad_data *) malloc(sizeof(struct wad_data));
-	if(wad)
-	{
-		short tag_count;
-
-		// Clear it
-		obj_clear(*wad);
-
-		// If the wad is of non-zero length
-		if(raw_length) 
-		{
-			// Count the tags
-			tag_count= count_raw_tags(raw_wad);
+function convert_wad_from_raw_modifiable(/* struct wad_header* */ header, /* uint8* -> Uint8Array */ raw_wad, raw_length) {
+	let wad = new wad_data();
 	
-			// Allocate the tags
-			wad->tag_count= tag_count;
-			wad->tag_data= (struct tag_data *) malloc(tag_count * sizeof(struct tag_data));
-			if(wad->tag_data)
-			{
-				short index;
-				short entry_header_size;
+	// If the wad is of non-zero length
+	if (raw_length) {
+		// Create DataViewReader for the raw wad data
+		const data_view = new DataView(raw_wad.buffer, raw_wad.byteOffset);
+		let raw_wad_reader = new DataViewReader(data_view, 0, true /* Marathon file data is little-endian */);
+		
+		// Count the tags
+		let tag_count = count_raw_tags(raw_wad_reader);
+		
+		// Allocate the tags
+		wad.tag_count = tag_count;
+		wad.tag_data = Array.from({ length: tag_count }, () => new tag_data());
+		
+		let entry_header_size = get_entry_header_length(header);
+		let wad_entry_header = new entry_header();
+		let raw_wad_entry_header = 0;
+		raw_wad_reader.seek(raw_wad_entry_header);
+		
+		// Will work OK for Marathon 1
+		unpack_entry_header(raw_wad_reader, wad_entry_header, 1);
+		
+		for (let index = 0; index < tag_count; ++index) {
+			wad.tag_data[index].tag = wad_entry_header.tag;
+			wad.tag_data[index].length = wad_entry_header.length;
+			wad.tag_data[index].data = new Uint8Array(wad.tag_data[index].length);
+			wad.tag_data[index].offset = 0;
 			
-				// Clear it
-				objlist_clear(wad->tag_data, tag_count);
-				
-				entry_header_size= get_entry_header_length(header);
-				entry_header wad_entry_header;
-				uint8 *raw_wad_entry_header = raw_wad;
-				// Will work OK for Marathon 1
-				unpack_entry_header(raw_wad_entry_header, &wad_entry_header, 1);
-				
-				for(index= 0; index<tag_count; ++index)
-				{
-					wad->tag_data[index].tag = wad_entry_header.tag;
-					wad->tag_data[index].length = wad_entry_header.length;
-					wad->tag_data[index].data = (uint8 *) malloc(wad->tag_data[index].length);
-					if(!wad->tag_data[index].data)
-					{
-						alert_out_of_memory();
-					}
-					wad->tag_data[index].offset= 0l;
-					
-					// This MUST be a base
-					assert(header->version<WADFILE_SUPPORTS_OVERLAYS || wad_entry_header.offset == 0);
-	
-					// Copy the data
-					memcpy(wad->tag_data[index].data, raw_wad_entry_header + entry_header_size, wad->tag_data[index].length);
-					raw_wad_entry_header = raw_wad + wad_entry_header.next_offset;
-					// Will work OK for Marathon 1
-					unpack_entry_header(raw_wad_entry_header, &wad_entry_header, 1);
-				} 
-			}
+			// Copy the data from source to the new allocated array
+			const source_data = raw_wad.subarray(
+				raw_wad_entry_header + entry_header_size, 
+				raw_wad_entry_header + entry_header_size + wad.tag_data[index].length
+			);
+			wad.tag_data[index].data.set(source_data);
+			
+			raw_wad_entry_header = wad_entry_header.next_offset;
+			raw_wad_reader.seek(raw_wad_entry_header);
+			
+			// Will work OK for Marathon 1
+			unpack_entry_header(raw_wad_reader, wad_entry_header, 1);
 		}
 	}
 	
 	return wad;
 }
 
+/*
 // Will work OK for Marathon 1
 static short count_raw_tags(
 	uint8 *raw_wad)
