@@ -20,13 +20,13 @@
 import { DataViewReader } from '../Misc/DataViewReader.js';
 import * as tags from  './tags.js';
 
-export const PRE_ENTRY_POINT_WADFILE_VERSION = 0;
-export const WADFILE_HAS_DIRECTORY_ENTRY = 1;
-export const WADFILE_SUPPORTS_OVERLAYS = 2;
-export const WADFILE_HAS_INFINITY_STUFF = 4;
+const PRE_ENTRY_POINT_WADFILE_VERSION = 0;
+const WADFILE_HAS_DIRECTORY_ENTRY = 1;
+const WADFILE_SUPPORTS_OVERLAYS = 2;
+const WADFILE_HAS_INFINITY_STUFF = 4;
 export const CURRENT_WADFILE_VERSION = (WADFILE_HAS_INFINITY_STUFF);
 
-export const MAXIMUM_WADFILE_NAME_LENGTH = 64;
+const MAXIMUM_WADFILE_NAME_LENGTH = 64;
 /*
 typedef uint32 WadDataType;
 
