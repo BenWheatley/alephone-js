@@ -940,89 +940,81 @@ static short get_directory_base_length(
 		
 	return size;
 }
+*/
 
-static bool read_indexed_directory_data(
-	OpenedFile& OFile,
-	struct wad_header *header,
-	short index,
-	struct directory_entry *entry)
-{
-	short base_entry_size;
-	int32 offset;
-
+function read_indexed_directory_data(/* OpenedFile& */ OFile, /* struct wad_header* */ header, /* short */ index, /* struct directory_entry* */ entry) {
+	let base_entry_size;
+	let offset;
+	
 	// Get the sizes of the data structures
-	base_entry_size= get_directory_base_length(header);
+	base_entry_size = get_directory_base_length(header);
 	
 	// For old files, the index==the actual index
-	if(header->version<=WADFILE_HAS_DIRECTORY_ENTRY) 
-	{
+	if (header.version <= WADFILE_HAS_DIRECTORY_ENTRY) {
 		// Calculate the offset
-		offset= calculate_directory_offset(header, index);
-
+		offset = calculate_directory_offset(header, index);
 		// Read it
-		assert(base_entry_size<=SIZEOF_directory_entry);
+		const buffer_size = Math.max(SIZEOF_old_directory_entry, SIZEOF_directory_entry);
+		const buffer = new Uint8Array(buffer_size);
 		
-		uint8 buffer[MAX(SIZEOF_old_directory_entry,SIZEOF_directory_entry)];
 		if (!read_from_file(OFile, offset, buffer, base_entry_size))
 			return false;
-		switch (base_entry_size)
-		{
+			
+		switch (base_entry_size) {
 		case SIZEOF_old_directory_entry:
-			unpack_old_directory_entry(buffer,(old_directory_entry *)entry,1);
+			unpack_old_directory_entry(buffer, entry, 1);
 			break;
 		case SIZEOF_directory_entry:
-			unpack_directory_entry(buffer,entry,1);
+			unpack_directory_entry(buffer, entry, 1);
 			break;
 		default:
-			vassert(false,csprintf(temporary,"Unrecognized base-entry length: %d",base_entry_size));
+			console.error(`Unrecognized base-entry length: ${base_entry_size}`);
+			return false;
 		}
 		return true;
-
 	} else {
-
-		short directory_index;
-
+		let directory_index;
 		// Pin it, so we can try to read future file formats
-		if(base_entry_size>SIZEOF_directory_entry) 
-		{
-			base_entry_size= SIZEOF_directory_entry;
+		if (base_entry_size > SIZEOF_directory_entry) {
+			base_entry_size = SIZEOF_directory_entry;
 		}
-	
-		// We have to loop
-		for(directory_index= 0; directory_index<header->wad_count; ++directory_index)
-		{
-			// We use a hint, that the index is the real index, to help make this have a "hit" on the first try
-			short test_index= (index+directory_index)%header->wad_count;
 		
+		// We have to loop
+		for (directory_index = 0; directory_index < header.wad_count; ++directory_index) {
+			// We use a hint, that the index is the real index, to help make this have a "hit" on the first try
+			let test_index = (index + directory_index) % header.wad_count;
+			
 			// Calculate the offset
-			offset= calculate_directory_offset(header, test_index);
-
+			offset = calculate_directory_offset(header, test_index);
+			
 			// Read it
-			uint8 buffer[MAX(SIZEOF_old_directory_entry,SIZEOF_directory_entry)];
+			const buffer_size = Math.max(SIZEOF_old_directory_entry, SIZEOF_directory_entry);
+			const buffer = new Uint8Array(buffer_size);
+			
 			if (!read_from_file(OFile, offset, buffer, base_entry_size))
 				return false;
-			switch (base_entry_size)
-			{
+				
+			switch (base_entry_size) {
 			case SIZEOF_old_directory_entry:
-				unpack_old_directory_entry(buffer,(old_directory_entry *)entry,1);
+				unpack_old_directory_entry(buffer, entry, 1);
 				break;
 			case SIZEOF_directory_entry:
-				unpack_directory_entry(buffer,entry,1);
+				unpack_directory_entry(buffer, entry, 1);
 				break;
 			default:
-				vassert(false,csprintf(temporary,"Unrecognized base-entry length: %d",base_entry_size));
+				console.error(`Unrecognized base-entry length: ${base_entry_size}`);
+				return false;
 			}
-			if(entry->index==index) 
-			{
+			
+			if (entry.index == index) {
 				return true; // Got it
 			}
 		}
 	}
-
+	
 	// Not found
 	return false;
 }
-*/
 
 function read_indexed_wad_from_file_into_buffer(
 	OFile /* OpenedFile */, 
