@@ -691,9 +691,11 @@ int32 calculate_wad_length(
 	
 	return running_length;
 }
+*/
 
-#define CURRENT_FLAT_MAGIC_COOKIE (0xDEADDEAD)
+const CURRENT_FLAT_MAGIC_COOKIE = 0xDEADDEAD;
 
+/*
 //	LP: ought not to use such a struct directly, because this is supposed to be packed data
 //	Format:
 //	4 bytes -- magic cookie
