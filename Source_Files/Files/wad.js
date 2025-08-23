@@ -19,6 +19,7 @@
 
 import { DataViewReader } from '../Misc/DataViewReader.js';
 import * as tags from  './tags.js';
+import { logError } from '../Misc/Logging.js';
 
 const PRE_ENTRY_POINT_WADFILE_VERSION = 0;
 const WADFILE_HAS_DIRECTORY_ENTRY = 1;
@@ -805,36 +806,32 @@ export function size_of_indexed_wad(OFile /* OpenedFile */, header /* wad_header
 	
 	return true;
 }
-/*
-static int32 calculate_directory_offset(
-	struct wad_header *header, 
-	short index)
-{
-	int32 offset;
-	int32 unit_size;
 
-	switch(header->version)
-	{
+function calculate_directory_offset(/* struct wad_header* */ header, /* short */ index) {
+	let offset;
+	let unit_size;
+	
+	switch (header.version) {
 		case PRE_ENTRY_POINT_WADFILE_VERSION:
 			// OK for Marathon 1
 		case WADFILE_HAS_DIRECTORY_ENTRY:
 		case WADFILE_SUPPORTS_OVERLAYS:
 		// LP addition:
 		case WADFILE_HAS_INFINITY_STUFF:
-			unit_size= header->application_specific_directory_data_size+get_directory_base_length(header);
+			unit_size = header.application_specific_directory_data_size + get_directory_base_length(header);
 			break;
 			
 		default:
-			vhalt(csprintf(temporary, "what is version %d?", header->version));
+			logError(`what is version ${header.version}?`);
 			break;
 	}
-
+	
 	// Now actually calculate it (Note that the directory_entry data is first)
-	offset= header->directory_offset+(index*unit_size);
+	offset = header.directory_offset + (index * unit_size);
 	
 	return offset;
 }
-*/
+
 function get_entry_header_length(/* struct wad_header* */ header) {
 	let size;
 	
