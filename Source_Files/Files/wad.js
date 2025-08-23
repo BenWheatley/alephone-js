@@ -52,8 +52,9 @@ struct old_directory_entry { // 8 bytes
 	int32 offset_to_start; // From start of file
 	int32 length; // Of total level 
 };
-const int SIZEOF_old_directory_entry = 8;
-
+*/
+export const SIZEOF_old_directory_entry = 8;
+/*
 struct directory_entry { // >=10 bytes
 	int32 offset_to_start; // From start of file
 	int32 length; // Of total level
