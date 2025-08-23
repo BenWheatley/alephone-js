@@ -890,54 +890,40 @@ static int32 calculate_directory_offset(
 	
 	return offset;
 }
-
-static short get_entry_header_length(
-	struct wad_header *header)
-{
-	short size;
-
-	assert(header);
+*/
+function get_entry_header_length(/* struct wad_header* */ header) {
+	let size;
 	
-	switch(header->version)
-	{
+	switch (header.version) {
 		case PRE_ENTRY_POINT_WADFILE_VERSION:
 		case WADFILE_HAS_DIRECTORY_ENTRY:
 			size = SIZEOF_old_entry_header;
 			break;
-
 		default:
 			// After this point, I stored it
-			size = header->entry_header_size;
+			size = header.entry_header_size;
 			break;
 	}
 	
 	return size;
 }
 
-static short get_directory_base_length(
-	struct wad_header *header)
-{
-	short size;
+function get_directory_base_length(/* struct wad_header* */ header) {
+	let size;
 	
-	assert(header);
-	assert(header->version<=CURRENT_WADFILE_VERSION);
-
-	switch(header->version)
-	{
+	switch (header.version) {
 		case PRE_ENTRY_POINT_WADFILE_VERSION:
 		case WADFILE_HAS_DIRECTORY_ENTRY:
 			size = SIZEOF_old_directory_entry;
 			break;
-
 		default:
 			// After this point, I stored it
-			size = header->directory_entry_base_size;
+			size = header.directory_entry_base_size;
 			break;
 	}
 		
 	return size;
 }
-*/
 
 function read_indexed_directory_data(/* OpenedFile& */ OFile, /* struct wad_header* */ header, /* short */ index, /* struct directory_entry* */ entry) {
 	let base_entry_size;
