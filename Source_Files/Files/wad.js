@@ -412,7 +412,7 @@ void set_indexed_directory_offset_and_length(
 	
 	assert(header->version>=WADFILE_HAS_DIRECTORY_ENTRY);
 	
-	// calculate_directory_offset is for the file, by subtracting the base, we get the actual offset..
+	// calculate_directory_offset is for the file, by subtracting the base, we get the actual offset
 	data_offset= calculate_directory_offset(header, index) - header->directory_offset;
 
 	data_ptr+= data_offset;
