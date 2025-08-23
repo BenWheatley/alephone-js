@@ -89,7 +89,7 @@ const SIZEOF_entry_header = 16;
 // ---------- Memory Data structures ------------
 class tag_data {
 	constructor() {
-		this.tag = 0;     // WadDataType - What type of data is this?
+		this.tag = 0;     // WadDataType -> uint32
 		this.data = null; // byte* - Offset into the wad
 		this.length = 0;  // int32 - Length of the data
 		this.offset = 0;  // int32 - Offset for patches
@@ -286,21 +286,11 @@ bool wad_file_has_parent_checksum(
 	
 	return has_checksum;
 }
-
-// Export this
-struct wad_data *create_empty_wad(void)
-{
-	struct wad_data *wad;
-
-	wad= (struct wad_data *) malloc(sizeof(struct wad_data));
-	if(wad)
-	{
-		obj_clear(*wad); // IMPORTANT!
-	}
-
-	return wad;
-} 
-
+*/
+export function create_empty_wad() {
+	return new wad_data();
+}
+/*
 // Export this
 void fill_default_wad_header(
 	FileSpecifier& File, 
