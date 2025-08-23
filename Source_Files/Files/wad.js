@@ -364,17 +364,16 @@ bool write_directorys(
 
 	return success;
 }
+*/
 
-// Export this
-int32 get_size_of_directory_data(
-	struct wad_header *header)
-{
-	short base_entry_size= get_directory_base_length(header);
+export function get_size_of_directory_data(/*struct wad_header **/ header) {
+	let base_entry_size = get_directory_base_length(header);
 
-	return (header->wad_count*
-		(header->application_specific_directory_data_size+base_entry_size));
+	return header.wad_count *
+		(header.application_specific_directory_data_size + base_entry_size);
 }
 
+/*
 // Takes raw, unswapped directory data
 // Export this
 void *get_indexed_directory_data(
