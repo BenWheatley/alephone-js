@@ -642,24 +642,22 @@ short number_of_wads_in_file(FileSpecifier& File)
 	
 	return count;
 }
+*/
 
 // Export this
-int32 calculate_wad_length(
-	struct wad_header *file_header, 
-	struct wad_data *wad)
+export function calculate_wad_length(
+	/* struct wad_header* */ file_header, 
+	/* struct wad_data* */ wad)
 {
-	short ii;
-	short header_length= get_entry_header_length(file_header);
-	int32 running_length= 0l;
-
-	for(ii= 0; ii<wad->tag_count; ++ii)
-	{
-		running_length += wad->tag_data[ii].length + header_length;
+	let header_length = get_entry_header_length(file_header);
+	let running_length = 0;
+	
+	for (let ii = 0; ii < wad.tag_count; ++ii) {
+		running_length += wad.tag_data[ii].length + header_length;
 	}
 	
 	return running_length;
 }
-*/
 
 const CURRENT_FLAT_MAGIC_COOKIE = 0xDEADDEAD;
 
