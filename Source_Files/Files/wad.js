@@ -1238,25 +1238,6 @@ static uint8 *pack_directory_entry(uint8 *Stream, directory_entry *Objects, size
 	return S;
 }
 
-
-#if 0
-static uint8 *unpack_old_entry_header(uint8 *Stream, old_entry_header *Objects, size_t Count)
-{
-	uint8* S = Stream;
-	old_entry_header* ObjPtr = Objects;
-	
-	for (size_t k = 0; k < Count; k++, ObjPtr++)
-	{
-		StreamToValue(S,ObjPtr->tag);
-		StreamToValue(S,ObjPtr->next_offset);
-		StreamToValue(S,ObjPtr->length);
-	}
-	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_old_entry_header));
-	return S;
-}
-#endif
-
 static uint8 *pack_old_entry_header(uint8 *Stream, old_entry_header *Objects, size_t Count)
 {
 	uint8* S = Stream;
