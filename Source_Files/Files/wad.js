@@ -359,7 +359,6 @@ bool write_directorys(
 	int32 size_to_write= get_size_of_directory_data(header);
 	bool success= true;
 	
-	assert(header->version>=WADFILE_HAS_DIRECTORY_ENTRY);
 	write_to_file(OFile, header->directory_offset, entries, 
 		size_to_write);
 
@@ -371,9 +370,6 @@ int32 get_size_of_directory_data(
 	struct wad_header *header)
 {
 	short base_entry_size= get_directory_base_length(header);
-
-	assert(header->wad_count);
-	assert(header->version>=WADFILE_HAS_DIRECTORY_ENTRY || header->application_specific_directory_data_size==0);
 
 	return (header->wad_count*
 		(header->application_specific_directory_data_size+base_entry_size));
@@ -390,8 +386,6 @@ void *get_indexed_directory_data(
 	uint8 *data_ptr= (uint8 *)directories;
 	short base_entry_size= get_directory_base_length(header);
 
-	assert(header->version>=WADFILE_HAS_DIRECTORY_ENTRY);
-	assert(index>=0 && index<header->wad_count);
 	data_ptr += index*(header->application_specific_directory_data_size+base_entry_size);
 	data_ptr += base_entry_size; // Because the application specific junk follows the standard entries
 
@@ -409,8 +403,6 @@ void set_indexed_directory_offset_and_length(
 {
 	uint8 *data_ptr= (uint8 *)entries;
 	int32 data_offset;
-	
-	assert(header->version>=WADFILE_HAS_DIRECTORY_ENTRY);
 	
 	// calculate_directory_offset is for the file, by subtracting the base, we get the actual offset
 	data_offset= calculate_directory_offset(header, index) - header->directory_offset;
@@ -448,8 +440,6 @@ void *read_directory_data(
 	int32 size;
 	uint8 *data;
 	
-	assert(header->version>=WADFILE_HAS_DIRECTORY_ENTRY);
-	
 	size= get_size_of_directory_data(header);
 	data= (uint8 *)malloc(size);
 	if(data)
@@ -469,9 +459,6 @@ struct wad_data *append_data_to_wad(
 	size_t offset) // Allows for inplace creation of wadfiles
 {
 	short index;
-
-	assert(size); // You can't append zero length data anymore!
-	assert(wad);
 
 	// Find the index to replace
 	for(index= 0; index<wad->tag_count; ++index)
@@ -497,7 +484,6 @@ struct wad_data *append_data_to_wad(
 			alert_out_of_memory();
 		}
 
-		assert(wad->tag_data);
 		objlist_clear(wad->tag_data, wad->tag_count);
 		if(old_data)
 		{
@@ -507,13 +493,11 @@ struct wad_data *append_data_to_wad(
 	}
 
 	// Copy it in
-	assert(index>=0 && index<wad->tag_count);
 	wad->tag_data[index].data= (uint8 *) malloc(size);
 	if(!wad->tag_data[index].data)
 	{
 		alert_out_of_memory();
 	}
-	assert(wad->tag_data[index].data);
 		
 	memcpy(wad->tag_data[index].data, data, size);
 
@@ -531,8 +515,6 @@ void remove_tag_from_wad(
 	WadDataType type)
 {
 	short index;
-
-	assert(wad);
 
 	// Find the index to replace
 	for(index= 0; index<wad->tag_count; ++index)
@@ -553,7 +535,6 @@ void remove_tag_from_wad(
 			alert_out_of_memory();
 		}
 
-		assert(wad->tag_data);
 		objlist_clear(wad->tag_data, wad->tag_count);
 		if(old_data)
 		{
@@ -600,8 +581,6 @@ bool write_wad(
 	short index;
 	struct entry_header header;
 	int32 running_offset= 0l;
-
-	assert(wad);
 
 	for(index=0; !error && index<wad->tag_count; ++index)
 	{
@@ -714,8 +693,6 @@ void *get_flat_data(
 	bool success= false;
 	uint8 *data= NULL;
 	
-	assert(!use_union);
-	
 	OpenedFile OFile;
 	if (open_wad_file_for_reading(File,OFile))
 	{
@@ -740,7 +717,6 @@ void *get_flat_data(
 					ValueToStream(S,uint32(CURRENT_FLAT_MAGIC_COOKIE));
 					ValueToStream(S,int32(length + SIZEOF_encapsulated_wad_data));
 					S = pack_wad_header(S,&header,1);
-					assert((S - data) == SIZEOF_encapsulated_wad_data);
 					
 					// Read into our buffer
 					success = read_indexed_wad_from_file_into_buffer(OFile, &header, wad_index, 
@@ -789,23 +765,17 @@ struct wad_data *inflate_flat_data(
 	uint8 *buffer= ((uint8 *) data)+SIZEOF_encapsulated_wad_data;
 	int32 raw_length;
 
-	assert(data);
-	assert(header);
-	
 	uint32 MagicCookie;
 	uint8 *S = (uint8 *)data;
 	StreamToValue(S,MagicCookie);
-	assert(MagicCookie==CURRENT_FLAT_MAGIC_COOKIE);
 	
 	// Get the length here, where it's convenient
 	int32 Length;
 	StreamToValue(S,Length);
 	
 	S = unpack_wad_header(S,header,1);
-	assert((S - (uint8 *)data) == SIZEOF_encapsulated_wad_data);
 
 	raw_length= calculate_raw_wad_length(header, buffer);
-	assert(raw_length==Length-SIZEOF_encapsulated_wad_data);
 	
 	// Now inflate
 	wad= convert_wad_from_raw(header, (uint8 *)data, SIZEOF_encapsulated_wad_data, raw_length);
@@ -859,13 +829,11 @@ static int32 calculate_directory_offset(
 	switch(header->version)
 	{
 		case PRE_ENTRY_POINT_WADFILE_VERSION:
-			assert(header->application_specific_directory_data_size==0);
-			// OK for Marathon 1		
+			// OK for Marathon 1
 		case WADFILE_HAS_DIRECTORY_ENTRY:
 		case WADFILE_SUPPORTS_OVERLAYS:
 		// LP addition:
 		case WADFILE_HAS_INFINITY_STUFF:
-			assert(header->application_specific_directory_data_size>=0);
 			unit_size= header->application_specific_directory_data_size+get_directory_base_length(header);
 			break;
 			
@@ -1184,7 +1152,6 @@ static uint8 *unpack_wad_header(uint8 *Stream, wad_header *Objects, size_t Count
 		S += 2*20;
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_wad_header));
 	return S;
 }
 
@@ -1208,7 +1175,6 @@ static uint8 *pack_wad_header(uint8 *Stream, wad_header *Objects, size_t Count)
 		S += 2*20;
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_wad_header));
 	return S;
 }
 
@@ -1224,7 +1190,6 @@ static uint8 *unpack_old_directory_entry(uint8 *Stream, old_directory_entry *Obj
 		StreamToValue(S,ObjPtr->length);
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_old_directory_entry));
 	return S;
 }
 
@@ -1239,7 +1204,6 @@ static uint8 *pack_old_directory_entry(uint8 *Stream, old_directory_entry *Objec
 		ValueToStream(S,ObjPtr->length);
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_old_directory_entry));
 	return S;
 }
 
@@ -1256,7 +1220,6 @@ static uint8 *unpack_directory_entry(uint8 *Stream, directory_entry *Objects, si
 		StreamToValue(S,ObjPtr->index);
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_directory_entry));
 	return S;
 }
 
@@ -1272,7 +1235,6 @@ static uint8 *pack_directory_entry(uint8 *Stream, directory_entry *Objects, size
 		ValueToStream(S,ObjPtr->index);
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_directory_entry));
 	return S;
 }
 
@@ -1307,7 +1269,6 @@ static uint8 *pack_old_entry_header(uint8 *Stream, old_entry_header *Objects, si
 		ValueToStream(S,ObjPtr->length);
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_old_entry_header));
 	return S;
 }
 
@@ -1325,7 +1286,6 @@ static uint8 *unpack_entry_header(uint8 *Stream, entry_header *Objects, size_t C
 		StreamToValue(S,ObjPtr->offset);
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_entry_header));
 	return S;
 }
 
@@ -1342,7 +1302,6 @@ static uint8 *pack_entry_header(uint8 *Stream, entry_header *Objects, size_t Cou
 		ValueToStream(S,ObjPtr->offset);
 	}
 	
-	assert((S - Stream) == static_cast<ptrdiff_t>(Count*SIZEOF_entry_header));
 	return S;
 }
 
