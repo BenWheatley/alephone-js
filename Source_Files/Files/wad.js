@@ -217,19 +217,14 @@ export function wad_file_has_checksum(/*FileSpecifier*/ File, checksum) {
 	return has_checksum;
 }
 
-/*
-// Export this
-uint32 read_wad_file_checksum(FileSpecifier& File)
-{
-	struct wad_header header;
-	uint32 checksum= 0;
+export function read_wad_file_checksum(/* FileSpecifier& */ File) {
+	let header = new wad_header();
+	let checksum = 0;
 	
-	OpenedFile OFile;
-	if (open_wad_file_for_reading(File,OFile))
-	{
-		if(read_wad_header(OFile, &header))
-		{
-			checksum= header.checksum;
+	let OFile = new OpenedFile();
+	if (open_wad_file_for_reading(File, OFile)) {
+		if (read_wad_header(OFile, header)) {
+			checksum = header.checksum;
 		}
 		
 		close_wad_file(OFile);
@@ -238,6 +233,7 @@ uint32 read_wad_file_checksum(FileSpecifier& File)
 	return checksum;
 }
 
+/*
 // Export this
 uint32 read_wad_file_parent_checksum(FileSpecifier& File)
 {
