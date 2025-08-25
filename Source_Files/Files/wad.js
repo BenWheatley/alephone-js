@@ -1050,47 +1050,60 @@ function convert_wad_from_raw_modifiable(/* struct wad_header* */ header, /* uin
 	return wad;
 }
 
-/*
 // Will work OK for Marathon 1
-static short count_raw_tags(
-	uint8 *raw_wad)
-{
-	int tag_count = 0;
-
-	entry_header header;
-	unpack_entry_header(raw_wad, &header);
+function count_raw_tags(/* DataViewReader */ raw_wad) {
+	let tag_count = 0;
+	let header = new entry_header();
+	
+	// Save current position and start from beginning
+	let original_position = raw_wad.tell();
+	raw_wad.seek(0);
+	
+	unpack_entry_header(raw_wad, header);
 	while (true) {
 		tag_count++;
-		uint32 next_offset = header.next_offset;
+		let next_offset = header.next_offset;
 		if (next_offset == 0)
 			break;
-		unpack_entry_header(raw_wad + next_offset, &header);
+		raw_wad.seek(next_offset);
+		unpack_entry_header(raw_wad, header);
 	}
-
+	
+	// Restore original position
+	raw_wad.seek(original_position);
+	
 	return tag_count;
 }
 
 // Will work OK for Marathon 1
-static int32 calculate_raw_wad_length(
-	struct wad_header *file_header,
-	uint8 *wad)
+function calculate_raw_wad_length(
+	/* struct wad_header* */ file_header,
+	/* was uint8, now DataViewReader */ wad)
 {
-	int entry_header_size = get_entry_header_length(file_header);
-	int32 length = 0;
-
-	entry_header header;
-	unpack_entry_header(wad, &header);
+	let entry_header_size = get_entry_header_length(file_header);
+	let length = 0;
+	let header = new entry_header();
+	
+	// Save current position and start from beginning
+	let original_position = wad.tell();
+	wad.seek(0);
+	
+	unpack_entry_header(wad, header);
 	while (true) {
 		length += header.length + entry_header_size;
-		uint32 next_offset = header.next_offset;
+		let next_offset = header.next_offset;
 		if (next_offset == 0)
 			break;
-		unpack_entry_header(wad + next_offset, &header);
+		wad.seek(next_offset);
+		unpack_entry_header(wad, header);
 	}
-
+	
+	// Restore original position
+	wad.seek(original_position);
+	
 	return length;
 }
-*/
+
 function write_to_file(
 	OFile /* OpenedFile */, 
 	offset /* int32 */, 
