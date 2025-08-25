@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 		directory_entry e;
 		switch (base_entry_size) {
 			case SIZEOF_old_directory_entry:
-				unpack_old_directory_entry(buffer, (old_directory_entry *)&e, 1);
+				unpack_old_directory_entry(buffer, (old_directory_entry *)&e);
 				e.index = i;
 				break;
 			case SIZEOF_directory_entry:

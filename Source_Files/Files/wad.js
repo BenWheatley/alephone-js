@@ -47,13 +47,15 @@ struct wad_header { // 128 bytes
 };
 */
 const SIZEOF_wad_header = 128;	// don't trust sizeof()
-/*
-struct old_directory_entry { // 8 bytes
-	int32 offset_to_start; // From start of file
-	int32 length; // Of total level 
-};
-*/
+
+class old_directory_entry { // Data parsing type, 8 bytes
+	constructor() {
+		this.offset_to_start = 0; // int32 - From start of file
+		this.length = 0; // int32 - Of total level
+	}
+}
 export const SIZEOF_old_directory_entry = 8;
+
 /*
 struct directory_entry { // >=10 bytes
 	int32 offset_to_start; // From start of file
@@ -75,8 +77,7 @@ struct old_entry_header { // 12 bytes
 */
 const SIZEOF_old_entry_header = 12;
 
-// Data parsing type, 16 bytes
-class entry_header {
+class entry_header { // Data parsing type, 16 bytes
 	constructor() {
 		this.tag = 0; // WadDataType -> uint32
 		this.next_offset = 0; // int32; From current file location-> ie directory_entry.offset_to_start+next_offset
@@ -791,7 +792,7 @@ export function close_wad_file(/*OpenedFile&*/File) {
 }
 
 export function size_of_indexed_wad(OFile /* OpenedFile */, header /* wad_header */, index, length) {
-	let entry = null; // directory_entry
+	let entry = new directory_entry();
 	
 	if (read_indexed_directory_data(OFile, header, index, entry)) {
 		length(entry.length); // Callback instead of &
@@ -881,7 +882,7 @@ function read_indexed_directory_data(/* OpenedFile& */ OFile, /* struct wad_head
 			
 		switch (base_entry_size) {
 		case SIZEOF_old_directory_entry:
-			unpack_old_directory_entry(buffer, entry, 1);
+			unpack_old_directory_entry(buffer, entry);
 			break;
 		case SIZEOF_directory_entry:
 			unpack_directory_entry(buffer, entry, 1);
@@ -915,7 +916,7 @@ function read_indexed_directory_data(/* OpenedFile& */ OFile, /* struct wad_head
 				
 			switch (base_entry_size) {
 			case SIZEOF_old_directory_entry:
-				unpack_old_directory_entry(buffer, entry, 1);
+				unpack_old_directory_entry(buffer, entry);
 				break;
 			case SIZEOF_directory_entry:
 				unpack_directory_entry(buffer, entry, 1);
@@ -1170,22 +1171,16 @@ static uint8 *pack_wad_header(uint8 *Stream, wad_header *Objects, size_t Count)
 	
 	return S;
 }
+*/
 
-
-static uint8 *unpack_old_directory_entry(uint8 *Stream, old_directory_entry *Objects, size_t Count)
-{
-	uint8* S = Stream;
-	old_directory_entry* ObjPtr = Objects;
+function unpack_old_directory_entry(/* was uint*, now DataViewReader */ Stream, /* old_directory_entry * */ obj) {
+	obj.offset_to_start = Stream.readInt32();
+	obj.length = Stream.readInt32();
 	
-	for (size_t k = 0; k < Count; k++, ObjPtr++)
-	{
-		StreamToValue(S,ObjPtr->offset_to_start);
-		StreamToValue(S,ObjPtr->length);
-	}
-	
-	return S;
+	return Stream;
 }
 
+/*
 static uint8 *pack_old_directory_entry(uint8 *Stream, old_directory_entry *Objects, size_t Count)
 {
 	uint8* S = Stream;
