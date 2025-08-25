@@ -74,18 +74,16 @@ struct old_entry_header { // 12 bytes
 };
 */
 const SIZEOF_old_entry_header = 12;
-/*
-struct entry_header { // 16 bytes
-	WadDataType tag;
-	int32 next_offset; // From current file location-> ie directory_entry.offset_to_start+next_offset
-	int32 length; // Of entry
-	int32 offset; // Offset for inplace expansion of data
 
-	// Element size?
-	
-	// Data follows
-};
-*/
+// Data parsing type, 16 bytes
+class entry_header {
+	constructor() {
+		this.tag = 0; // WadDataType -> uint32
+		this.next_offset = 0; // int32; From current file location-> ie directory_entry.offset_to_start+next_offset
+		this.length = 0; // int32; Of entry
+		this.offset = 0; // int32; Offset for inplace expansion of data
+	  }
+}
 const SIZEOF_entry_header = 16;
 
 // ---------- Memory Data structures ------------
@@ -984,7 +982,7 @@ function convert_wad_from_raw(/* struct wad_header* */ header, /* uint8* -> Uint
 		raw_wad.seek(raw_wad_entry_header);
 		
 		// Will work OK for Marathon 1
-		unpack_entry_header(raw_wad, wad_entry_header, 1);
+		unpack_entry_header(raw_wad, wad_entry_header);
 		
 		for (let index = 0; index<tag_count; ++index) {
 			wad.tag_data[index].tag = wad_entry_header.tag;
@@ -996,7 +994,7 @@ function convert_wad_from_raw(/* struct wad_header* */ header, /* uint8* -> Uint
 			raw_wad.seek(raw_wad_entry_header);
 			
 			// Will work OK for Marathon 1
-			unpack_entry_header(raw_wad, wad_entry_header, 1);
+			unpack_entry_header(raw_wad, wad_entry_header);
 		}
 	}
 	
@@ -1025,7 +1023,7 @@ function convert_wad_from_raw_modifiable(/* struct wad_header* */ header, /* uin
 		raw_wad_reader.seek(raw_wad_entry_header);
 		
 		// Will work OK for Marathon 1
-		unpack_entry_header(raw_wad_reader, wad_entry_header, 1);
+		unpack_entry_header(raw_wad_reader, wad_entry_header);
 		
 		for (let index = 0; index < tag_count; ++index) {
 			wad.tag_data[index].tag = wad_entry_header.tag;
@@ -1044,7 +1042,7 @@ function convert_wad_from_raw_modifiable(/* struct wad_header* */ header, /* uin
 			raw_wad_reader.seek(raw_wad_entry_header);
 			
 			// Will work OK for Marathon 1
-			unpack_entry_header(raw_wad_reader, wad_entry_header, 1);
+			unpack_entry_header(raw_wad_reader, wad_entry_header);
 		}
 	}
 	
@@ -1059,13 +1057,13 @@ static short count_raw_tags(
 	int tag_count = 0;
 
 	entry_header header;
-	unpack_entry_header(raw_wad, &header, 1);
+	unpack_entry_header(raw_wad, &header);
 	while (true) {
 		tag_count++;
 		uint32 next_offset = header.next_offset;
 		if (next_offset == 0)
 			break;
-		unpack_entry_header(raw_wad + next_offset, &header, 1);
+		unpack_entry_header(raw_wad + next_offset, &header);
 	}
 
 	return tag_count;
@@ -1080,13 +1078,13 @@ static int32 calculate_raw_wad_length(
 	int32 length = 0;
 
 	entry_header header;
-	unpack_entry_header(wad, &header, 1);
+	unpack_entry_header(wad, &header);
 	while (true) {
 		length += header.length + entry_header_size;
 		uint32 next_offset = header.next_offset;
 		if (next_offset == 0)
 			break;
-		unpack_entry_header(wad + next_offset, &header, 1);
+		unpack_entry_header(wad + next_offset, &header);
 	}
 
 	return length;
@@ -1233,24 +1231,18 @@ static uint8 *pack_old_entry_header(uint8 *Stream, old_entry_header *Objects, si
 	
 	return S;
 }
+*/
 
-
-static uint8 *unpack_entry_header(uint8 *Stream, entry_header *Objects, size_t Count)
-{
-	uint8* S = Stream;
-	entry_header* ObjPtr = Objects;
-	
-	for (size_t k = 0; k < Count; k++, ObjPtr++)
-	{
-		StreamToValue(S,ObjPtr->tag);
-		StreamToValue(S,ObjPtr->next_offset);
-		StreamToValue(S,ObjPtr->length);
-		StreamToValue(S,ObjPtr->offset);
-	}
+function unpack_entry_header(/* was uint*, now DataViewReader */ Stream, /* entry_header * */ obj) {
+	obj.tag = Stream.readUint32();
+	obj.next_offset = Stream.readInt32();
+	obj.length = Stream.readInt32();
+	obj.offset = Stream.readInt32();
 	
 	return S;
 }
 
+/*
 static uint8 *pack_entry_header(uint8 *Stream, entry_header *Objects, size_t Count)
 {
 	uint8* S = Stream;
