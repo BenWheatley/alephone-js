@@ -28,24 +28,25 @@ const WADFILE_HAS_INFINITY_STUFF = 4;
 export const CURRENT_WADFILE_VERSION = (WADFILE_HAS_INFINITY_STUFF);
 
 const MAXIMUM_WADFILE_NAME_LENGTH = 64;
-/*
-typedef uint32 WadDataType;
+
+// Conversion note: typedef uint32 WadDataType;
 
 // ------------- file structures
-struct wad_header { // 128 bytes
-	int16 version;									// Used internally
-	int16 data_version;								// Used by the data
-	char file_name[MAXIMUM_WADFILE_NAME_LENGTH];
-	uint32 checksum;
-	int32 directory_offset;
-	int16 wad_count;
-	int16 application_specific_directory_data_size;
-	int16 entry_header_size;
-	int16 directory_entry_base_size;
-	uint32 parent_checksum;	// If non-zero, this is the checksum of our parent, and we are simply modifications!
-	int16 unused[20];
+class wad_header { // Data parsing type, 128 bytes
+	constructor() {
+		this.version; // int16 - Used internally
+		this.data_version; // int16 - Used by the data
+		this.file_name = ""; // char file_name[MAXIMUM_WADFILE_NAME_LENGTH];
+		this.checksum; // uint32
+		this.directory_offset; // int32
+		this.wad_count; // int16
+		this.application_specific_directory_data_size; // int16
+		this.entry_header_size; // int16
+		this.directory_entry_base_size; // int16
+		this.parent_checksum; // uint32 - If non-zero, this is the checksum of our parent, and we are simply modifications!
+		// original had `int16 unused[20];` at the end
+	}
 };
-*/
 const SIZEOF_wad_header = 128;	// don't trust sizeof()
 
 class old_directory_entry { // Data parsing type, 8 bytes
@@ -121,35 +122,29 @@ import * as FileHandler from './FileHandler.js';
 #include "Packing.h"
 */
 const memory_error = 0; // Was function in C++, always returned 0
-/*
-// Export this
-bool read_wad_header(
-	OpenedFile& OFile, 
-	struct wad_header *header)
-{
-	int error = 0;
-	bool success= true;
+
+export function read_wad_header(/* OpenedFile& */ OFile, /* struct wad_header * */ header) {
+	let error = 0;
+	let success = true;
 	
-	uint8 buffer[SIZEOF_wad_header];
+	let buffer = new Uint8Array(SIZEOF_wad_header);
 	error = !read_from_file(OFile, 0, buffer, SIZEOF_wad_header);
-	unpack_wad_header(buffer,header,1);
+	unpack_wad_header(buffer, header, 1);
 	
-	if(error)
-	{
+	if (error) {
 		set_game_error(game_errors.systemError, error);
-		success= false;
+		success = false;
 	} else {
 		// Thomas Herzog made this error checking more careful
-		if((header->version>CURRENT_WADFILE_VERSION) || (header->data_version > 2) || (header->wad_count < 1))
-		{
-			set_game_error(gameError, errUnknownWadVersion);
-			success= false;
+		if (header.version > CURRENT_WADFILE_VERSION || header.data_version > 2 || header.wad_count < 1) {
+		  set_game_error(game_errors.gameError, game_errors.errUnknownWadVersion);
+		  success = false;
 		}
 	}
 	
 	return success;
 }
-*/
+
 export function read_indexed_wad_from_file(OFile, header, index, read_only) {
 	let read_wad = null; // original type: wad_data*
 	let raw_wad = null; // original type: uint8*
