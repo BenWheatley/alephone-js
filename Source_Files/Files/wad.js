@@ -56,13 +56,13 @@ class old_directory_entry { // Data parsing type, 8 bytes
 }
 export const SIZEOF_old_directory_entry = 8;
 
-/*
-struct directory_entry { // >=10 bytes
-	int32 offset_to_start; // From start of file
-	int32 length; // Of total level
-	int16 index; // For inplace modification of the wadfile!
-};
-*/
+class directory_entry { // Data parsing type, 10 bytes (original comment said ">=10 bytes", but also it's exactly 10)
+	constructor() {
+		this.offset_to_start = 0; // int32 - From start of file
+		this.length = 0; // int32 - Of total level
+		this.index = 0; // int16 - For inplace modification of the wadfile!
+	}
+}
 const SIZEOF_directory_entry = 10;
 /*
 struct old_entry_header { // 12 bytes
@@ -885,7 +885,7 @@ function read_indexed_directory_data(/* OpenedFile& */ OFile, /* struct wad_head
 			unpack_old_directory_entry(buffer, entry);
 			break;
 		case SIZEOF_directory_entry:
-			unpack_directory_entry(buffer, entry, 1);
+			unpack_directory_entry(buffer, entry);
 			break;
 		default:
 			console.error(`Unrecognized base-entry length: ${base_entry_size}`);
@@ -919,7 +919,7 @@ function read_indexed_directory_data(/* OpenedFile& */ OFile, /* struct wad_head
 				unpack_old_directory_entry(buffer, entry);
 				break;
 			case SIZEOF_directory_entry:
-				unpack_directory_entry(buffer, entry, 1);
+				unpack_directory_entry(buffer, entry);
 				break;
 			default:
 				console.error(`Unrecognized base-entry length: ${base_entry_size}`);
@@ -1194,23 +1194,17 @@ static uint8 *pack_old_directory_entry(uint8 *Stream, old_directory_entry *Objec
 	
 	return S;
 }
+*/
 
-
-static uint8 *unpack_directory_entry(uint8 *Stream, directory_entry *Objects, size_t Count)
-{
-	uint8* S = Stream;
-	directory_entry* ObjPtr = Objects;
+function unpack_directory_entry(/* was uint8*, now DataViewReader */ Stream, /* directory_entry * */ obj) {
+	obj.offset_to_start = Stream.readInt32();
+	obj.length = Stream.readInt32();
+	obj.index = Stream.readInt16();
 	
-	for (size_t k = 0; k < Count; k++, ObjPtr++)
-	{
-		StreamToValue(S,ObjPtr->offset_to_start);
-		StreamToValue(S,ObjPtr->length);
-		StreamToValue(S,ObjPtr->index);
-	}
-	
-	return S;
+	return reader;
 }
 
+/*
 static uint8 *pack_directory_entry(uint8 *Stream, directory_entry *Objects, size_t Count)
 {
 	uint8* S = Stream;

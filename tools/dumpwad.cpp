@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 				e.index = i;
 				break;
 			case SIZEOF_directory_entry:
-				unpack_directory_entry(buffer, &e, 1);
+				unpack_directory_entry(buffer, &e);
 				break;
 			default:
 				fprintf(stderr, "Unrecognized base entry length\n");
