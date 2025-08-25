@@ -965,7 +965,8 @@ function convert_wad_from_raw(/* struct wad_header* */ header, /* uint8* -> Uint
 	
 	// In case we are somewhere else, like, for example, in a net transferred level
 	const data_view = new DataView(data.buffer, data.byteOffset + wad_start_offset);
-	let raw_wad = new DataViewReader(data_view, 0, true /* Marathon file data is little-endian */);
+	const littleEndian = false;  // Marathon file data is big-endian… I think?
+	let raw_wad = new DataViewReader(data_view, 0, littleEndian);
 	
 	// If the wad is of non-zero length
 	if (raw_length) {
