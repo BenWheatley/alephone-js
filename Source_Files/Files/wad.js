@@ -1173,7 +1173,7 @@ static uint8 *pack_wad_header(uint8 *Stream, wad_header *Objects, size_t Count)
 }
 */
 
-function unpack_old_directory_entry(/* was uint*, now DataViewReader */ Stream, /* old_directory_entry * */ obj) {
+function unpack_old_directory_entry(/* was uint8*, now DataViewReader */ Stream, /* old_directory_entry * */ obj) {
 	obj.offset_to_start = Stream.readInt32();
 	obj.length = Stream.readInt32();
 	
