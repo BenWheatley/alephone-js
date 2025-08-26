@@ -129,7 +129,7 @@ export function read_wad_header(/* OpenedFile& */ OFile, /* struct wad_header * 
 	
 	let buffer = new Uint8Array(SIZEOF_wad_header);
 	error = !read_from_file(OFile, 0, buffer, SIZEOF_wad_header);
-	unpack_wad_header(buffer, header, 1);
+	unpack_wad_header(buffer, header);
 	
 	if (error) {
 		set_game_error(game_errors.systemError, error);
@@ -752,7 +752,7 @@ struct wad_data *inflate_flat_data(
 	int32 Length;
 	StreamToValue(S,Length);
 	
-	S = unpack_wad_header(S,header,1);
+	S = unpack_wad_header(S,header);
 
 	raw_length= calculate_raw_wad_length(header, buffer);
 	
@@ -1120,30 +1120,24 @@ function read_from_file(
 	return OFile.Read(length, data);
 }
 
-/*
-static uint8 *unpack_wad_header(uint8 *Stream, wad_header *Objects, size_t Count)
-{
-	uint8* S = Stream;
-	wad_header* ObjPtr = Objects;
+function unpack_wad_header(/* was uint8*, now DataViewReader */ Stream, /* wad_header * */obj) {
+	obj.version = Stream.readInt16();
+	obj.data_version = Stream.readInt16();
+	obj.file_name = csstrings.mac_roman_to_utf8( Stream.readBytes(MAXIMUM_WADFILE_NAME_LENGTH) );
+	obj.checksum = Stream.readUint32();
+	obj.directory_offset = Stream.readInt32();
+	obj.wad_count = Stream.readInt16();
+	obj.application_specific_directory_data_size = Stream.readInt16();
+	obj.entry_header_size = Stream.readInt16();
+	obj.directory_entry_base_size = Stream.readInt16();
+	obj.parent_checksum = Stream.readUint32();
 	
-	for (size_t k = 0; k < Count; k++, ObjPtr++)
-	{
-		StreamToValue(S,ObjPtr->version);
-		StreamToValue(S,ObjPtr->data_version);
-		StreamToBytes(S,ObjPtr->file_name,MAXIMUM_WADFILE_NAME_LENGTH);
-		StreamToValue(S,ObjPtr->checksum);
-		StreamToValue(S,ObjPtr->directory_offset);
-		StreamToValue(S,ObjPtr->wad_count);
-		StreamToValue(S,ObjPtr->application_specific_directory_data_size);
-		StreamToValue(S,ObjPtr->entry_header_size);
-		StreamToValue(S,ObjPtr->directory_entry_base_size);
-		StreamToValue(S,ObjPtr->parent_checksum);
-		S += 2*20;
-	}
+	Stream.skip(2 * 20); // Skip unused[20] (40 bytes)
 	
-	return S;
+	return Stream;
 }
 
+/*
 static uint8 *pack_wad_header(uint8 *Stream, wad_header *Objects, size_t Count)
 {
 	uint8* S = Stream;
