@@ -106,11 +106,11 @@ export class wad_data {
 		this.tag_data = [];           // struct tag_data* - Tag data array
 	}
 }
-/*
 // Note that level_transition_malloc is specific to marathon...
 
-#include "cseries.h"
+import * as cseries from '../CSeries/cseries.js';
 
+/*
 #include "crc.h"
 */
 import * as game_errors from '../Misc/game_errors.js';
@@ -1123,7 +1123,7 @@ function read_from_file(
 function unpack_wad_header(/* was uint8*, now DataViewReader */ Stream, /* wad_header * */obj) {
 	obj.version = Stream.readInt16();
 	obj.data_version = Stream.readInt16();
-	obj.file_name = csstrings.mac_roman_to_utf8( Stream.readBytes(MAXIMUM_WADFILE_NAME_LENGTH) );
+	obj.file_name = cseries.mac_roman_to_utf8( Stream.readBytes(MAXIMUM_WADFILE_NAME_LENGTH) );
 	obj.checksum = Stream.readUint32();
 	obj.directory_offset = Stream.readInt32();
 	obj.wad_count = Stream.readInt16();
