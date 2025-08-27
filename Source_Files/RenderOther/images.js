@@ -1320,8 +1320,9 @@ export function draw_full_screen_pict_resource_from_images(pict_resource_number)
 		return;
 	
 	let PictRsrc = new FileHandler.LoadedResource();
+	
 	let result = get_picture_resource_from_images(pict_resource_number, PictRsrc);
-	if (PictRsrc != null) {
+	if (result != null) {
 		draw_picture(PictRsrc);
 	}
 }
