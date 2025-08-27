@@ -825,7 +825,7 @@ static void process_game_key(const SDL_Event &event)
 			{
 				toggle_fullscreen();
 			} else {
-				process_main_menu_highlight_select(event_has_cheat_modifiers(event));
+				_interface.process_main_menu_highlight_select(event_has_cheat_modifiers(event));
 			}
 			break;
 		case SDLK_a:
@@ -853,10 +853,10 @@ static void process_game_key(const SDL_Event &event)
 					process_main_menu_highlight_advance(false);
 					break;
 				case AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_A:
-					process_main_menu_highlight_select(false);
+					_interface.process_main_menu_highlight_select(false);
 					break;
 				case AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_GUIDE:
-					process_main_menu_highlight_select(true);
+					_interface.process_main_menu_highlight_select(true);
 					break;
 				default:
 					break;
