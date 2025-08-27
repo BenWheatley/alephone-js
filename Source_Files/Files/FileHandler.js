@@ -519,32 +519,12 @@ static int to_posix_code_or_unknown(sys::error_code ec)
 	return cond.category() == sys::generic_category() ? cond.value() : unknown_filesystem_error;
 }
 
-#ifdef __WIN32__
-static fs::path utf8_to_path(const std::string& utf8) { return utf8_to_wide(utf8); }
-static std::string path_to_utf8(const fs::path& path) { return wide_to_utf8(path.native()); }
-#else
 static fs::path utf8_to_path(const std::string& utf8) { return utf8; }
 static std::string path_to_utf8(const fs::path& path) { return path.native(); }
-#endif
 
 // utf8_zzip_io(): a zzip I/O handler set with a UTF-8-compatible 'open' handler
 #ifdef HAVE_ZZIP
-#ifdef __WIN32__
-static int win_zzip_open(const char* f, int o, ...) { return _wopen(utf8_to_wide(f).c_str(), o); }
-
-static const zzip_plugin_io_handlers& utf8_zzip_io()
-{
-	static const zzip_plugin_io_handlers io = []
-	{
-		zzip_plugin_io_handlers io = {zzip_get_default_io()->fd};
-		io.fd.open = &win_zzip_open;
-		return io;
-	}();
-	return io;
-}
-#else
 static const zzip_plugin_io_handlers& utf8_zzip_io() { return *zzip_get_default_io(); }
-#endif
 #endif // HAVE_ZZIP
 
 // Opened file
@@ -779,11 +759,7 @@ bool FileSpecifier::Exists()
 {
 	// Check whether the file is readable
 	err = 0;
-#ifdef __WIN32__
-	const bool access_ok = _waccess(utf8_to_wide(name).c_str(), R_OK) == 0;
-#else
 	const bool access_ok = access(GetPath(), R_OK) == 0;
-#endif
 	if (!access_ok)
 		err = errno;
 	
@@ -1605,21 +1581,8 @@ static std::map<Typecode, const char*> typecode_filters {
 bool FileSpecifier::ReadDirectoryDialog() //needs native file dialog to work
 {
 #ifdef HAVE_NFD
-#if defined(_WIN32)
-	auto fullscreen = get_screen_mode()->fullscreen;
-	if (fullscreen)
-	{
-		toggle_fullscreen(false);
-	}
-#endif
 	nfdchar_t* outpath;
 	auto result = NFD_PickFolder(nullptr, &outpath);
-#if defined(_WIN32)
-	if (fullscreen)
-	{
-		toggle_fullscreen(true);
-	}
-#endif
 
 	if (result == NFD_OKAY)
 	{
@@ -1683,20 +1646,7 @@ bool FileSpecifier::ReadDialog(Typecode type, const char *prompt)
 #endif
 
 		nfdchar_t* outpath;
-#if defined(_WIN32)
-		auto fullscreen = get_screen_mode()->fullscreen;
-		if (fullscreen)
-		{
-			toggle_fullscreen(false);
-		}
-#endif		
 		auto result = NFD_OpenDialog(filters, dir.GetPath(), &outpath);
-#if defined(_WIN32)
-		if (fullscreen)
-		{
-			toggle_fullscreen(true);
-		}
-#endif
 		if (result == NFD_OKAY)
 		{
 			name = outpath;
@@ -1935,20 +1885,7 @@ bool FileSpecifier::WriteDialog(Typecode type, const char *prompt, const char *d
 		}
 		
 		nfdchar_t* outpath;
-#if defined(_WIN32)
-		auto fullscreen = get_screen_mode()->fullscreen;
-		if (fullscreen)
-		{
-			toggle_fullscreen(false);
-		}
-#endif
 		auto result = NFD_SaveDialog(typecode_filters[type], dir.GetPath(), &outpath);
-#if defined(_WIN32)
-		if (fullscreen)
-		{
-			toggle_fullscreen(true);
-		}
-#endif
 		if (result == NFD_OKAY)
 		{
 			name = outpath;
