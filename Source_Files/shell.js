@@ -78,7 +78,7 @@ import * as screen_drawing from "./RenderOther/screen_drawing.js"
 #include "extensions.h"
 #include "items.h"
 */
-import * as interface_menus from './Misc/interface_menus.js';
+import { mGame, iPause, iSave, iRevert, iCloseGame, iQuitGame, mInterface, iNewGame, iLoadGame, iGatherGame, iJoinGame, iPreferences, iReplayLastFilm, iSaveLastFilm, iReplaySavedFilm, iCredits, iQuit, iCenterButton, iPlaySingletonLevel, iAbout } from './Misc/interface_menus.js';
 /*
 #include "weapons.h"
 #include "lua_script.h"

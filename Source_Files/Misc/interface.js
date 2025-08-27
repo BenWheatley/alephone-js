@@ -224,7 +224,7 @@ import * as screen from '../RenderOther/screen.js';
 #include "FileHandler.h"
 #include "lua_script.h" // PostIdle
 */
-import * as interface_menus from './interface_menus.js';
+import { mGame, iPause, iSave, iRevert, iCloseGame, iQuitGame, mInterface, iNewGame, iLoadGame, iGatherGame, iJoinGame, iPreferences, iReplayLastFilm, iSaveLastFilm, iReplaySavedFilm, iCredits, iQuit, iCenterButton, iPlaySingletonLevel, iAbout } from './interface_menus.js';
 /*
 #include "XML_LevelScript.h"
 #include "Movie.h"
