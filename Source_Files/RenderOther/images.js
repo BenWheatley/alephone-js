@@ -915,8 +915,11 @@ SDL_Surface *tile_surface(SDL_Surface *s, int width, int height)
 }
 */
 //  Draw picture resource centered on screen
-function draw_picture_surface(picture) {
+function draw_picture_surface(/* ImageData */ picture) {
 	if (!picture) return;
+	if (!(picture instanceof ImageData)) {
+		console.assert(false, "wrong data type: expected ImageData");
+	}
 	
 	const ctx = window._2DContext;
 	const canvas = ctx.canvas;
