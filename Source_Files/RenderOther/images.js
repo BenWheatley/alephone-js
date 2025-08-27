@@ -196,7 +196,7 @@ class image_file_t {
 		// Get resource from resource file
 		let result = null;
 		if (this.rsrc_file.IsOpen()) this.rsrc_file.Get(rsrc_type, id, rsrc);
-		if (result != null) return result;
+		if (result != null) return true;
 		
 		// Get resource from wad file
 /* TODO: continue converting this CPP into JS
@@ -244,7 +244,7 @@ class image_file_t {
 		}
 */
 		
-		return result;
+		return false;
 	}
 
 	make_rsrc_from_pict(data, length, rsrc, clut_data, clut_length) { // original used a pointer: LoadedResource &rsrc
