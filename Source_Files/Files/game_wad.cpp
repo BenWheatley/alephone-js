@@ -340,7 +340,7 @@ bool load_level_from_map(
 						// error code has been set...
 					}
 				} else {
-					set_game_error(gameError, errWadIndexOutOfRange);
+					set_game_error(game_errors.gameError, game_errors.errWadIndexOutOfRange);
 				}
 			} else {
 				// error code has been set...
@@ -352,7 +352,7 @@ bool load_level_from_map(
 			// error code has been set..
 		}
 	} else {
-		set_game_error(gameError, errMapFileNotSet);
+		set_game_error(game_errors.gameError, errMapFileNotSet);
 	}
 
 	/* ... and bail */

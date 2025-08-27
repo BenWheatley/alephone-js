@@ -281,7 +281,7 @@ static void load_preferences(
 			/* Read the indexed wad from the file */
 			prefInfo->wad= read_indexed_wad_from_file(PrefsFile, &header, 0, false);
 			// LP change: more graceful degradation
-			if (!prefInfo->wad) set_game_error(gameError, errUnknownWadVersion);
+			if (!prefInfo->wad) set_game_error(game_errors.gameError, errUnknownWadVersion);
 		}
 				
 		/* Close the file.. */
