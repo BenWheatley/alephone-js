@@ -32,7 +32,7 @@ const MAXIMUM_WADFILE_NAME_LENGTH = 64;
 // Conversion note: typedef uint32 WadDataType;
 
 // ------------- file structures
-class wad_header { // Data parsing type, 128 bytes
+export class wad_header { // Data parsing type, 128 bytes
 	constructor() {
 		this.version; // int16 - Used internally
 		this.data_version; // int16 - Used by the data

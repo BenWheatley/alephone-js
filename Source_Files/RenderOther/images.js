@@ -53,7 +53,7 @@ class image_file_t {
 	constructor() {
 		this.rsrc_file = new FileHandler.OpenedResourceFile();
 		this.wad_file = new FileHandler.OpenedFile();
-		this.wad_hdr = null; // TODO = new FileHandler.wad_header();
+		this.wad_hdr = new wad.wad_header();
 		
 		this.file = null;
 	}
@@ -179,7 +179,7 @@ class image_file_t {
 		// Check for resource in wad file
 		if (this.wad_file.IsOpen()) {
 		// Note: original used &wad_hdr, so be sure of return-by-mutation-value here
-			const d = read_indexed_wad_from_file(this.wad_file, this.wad_hdr, id, true);
+			const d = wad.read_indexed_wad_from_file(this.wad_file, this.wad_hdr, id, true);
 			if (d) {
 				let success = false;
 				let len; // Note: original used &len, hence these shenanigans. I don't think I need it?

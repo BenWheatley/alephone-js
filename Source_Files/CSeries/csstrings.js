@@ -49,11 +49,11 @@ class MacRomanUnicodeConverter {
 		}
 	}
 	
-	function ToUnicode(char c) { // return uint16
+	ToUnicode(/*char*/ c) { // return uint16
 		return MacRomanUnicodeConverter.mac_roman_to_unicode_table[c];
 	}
-
-	function ToMacRoman(/*uint16*/ c) { // return char
+	
+	ToMacRoman(/*uint16*/ c) { // return char
 		if (c <= 0x7f) return c;
 		let result = MacRomanUnicodeConverter.unicode_to_mac_roman.get(c);
 		return result ?? '?';
@@ -63,7 +63,7 @@ class MacRomanUnicodeConverter {
 	static initialized = false;
 	
 	// from ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/APPLE/ROMAN.TXT
-	static mac_roman_to_unicode_table[256] = [
+	static mac_roman_to_unicode_table = [
 		0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007, 
 		0x0008, 0x0009, 0x000A, 0x000B, 0x000C, 0x000D, 0x000E, 0x000F, 
 		0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x0016, 0x0017, 
