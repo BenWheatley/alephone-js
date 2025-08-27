@@ -51,8 +51,6 @@ import * as resource_manager from './resource_manager.js';
 // For the filetypes
 #include "tags.h"
 
-#include <SDL2/SDL.h>
-
 // Returned by .GetError() for unknown errors
 constexpr int unknown_filesystem_error = -1;
 
@@ -480,8 +478,6 @@ private:
 #include "interface.h"
 #include "screen.h"
 #include "tags.h"
-
-#include <SDL2/SDL_endian.h>
 
 #ifdef HAVE_ZZIP
 #include "SDL_rwops_zzip.h"
