@@ -561,11 +561,11 @@ static void handle_game_key(const SDL_Event &event)
 		if (sc == SDL_SCANCODE_ESCAPE || sc == AO_SCANCODE_JOYSTICK_ESCAPE) // (ZZZ) Quit gesture (now safer)
 		{
 			if(!player_controlling_game())
-				do_menu_item_command(mGame, iQuitGame, false);
+				do_menu_item_command(mGame, iQuitGame);
 			else {
 				if(get_ticks_since_local_player_in_terminal() > 1 * map.TICKS_PER_SECOND) {
 					if(!game_is_networked) {
-						do_menu_item_command(mGame, iQuitGame, false);
+						do_menu_item_command(mGame, iQuitGame);
 					}
 					else {
 #if defined(__APPLE__) && defined(__MACH__)
@@ -751,7 +751,7 @@ static void process_game_key(const SDL_Event &event)
 				break;
 			}
 			if (item > 0)
-				do_menu_item_command(mGame, item, event_has_cheat_modifiers(event));
+				do_menu_item_command(mGame, item);
 			else if (item != 0)
 				handle_game_key(event);
 		} else
@@ -867,7 +867,7 @@ static void process_game_key(const SDL_Event &event)
 		}
 		if (item > 0) {
 			draw_menu_button_for_command(item);
-			do_menu_item_command(mInterface, item, event_has_cheat_modifiers(event));
+			do_menu_item_command(mInterface, item);
 		}
 		break;
 	}
