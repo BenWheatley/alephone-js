@@ -981,20 +981,6 @@ static void process_event(const SDL_Event &event)
 	
 }
 
-std::string to_alnum(const std::string& input)
-{
-	std::string output;
-	for (std::string::const_iterator it = input.begin(); it != input.end(); ++it)
-	{
-		if (isalnum(*it))
-		{
-			output += *it;
-		}
-	}
-
-	return output;
-}
-*/
 export function dump_screen()
 {
 	// Generate a timestamped filename
