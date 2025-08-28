@@ -127,78 +127,73 @@ struct player_preferences_data
 
 	int solo_profile;
 };
-
+*/
 // LP addition: input-modifier flags
 // run/walk and swim/sink
 // LP addition: Josh Elsasser's dont-switch-weapons patch
-enum {
-	_inputmod_interchange_run_walk = 0x0001,
-	_inputmod_interchange_swim_sink = 0x0002,
-	_inputmod_dont_switch_to_new_weapon = 0x0004,
-	_inputmod_invert_mouse = 0x0008,
-	_inputmod_use_button_sounds = 0x0010,
-	_inputmod_dont_auto_recenter = 0x0020,   // ZZZ addition
-	_inputmod_run_key_toggle = 0x0040,
-};
+const _inputmod_interchange_run_walk = 0x0001;
+const _inputmod_interchange_swim_sink = 0x0002;
+const _inputmod_dont_switch_to_new_weapon = 0x0004;
+const _inputmod_invert_mouse = 0x0008;
+const _inputmod_use_button_sounds = 0x0010;
+const _inputmod_dont_auto_recenter = 0x0020;   // ZZZ addition
+const _inputmod_run_key_toggle = 0x0040;
 
 // shell keys
-enum {
-	_key_inventory_left,
-	_key_inventory_right,
-	_key_switch_view,
-	_key_volume_up,
-	_key_volume_down,
-	_key_zoom_in,
-	_key_zoom_out,
-	_key_toggle_fps,
-	_key_activate_console,
-	_key_show_scores,
-	NUMBER_OF_SHELL_KEYS
-};
+export const _key_inventory_left = 0;
+export const _key_inventory_right = 1;
+export const _key_switch_view = 2;
+export const _key_volume_up = 3;
+export const _key_volume_down = 4;
+export const _key_zoom_in = 5;
+export const _key_zoom_out = 6;
+export const _key_toggle_fps = 7;
+export const _key_activate_console = 8;
+export const _key_show_scores = 9;
+export const NUMBER_OF_SHELL_KEYS = 10;
 
-enum {
-	_mouse_accel_none,
-	_mouse_accel_classic,
-	_mouse_accel_symmetric,
-	NUMBER_OF_MOUSE_ACCEL_TYPES
-};
+const _mouse_accel_none = 0;
+export const _mouse_accel_classic = 1;
+const _mouse_accel_symmetric = 2;
+const NUMBER_OF_MOUSE_ACCEL_TYPES = 3;
 
 static constexpr int NUMBER_OF_HOTKEYS = 12;
 
+/* TODO: remove this note when it's all working
 typedef std::map<int, std::set<SDL_Scancode> > key_binding_map;
-
-struct input_preferences_data
-{
-	int16 input_device;
-	// LP addition: input modifiers
-	uint16 modifiers;
-	// Mouse-sensitivity parameters (LP: originally ZZZ)
-	_fixed sens_horizontal;
-	_fixed sens_vertical;
-	int16 mouse_accel_type;
-	float mouse_accel_scale;
-	bool raw_mouse_input;
-	bool extra_mouse_precision;
-	bool classic_vertical_aim;
-	
-	// Limit absolute-mode {yaw, pitch} deltas per tick to +/- {32, 8} instead of {63, 15}
-	bool classic_aim_speed_limits;
-	
-	bool controller_analog;
-	bool controller_aim_inverted;
-	_fixed controller_sensitivity_horizontal;
-	_fixed controller_sensitivity_vertical;
-	// if an axis reading is taken below this number in absolute
-	// value, then we clip it to 0.  this lets people use
-	// inaccurate zero points.
-	int16 controller_deadzone_horizontal;
-	int16 controller_deadzone_vertical;
-
-	key_binding_map key_bindings;
-	key_binding_map shell_key_bindings;
-	key_binding_map hotkey_bindings;
+*/
+class input_preferences_data {
+	constructor() {
+		this.input_device = shell._mouse_yaw_pitch;
+		this.modifiers = _inputmod_use_button_sounds;
+		this.sens_horizontal = 0.25; // _fixed Mouse-sensitivity parameters (LP: originally ZZZ)
+		this.sens_vertical = 0.25; // _fixed
+		this.mouse_accel_type = _mouse_accel_none;
+		this.mouse_accel_scale = 1.0;
+		this.raw_mouse_input = true;
+		this.extra_mouse_precision = true;
+		this.classic_vertical_aim = false;
+		
+		// Limit absolute-mode {yaw, pitch} deltas per tick to +/- {32, 8} instead of {63, 15}
+		this.classic_aim_speed_limits = false;
+		
+		this.controller_analog = true;
+		this.controller_aim_inverted = false;
+		this.controller_sensitivity_horizontal = 1.0;
+		this.controller_sensitivity_vertical = 1.0;
+		
+		// if an axis reading is taken below this number in absolute
+		// value, then we clip it to 0.  this lets people use
+		// inaccurate zero points.
+		this.controller_deadzone_horizontal = 3276; // TODO: this number may well be much too large on web API, but I don't know yet as the game isn't playable at this time
+		this.controller_deadzone_vertical = 3276;
+		
+		this.key_bindings = default_key_bindings;
+		this.shell_key_bindings = default_shell_key_bindings;
+		this.hotkey_bindings = default_hotkey_bindings;
+	}
 };
-
+/*
 #define MAXIMUM_PATCHES_PER_ENVIRONMENT (32)
 
 struct environment_preferences_data
@@ -318,71 +313,21 @@ static std::vector<boost::filesystem::path> orphan_enabled_plugins;
 struct graphics_preferences_data *graphics_preferences = NULL;
 struct network_preferences_data *network_preferences = NULL;
 struct player_preferences_data *player_preferences = NULL;
-struct input_preferences_data *input_preferences = NULL;
+*/
+export let input_preferences = null; // input_preferences_data
+/*
 SoundManager::Parameters *sound_preferences = NULL;
 struct environment_preferences_data *environment_preferences = NULL;
 
 // LP: fake portable-files stuff
 inline short memory_error() {return 0;}
 
-static bool ethernet_active(void);
-static std::string get_name_from_system(void);
-
-// LP: getting rid of the (void *) mechanism as inelegant and non-type-safe
-static void default_graphics_preferences(graphics_preferences_data *preferences);
-static bool validate_graphics_preferences(graphics_preferences_data *preferences);
-static void default_network_preferences(network_preferences_data *preferences);
-static bool validate_network_preferences(network_preferences_data *preferences);
-static void default_player_preferences(player_preferences_data *preferences);
-static bool validate_player_preferences(player_preferences_data *preferences);
-static void default_input_preferences(input_preferences_data *preferences);
-static bool validate_input_preferences(input_preferences_data *preferences);
-static void default_environment_preferences(environment_preferences_data *preferences);
-static bool validate_environment_preferences(environment_preferences_data *preferences);
-
-void parse_graphics_preferences(InfoTree root, std::string version);
-void parse_player_preferences(InfoTree root, std::string version);
-void parse_input_preferences(InfoTree root, std::string version);
-void parse_sound_preferences(InfoTree root, std::string version);
-void parse_network_preferences(InfoTree root, std::string version);
-void parse_environment_preferences(InfoTree root, std::string version);
-
-// Prototypes
-static void player_dialog(void *arg);
-static void online_dialog(void *arg);
-static void graphics_dialog(void *arg);
-static void sound_dialog(void *arg);
-static void controls_dialog(void *arg);
-static void environment_dialog(void *arg);
-static void plugins_dialog(void *arg);
-static void keyboard_dialog(void *arg);
-//static void texture_options_dialog(void *arg);
-
 //  Get user name
 
 static std::string get_name_from_system()
 {
-#if defined(unix) || (defined (__APPLE__) && defined (__MACH__)) || defined(__NetBSD__) || defined(__OpenBSD__)
-
-	const char *login_name = getlogin();
-	std::string login = (login_name ? login_name : "");
-	if (login.length())
-		return login;
-
-#elif defined(__WIN32__)
-
-	wchar_t wname[UNLEN + 1];
-	DWORD wname_n = UNLEN + 1;
-	if (GetUserNameW(wname, &wname_n))
-		return wide_to_utf8(wname);
-
-#else
-//#error get_name_from_system() not implemented for this platform
-#endif
-
 	return "Bob User";
 }
-
 
 //  Ethernet always available
 
@@ -1696,116 +1641,60 @@ public:
 		return ss.str();
 	}
 };
+*/
 
-
-const int NUM_KEYS = 21;
-
-static const char *action_name[NUM_KEYS] = {
+const action_name = [
 	"Move Forward", "Move Backward", "Turn Left", "Turn Right", "Sidestep Left", "Sidestep Right",
 	"Glance Left", "Glance Right", "Look Up", "Look Down", "Recenter View",
 	"Previous Weapon", "Next Weapon", "Trigger", "2nd Trigger",
 	"Turn -> Sidestep", "Run/Swim", "Move -> Look",
 	"Action", "Auto Map", "Aux Trigger"
+];
+
+const NUM_KEYS = action_name.length;
+
+const default_key_bindings = {
+	0: [SDL_SCANCODE_W, AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE + SDL_CONTROLLER_AXIS_LEFTY],
+	1: [SDL_SCANCODE_S, AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_LEFTY],
+	2: [SDL_SCANCODE_LEFT, AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE + SDL_CONTROLLER_AXIS_RIGHTX],
+	3: [SDL_SCANCODE_RIGHT, AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_RIGHTX],
+	4: [SDL_SCANCODE_A, AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE + SDL_CONTROLLER_AXIS_LEFTX],
+	5: [SDL_SCANCODE_D, AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_LEFTX],
+	6: [SDL_SCANCODE_Q, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_DPAD_LEFT],
+	7: [SDL_SCANCODE_E, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_DPAD_RIGHT],
+	8: [SDL_SCANCODE_UP, AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE + SDL_CONTROLLER_AXIS_RIGHTY],
+	9: [SDL_SCANCODE_DOWN, AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_RIGHTY],
+	10: [SDL_SCANCODE_V, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_RIGHTSTICK],
+	11: [SDL_SCANCODE_F, AO_SCANCODE_MOUSESCROLL_UP, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_LEFTSHOULDER],
+	12: [SDL_SCANCODE_R, AO_SCANCODE_MOUSESCROLL_DOWN, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_RIGHTSHOULDER],
+	13: [SDL_SCANCODE_SPACE, AO_SCANCODE_BASE_MOUSE_BUTTON + SDL_BUTTON_LEFT - 1, AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_TRIGGERRIGHT],
+	14: [SDL_SCANCODE_LSHIFT, AO_SCANCODE_BASE_MOUSE_BUTTON + SDL_BUTTON_RIGHT - 1, AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_TRIGGERLEFT],
+	15: [SDL_SCANCODE_LALT],
+	16: [SDL_SCANCODE_LCTRL, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_LEFTSTICK],
+	17: [SDL_SCANCODE_LGUI],
+	18: [SDL_SCANCODE_TAB, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_A],
+	19: [SDL_SCANCODE_M, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_X],
+	20: [SDL_SCANCODE_GRAVE, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_Y]
 };
 
-static key_binding_map default_key_bindings = {
-	{ 0, { SDL_SCANCODE_W,
-		   static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE + SDL_CONTROLLER_AXIS_LEFTY)
-	} },
-	{ 1, { SDL_SCANCODE_S,
-			static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_LEFTY)
-	} },
-	{ 2, { SDL_SCANCODE_LEFT,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE + SDL_CONTROLLER_AXIS_RIGHTX)
-	} },
-	{ 3, { SDL_SCANCODE_RIGHT,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_RIGHTX)
-	} },
-	{ 4, { SDL_SCANCODE_A,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE + SDL_CONTROLLER_AXIS_LEFTX)
-	} },
-	{ 5, { SDL_SCANCODE_D,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_LEFTX)
-	} },
-	{ 6, { SDL_SCANCODE_Q,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_DPAD_LEFT)
-	} },
-	{ 7, { SDL_SCANCODE_E,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_DPAD_RIGHT)
-	} },
-	{ 8, { SDL_SCANCODE_UP,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_NEGATIVE + SDL_CONTROLLER_AXIS_RIGHTY)
-	} },
-	{ 9, { SDL_SCANCODE_DOWN,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_RIGHTY)
-	} },
-	{ 10, { SDL_SCANCODE_V,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_RIGHTSTICK)
-	} },
-	{ 11, { SDL_SCANCODE_F,
-		static_cast<SDL_Scancode>(AO_SCANCODE_MOUSESCROLL_UP),
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_LEFTSHOULDER)
-	} },
-	{ 12, { SDL_SCANCODE_R,
-		static_cast<SDL_Scancode>(AO_SCANCODE_MOUSESCROLL_DOWN),
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)
-	} },
-	{ 13, { SDL_SCANCODE_SPACE,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_MOUSE_BUTTON + SDL_BUTTON_LEFT - 1),
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_TRIGGERRIGHT)
-	} },
-	{ 14, { SDL_SCANCODE_LSHIFT,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_MOUSE_BUTTON + SDL_BUTTON_RIGHT - 1),
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_AXIS_POSITIVE + SDL_CONTROLLER_AXIS_TRIGGERLEFT)
-	} },
-	{ 15, { SDL_SCANCODE_LALT
-	} },
-	{ 16, { SDL_SCANCODE_LCTRL,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_LEFTSTICK)
-	} },
-	{ 17, { SDL_SCANCODE_LGUI
-	} },
-	{ 18, { SDL_SCANCODE_TAB,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_A)
-	} },
-	{ 19, { SDL_SCANCODE_M,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_X)
-	} },
-	{ 20, { SDL_SCANCODE_GRAVE,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_Y)
-	} },
-};
-
+/*
 static const char *shell_action_name[NUMBER_OF_SHELL_KEYS] = {
 	"Inventory Left", "Inventory Right", "Switch Player View", "Volume Up", "Volume Down", "Zoom Map In", "Zoom Map Out", "Toggle FPS", "Chat/Console", "Network Stats"
 };
-
-static key_binding_map default_shell_key_bindings = {
-	{ 0, { SDL_SCANCODE_LEFTBRACKET
-	} },
-	{ 1, { SDL_SCANCODE_RIGHTBRACKET
-	} },
-	{ 2, { SDL_SCANCODE_BACKSPACE
-	} },
-	{ 3, { SDL_SCANCODE_PERIOD
-	} },
-	{ 4, { SDL_SCANCODE_COMMA
-	} },
-	{ 5, { SDL_SCANCODE_EQUALS,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_DPAD_UP)
-	} },
-	{ 6, { SDL_SCANCODE_MINUS,
-		static_cast<SDL_Scancode>(AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_DPAD_DOWN)
-	} },
-	{ 7, { SDL_SCANCODE_SLASH
-	} },
-	{ 8, { SDL_SCANCODE_BACKSLASH
-	} },
-	{ 9, { SDL_SCANCODE_N
-	} },
+*/
+const default_shell_key_bindings = {
+	0: [SDL_SCANCODE_LEFTBRACKET],
+	1: [SDL_SCANCODE_RIGHTBRACKET],
+	2: [SDL_SCANCODE_BACKSPACE],
+	3: [SDL_SCANCODE_PERIOD],
+	4: [SDL_SCANCODE_COMMA],
+	5: [SDL_SCANCODE_EQUALS, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_DPAD_UP],
+	6: [SDL_SCANCODE_MINUS, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_DPAD_DOWN],
+	7: [SDL_SCANCODE_SLASH],
+	8: [SDL_SCANCODE_BACKSLASH],
+	9: [SDL_SCANCODE_N]
 };
-
-static const char* hotkey_action_name[NUMBER_OF_HOTKEYS] = {
+const hotkey_action_name = [
 	"Hotkey 1",
 	"Hotkey 2",
 	"Hotkey 3",
@@ -1818,21 +1707,21 @@ static const char* hotkey_action_name[NUMBER_OF_HOTKEYS] = {
 	"Hotkey 10",
 	"Hotkey 11",
 	"Hotkey 12",
-};
+];
 
-static key_binding_map default_hotkey_bindings = {
-	{ 0, { SDL_SCANCODE_1 }},
-	{ 1, { SDL_SCANCODE_2 }},
-	{ 2, { SDL_SCANCODE_3 }},
-	{ 3, { SDL_SCANCODE_4 }},
-	{ 4, { SDL_SCANCODE_5 }},
-	{ 5, { SDL_SCANCODE_6 }},
-	{ 6, { SDL_SCANCODE_7 }},
-	{ 7, { SDL_SCANCODE_8 }},
-	{ 8, { SDL_SCANCODE_9 }},
-	{ 9, { SDL_SCANCODE_T }},
-	{ 10, { SDL_SCANCODE_G }},
-	{ 11, { SDL_SCANCODE_B }}
+const default_hotkey_bindings = {
+	0: [SDL_SCANCODE_1],
+	1: [SDL_SCANCODE_2],
+	2: [SDL_SCANCODE_3],
+	3: [SDL_SCANCODE_4],
+	4: [SDL_SCANCODE_5],
+	5: [SDL_SCANCODE_6],
+	6: [SDL_SCANCODE_7],
+	7: [SDL_SCANCODE_8],
+	8: [SDL_SCANCODE_9],
+	9: [SDL_SCANCODE_T],
+	10: [SDL_SCANCODE_G],
+	11: [SDL_SCANCODE_B]
 };
 
 class w_prefs_key;
@@ -3360,7 +3249,9 @@ export function initialize_preferences() {
 /*
 	graphics_preferences= new graphics_preferences_data;
 	player_preferences= new player_preferences_data;
-	input_preferences= new input_preferences_data;
+*/
+	input_preferences = new input_preferences_data();
+/*
 	sound_preferences = new SoundManager::Parameters;
 	network_preferences= new network_preferences_data;
 	environment_preferences= new environment_preferences_data;
@@ -3381,19 +3272,16 @@ export function initialize_preferences() {
 	PreferenceCommandParser.register_command("set", PreferenceSetCommandParser);
 	PreferenceCommandParser.register_command("get", PreferenceGetCommandParser);
 	Console::instance()->register_command("preferences", PreferenceCommandParser);
-	
-	read_preferences();
 */
+	read_preferences();
 }
 
+function read_preferences() {
 /*
-void read_preferences ()
-{
 	// Set to defaults; will be overridden by reading in the XML stuff
 	default_graphics_preferences(graphics_preferences);
 	default_network_preferences(network_preferences);
 	default_player_preferences(player_preferences);
-	default_input_preferences(input_preferences);
 	*sound_preferences = SoundManager::Parameters();
 	default_environment_preferences(environment_preferences);
 
@@ -3510,11 +3398,10 @@ void read_preferences ()
 	//       default file.
 	//       (Problem is SDL specific - socre one for Carbon? :) )
 	clear_game_error ();
+*/
 }
 
-
 //  Write preferences to file
-
 
 InfoTree graphics_preferences_tree()
 {
@@ -4090,33 +3977,6 @@ static void default_player_preferences(player_preferences_data *preferences)
 
 	preferences->solo_profile = _solo_profile_aleph_one;
 }
-
-static void default_input_preferences(input_preferences_data *preferences)
-{
-	preferences->input_device= _mouse_yaw_pitch;
-	preferences->key_bindings = default_key_bindings;
-	preferences->shell_key_bindings = default_shell_key_bindings;
-	preferences->hotkey_bindings = default_hotkey_bindings;
-	
-	preferences->modifiers = _inputmod_use_button_sounds;
-
-	preferences->sens_horizontal = FIXED_ONE / 4;
-	preferences->sens_vertical = FIXED_ONE / 4;
-	preferences->mouse_accel_type = _mouse_accel_none;
-	preferences->mouse_accel_scale = 1.f;
-	preferences->raw_mouse_input = true;
-	preferences->extra_mouse_precision = true;
-	preferences->classic_vertical_aim = false;
-	preferences->classic_aim_speed_limits = false;
-
-	preferences->controller_aim_inverted = false;
-	preferences->controller_analog = true;
-	preferences->controller_sensitivity_horizontal = FIXED_ONE;
-	preferences->controller_deadzone_horizontal = 3276;
-	preferences->controller_sensitivity_vertical = FIXED_ONE;
-	preferences->controller_deadzone_vertical = 3276;
-}
-
 static void default_environment_preferences(environment_preferences_data *preferences)
 {
 	obj_set(*preferences, NONE);
