@@ -49,11 +49,11 @@ let joystick_active = true;
 const axis_values = new Array(SDL_CONTROLLER_AXIS_MAX).fill(0);
 const button_values = new Array(NUM_SDL_JOYSTICK_BUTTONS).fill(false);
 
-function enter_joystick() {
+export function enter_joystick() {
 	joystick_active = true;
 }
 
-function exit_joystick() {
+export function exit_joystick() {
 	joystick_active = false;
 }
 
