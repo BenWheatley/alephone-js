@@ -93,7 +93,9 @@ Feb 20, 2002 (Woody Zenfell):
 #include "ActionQueues.h"
 #include "computer_interface.h"
 #include "Console.h"
-#include "joystick.h"
+*/
+import * as joystick from '../Input/joystick.js';
+/*
 #include "Movie.h"
 #include "InfoTree.h"
 
@@ -173,28 +175,22 @@ void initialize_keyboard_controller(
 	}
 	enter_mouse(0);
 }
-
-void set_keyboard_controller_status(
-	bool active)
-{
-	input_task_active= active;
-
+*/
+export function set_keyboard_controller_status(active) {
+	input_task_active = active;
+	
 	// flush events when changing game state
-	SDL_PumpEvents();
-	SDL_FlushEvents(SDL_KEYDOWN, SDL_KEYUP);
-	SDL_FlushEvents(SDL_MOUSEMOTION, SDL_MOUSEWHEEL);
-	SDL_FlushEvents(SDL_CONTROLLERAXISMOTION, SDL_CONTROLLERBUTTONUP);
-
+	shell.flush_events();
+	
 	// We enable/disable mouse control here
 	if (active) {
-		enter_mouse(input_preferences->input_device);
-                enter_joystick();
-        } else {
-		exit_mouse(input_preferences->input_device);
-                exit_joystick();
-        }
+		enter_mouse(input_preferences.input_device);
+		joystick.enter_joystick();
+	} else {
+		exit_mouse(input_preferences.input_device);
+		joystick.exit_joystick();
+	}
 }
-*/
 
 export function get_keyboard_controller_status() {
 	return input_task_active;

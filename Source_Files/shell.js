@@ -386,6 +386,10 @@ export function push_event(event) {
 	events.push(event);
 }
 
+export function flush_events() {
+	events = [];
+}
+
 let last_event_poll = 0;
 let game_state;
 export function main_event_loop() {
