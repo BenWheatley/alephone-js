@@ -193,9 +193,10 @@ class input_preferences_data {
 		this.hotkey_bindings = default_hotkey_bindings;
 	}
 };
-/*
-#define MAXIMUM_PATCHES_PER_ENVIRONMENT (32)
 
+const MAXIMUM_PATCHES_PER_ENVIRONMENT = 32;
+
+/*
 struct environment_preferences_data
 {
 	char map_file[256];
@@ -318,27 +319,22 @@ export let input_preferences = null; // input_preferences_data
 /*
 SoundManager::Parameters *sound_preferences = NULL;
 struct environment_preferences_data *environment_preferences = NULL;
+*/
 
-// LP: fake portable-files stuff
-inline short memory_error() {return 0;}
+const memory_error = 0; // Was function in C++, always returned 0
 
 //  Get user name
-
-static std::string get_name_from_system()
-{
+function get_name_from_system() {
 	return "Bob User";
 }
 
 //  Ethernet always available
-
-static bool ethernet_active(void)
-{
+function ethernet_active() {
 	return true;
 }
 
-
+/*
 //  Main preferences dialog
-
 void handle_preferences(void)
 {
 	// Save the existing preferences, in case we have to reload them
@@ -1723,9 +1719,7 @@ const default_hotkey_bindings = {
 	10: [SDL_SCANCODE_G],
 	11: [SDL_SCANCODE_B]
 };
-
-class w_prefs_key;
-
+/*
 typedef std::multimap<int, w_prefs_key*> prefsKeyMap;
 typedef std::pair<int, w_prefs_key*> prefsKeyMapPair;
 static prefsKeyMap key_w;
