@@ -1673,11 +1673,10 @@ const default_key_bindings = {
 	20: [SDL_SCANCODE_GRAVE, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_Y]
 };
 
-/*
-static const char *shell_action_name[NUMBER_OF_SHELL_KEYS] = {
+const shell_action_name[
 	"Inventory Left", "Inventory Right", "Switch Player View", "Volume Up", "Volume Down", "Zoom Map In", "Zoom Map Out", "Toggle FPS", "Chat/Console", "Network Stats"
-};
-*/
+];
+
 const default_shell_key_bindings = {
 	0: [SDL_SCANCODE_LEFTBRACKET],
 	1: [SDL_SCANCODE_RIGHTBRACKET],
@@ -3388,9 +3387,8 @@ function read_preferences() {
 	clear_game_error ();
 */
 }
-
+/*
 //  Write preferences to file
-
 InfoTree graphics_preferences_tree()
 {
 	InfoTree root;
@@ -3466,27 +3464,27 @@ InfoTree player_preferences_tree()
 
 	return root;
 }
-
+*/
 // symbolic names for key and button bindings
-static const char *binding_action_name[NUM_KEYS] = {
+const binding_action_name[
 	"forward", "back", "look-left", "look-right", "strafe-left",
 	"strafe-right", "glance-left", "glance-right", "look-up", "look-down",
 	"look-ahead", "prev-weapon", "next-weapon", "trigger-1", "trigger-2",
 	"strafe", "run", "look", "action", "map",
 	"microphone"
-};
-static const char *binding_shell_action_name[NUMBER_OF_SHELL_KEYS] = {
+];
+const binding_shell_action_name[
 	"inventory-left", "inventory-right", "switch-player-view", "volume-up", "volume-down",
 	"map-zoom-in", "map-zoom-out", "fps", "chat", "net-stats"
-};
-static const char *binding_hotkey_action_name[NUMBER_OF_HOTKEYS] = {
+];
+const binding_hotkey_action_name[
 	"hotkey-1", "hotkey-2", "hotkey-3", "hotkey-4", "hotkey-5", "hotkey-6", "hotkey-7", "hotkey-8", "hotkey-9", "hotkey-10", "hotkey-11", "hotkey-12"
-};
-static const char *binding_mouse_button_name[NUM_SDL_MOUSE_BUTTONS] = {
+];
+const binding_mouse_button_name[
 	"mouse-left", "mouse-middle", "mouse-right", "mouse-x1", "mouse-x2",
 	"mouse-scroll-up", "mouse-scroll-down"
-};
-
+];
+/*
 static const char* get_binding_joystick_button_name(int offset)
 {
 	static_assert(SDL_CONTROLLER_BUTTON_MAX <= 21 &&
@@ -3521,9 +3519,9 @@ static const char* get_binding_joystick_button_name(int offset)
 		return axes[offset - SDL_CONTROLLER_BUTTON_MAX];
 	}
 }
-
-static const int binding_num_scancodes = 285;
-static const char *binding_scancode_name[binding_num_scancodes] = {
+*/
+const binding_num_scancodes = 285;
+const binding_scancode_name = [
 	"unknown", "unknown-1", "unknown-2", "unknown-3", "a",
 	"b", "c", "d", "e", "f",
 	"g", "h", "i", "j", "k",
@@ -3581,8 +3579,8 @@ static const char *binding_scancode_name[binding_num_scancodes] = {
 	"ac-back", "ac-forward", "ac-stop", "ac-refresh", "ac-bookmarks",
 	"brightnessdown", "brightnessup", "displayswitch", "kbdillumtoggle", "kbdillumdown",
 	"kbdillumup", "eject", "sleep", "app1", "app2"
-};
-
+];
+/*
 static const char *binding_name_for_code(SDL_Scancode code)
 {
 	int i = static_cast<int>(code);
@@ -3618,13 +3616,14 @@ static SDL_Scancode code_for_binding_name(std::string name)
 	}
 	return SDL_SCANCODE_UNKNOWN;
 }
+*/
+const BindingType = Object.freeze({
+	in_game: 0,
+	shell: 1,
+	hotkey: 2
+});
 
-enum class BindingType {
-	in_game,
-	shell,
-	hotkey
-};
-
+/*
 static int index_for_action_name(std::string name, BindingType& binding_type)
 {
 	for (int i = 0; i < NUM_KEYS; ++i)
