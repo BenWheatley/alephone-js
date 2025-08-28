@@ -108,10 +108,9 @@ import * as joystick from '../Input/joystick.js';
 #define MINIMUM_REPLAY_SPEED        -5
 
 #define INCREMENT_QUEUE_COUNTER(c) { (c)++; if ((c)>=MAXIMUM_QUEUE_SIZE) (c) = 0; }
-
-// LP: fake portable-files stuff
-inline short memory_error() {return 0;}
-
+*/
+const memory_error = 0; // Was function in C++, always returned 0
+/*
 #include "vbl_definitions.h"
 */
 let heartbeat_count = 0;
