@@ -1926,12 +1926,6 @@ static void unset_scancode(SDL_Scancode code)
 	}
 }
 
-enum {
-	KEYBOARD_TABS,
-	TAB_KEYS,
-	TAB_MORE_KEYS
-};
-
 const std::vector<std::string> mouse_feel_labels = { "Classic", "Modern", "(custom)" };
 static w_select_popup *mouse_feel_w;
 static w_select_popup *mouse_feel_details_w;
