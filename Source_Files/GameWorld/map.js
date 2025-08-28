@@ -1029,8 +1029,6 @@ extern vector<map_object> SavedObjectList;
 // extern struct map_annotation *map_annotations;
 // extern struct map_object *saved_objects;
 
-extern bool game_is_networked; // true if this is a network game
-
 #define ADD_LINE_TO_AUTOMAP(i) (automap_lines[(i)>>3] |= (byte) 1<<((i)&0x07))
 #define CLEAR_LINE_FROM_AUTOMAP(i) (automap_lines[(i)>>3] &= ~((byte) 1<<((i&0x07))))
 #define LINE_IS_IN_AUTOMAP(i) ((automap_lines[(i)>>3]&((byte)1<<((i)&0x07)))?(true):(false))
@@ -1465,9 +1463,9 @@ vector<map_annotation> MapAnnotationList;
 vector<map_object> SavedObjectList;
 // struct map_object *saved_objects = NULL;
 struct item_placement_data *placement_information = NULL;
-
-bool game_is_networked = false;
-
+*/
+export let game_is_networked = false;
+/*
 // This could be a handle
 struct map_memory_data {
 	byte *memory;

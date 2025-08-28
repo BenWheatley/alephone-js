@@ -218,8 +218,8 @@ import * as screen_drawing from '../RenderOther/screen_drawing.js';
 import { Music } from '../Sound/Music.js';
 import * as images from '../RenderOther/images.js';
 import * as screen from '../RenderOther/screen.js';
+import * as vbl from './vbl.js'
 /*
-#include "vbl.h"
 #include "preferences.h"
 #include "FileHandler.h"
 #include "lua_script.h" // PostIdle
@@ -915,25 +915,20 @@ bool check_level_change(
 	
 	return level_changed;
 }
-
-void pause_game(
-	void)
-{
-	set_keyboard_controller_status(false);
-	show_cursor();
-	if (!game_is_networked && OpenALManager::Get()) OpenALManager::Get()->Pause(true);
-}
 */
+export function pause_game() {
+	vbl.set_keyboard_controller_status(false);
+	mouse.show_cursor();
+	if (!map.game_is_networked) {
+		/* OpenALManager::Get()->Pause(true); TODO: WebAudioManager to replace OpenALManager */
+	}
+}
 
 export function resume_game() {
-	/* TODO: this
-	hide_cursor();
-	if (OGL_IsActive())
-		OGL_Blitter::BoundScreen(true);
-	validate_world_window();
-	set_keyboard_controller_status(true);
-	if (OpenALManager::Get()) OpenALManager::Get()->Pause(false);
-	*/
+	mouse.hide_cursor();
+	screen.validate_world_window();
+	vbl.set_keyboard_controller_status(true);
+	/* OpenALManager::Get()->Pause(false); TODO: WebAudioManager to replace OpenALManager */
 }
 
 /*
