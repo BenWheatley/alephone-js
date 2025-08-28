@@ -1117,31 +1117,29 @@ export function idle_game_state(/*uint32*/ time) {
 		return false;
 	}
 }
-/*
-void set_game_focus_lost()
-{
+
+export function set_game_focus_lost() {
 	switch (game_state.state)
 	{
-		case _display_main_menu:
-		case _display_intro_screens_for_demo:
+		case GameStates._display_main_menu:
+		case GameStates._display_intro_screens_for_demo:
 			game_state.phase = INDEFINATE_TIME_DELAY;
 			break;
 	}
 }
 
-void set_game_focus_gained()
-{
+export function set_game_focus_gained() {
 	switch (game_state.state)
 	{
-		case _display_main_menu:
+		case GameStates._display_main_menu:
 			game_state.phase = TICKS_UNTIL_DEMO_STARTS;
 			break;
-		case _display_intro_screens_for_demo:
+		case GameStates._display_intro_screens_for_demo:
 			game_state.phase = DEMO_INTRO_SCREEN_DURATION;
 			break;
 	}
 }
-
+/*
 extern SDL_Surface *draw_surface;	// from screen_drawing.cpp
 
 static SDL_Surface *powered_by_alephone_surface[] = {nullptr, nullptr};
