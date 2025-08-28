@@ -1062,3 +1062,11 @@ void PlayInterfaceButtonSound(short SoundID)
 		SoundManager::instance()->PlaySound(SoundID, (world_location3d *) NULL, NONE);
 }
 */
+
+window.addEventListener("focus", event => {
+	push_event(event);
+});
+
+window.addEventListener("blur", event => {
+	push_event(event);
+});
