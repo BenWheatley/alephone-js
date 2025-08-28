@@ -41,10 +41,6 @@ export const _mouse_yaw_pitch = 1;
 
 const PREFERENCES_NAME_LENGTH = 32;
 
-/*
- *  shell.cpp - Main game loop and input handling
- */
- 
 import * as shell_misc from './shell_misc.js';
 
 import * as xml from './XML/xml.js';
@@ -981,8 +977,7 @@ static void process_event(const SDL_Event &event)
 	
 }
 
-export function dump_screen()
-{
+export function dump_screen() {
 	// Generate a timestamped filename
 	const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
 	const filename = `screenshot_${timestamp}.png`;
