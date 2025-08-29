@@ -177,9 +177,6 @@ import * as cseries from '../CSeries/cseries.js';
 #include <SDL2/SDL_ttf.h>
 #include "preferences.h"
 
-#define clutSCREEN_COLORS 130
-#define finfFONTS 128
-
 extern TextSpec *_get_font_spec(short font_index);
 */
 // LP change: hardcoding this quantity since we know how many we need
