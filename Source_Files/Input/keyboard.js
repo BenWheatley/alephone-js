@@ -1,3 +1,5 @@
+import * as shell from '../shell.js';
+
 // DOM Event Bindings
 
 window.addEventListener("keydown", (event) => {
