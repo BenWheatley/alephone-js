@@ -21,9 +21,9 @@
 */
 const NUM_SDL_REAL_MOUSE_BUTTONS = 5;
 const NUM_SDL_MOUSE_BUTTONS = 7;   		  // two scroll-wheel buttons
-const AO_SCANCODE_BASE_MOUSE_BUTTON = 400; // this is button 1's pseudo-keysym
-const AO_SCANCODE_MOUSESCROLL_UP = 405;    // stored as mouse button 6
-const AO_SCANCODE_MOUSESCROLL_DOWN = 406;  // stored as mouse button 7
+export const AO_SCANCODE_BASE_MOUSE_BUTTON = 400; // this is button 1's pseudo-keysym
+export const AO_SCANCODE_MOUSESCROLL_UP = 405;    // stored as mouse button 6
+export const AO_SCANCODE_MOUSESCROLL_DOWN = 406;  // stored as mouse button 7
 
 import * as cseries from '../CSeries/cseries.js';
 
@@ -139,14 +139,14 @@ export function show_cursor() {
 	document.body.style.cursor = 'default';
 }
 
-export function mouse_scroll(event) {
+function mouse_scroll(event) {
 	let up = event.deltaY < 0;
 	snapshot_delta_scrollwheel += up ? 1 : -1;
 	console.log(snapshot_delta_scrollwheel);
 	shell.push_event(event);
 }
 
-export function mouse_moved(event) {
+function mouse_moved(event) {
 	snapshot_delta_x += event.movementX;
 	snapshot_delta_y += event.movementY;
 	console.log(snapshot_delta_x + ", "+ snapshot_delta_y);
