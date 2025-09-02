@@ -159,7 +159,7 @@ export const _mouse_accel_classic = 1;
 const _mouse_accel_symmetric = 2;
 const NUMBER_OF_MOUSE_ACCEL_TYPES = 3;
 
-static constexpr int NUMBER_OF_HOTKEYS = 12;
+export const NUMBER_OF_HOTKEYS = 12;
 
 /* TODO: remove this note when it's all working
 typedef std::map<int, std::set<SDL_Scancode> > key_binding_map;
@@ -1675,7 +1675,7 @@ const default_key_bindings = {
 	20: [SDL_SCANCODE_GRAVE, AO_SCANCODE_BASE_JOYSTICK_BUTTON + SDL_CONTROLLER_BUTTON_Y]
 };
 
-const shell_action_name[
+const shell_action_name = [
 	"Inventory Left", "Inventory Right", "Switch Player View", "Volume Up", "Volume Down", "Zoom Map In", "Zoom Map Out", "Toggle FPS", "Chat/Console", "Network Stats"
 ];
 
@@ -3468,21 +3468,21 @@ InfoTree player_preferences_tree()
 }
 */
 // symbolic names for key and button bindings
-const binding_action_name[
+const binding_action_name = [
 	"forward", "back", "look-left", "look-right", "strafe-left",
 	"strafe-right", "glance-left", "glance-right", "look-up", "look-down",
 	"look-ahead", "prev-weapon", "next-weapon", "trigger-1", "trigger-2",
 	"strafe", "run", "look", "action", "map",
 	"microphone"
 ];
-const binding_shell_action_name[
+const binding_shell_action_name = [
 	"inventory-left", "inventory-right", "switch-player-view", "volume-up", "volume-down",
 	"map-zoom-in", "map-zoom-out", "fps", "chat", "net-stats"
 ];
-const binding_hotkey_action_name[
+const binding_hotkey_action_name = [
 	"hotkey-1", "hotkey-2", "hotkey-3", "hotkey-4", "hotkey-5", "hotkey-6", "hotkey-7", "hotkey-8", "hotkey-9", "hotkey-10", "hotkey-11", "hotkey-12"
 ];
-const binding_mouse_button_name[
+const binding_mouse_button_name = [
 	"mouse-left", "mouse-middle", "mouse-right", "mouse-x1", "mouse-x2",
 	"mouse-scroll-up", "mouse-scroll-down"
 ];
