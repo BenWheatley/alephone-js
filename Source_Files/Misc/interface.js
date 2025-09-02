@@ -219,9 +219,9 @@ import { Music } from '../Sound/Music.js';
 import * as images from '../RenderOther/images.js';
 import * as screen from '../RenderOther/screen.js';
 import * as vbl from './vbl.js'
+import * as preferences from './preferences.js'
+import * as FileHandler from '../Files/FileHandler.js'
 /*
-#include "preferences.h"
-#include "FileHandler.h"
 #include "lua_script.h" // PostIdle
 */
 import { mGame, iPause, iSave, iRevert, iCloseGame, iQuitGame, mInterface, iNewGame, iLoadGame, iGatherGame, iJoinGame, iPreferences, iReplayLastFilm, iSaveLastFilm, iReplaySavedFilm, iCredits, iQuit, iCenterButton, iPlaySingletonLevel, iAbout } from './interface_menus.js';
