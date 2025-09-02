@@ -16,9 +16,7 @@
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
 */
-/*
-#include "world.h"
-*/
+
 const NUM_SDL_REAL_MOUSE_BUTTONS = 5;
 const NUM_SDL_MOUSE_BUTTONS = 7;   		  // two scroll-wheel buttons
 export const AO_SCANCODE_BASE_MOUSE_BUTTON = 400; // this is button 1's pseudo-keysym
@@ -26,14 +24,7 @@ export const AO_SCANCODE_MOUSESCROLL_UP = 405;    // stored as mouse button 6
 export const AO_SCANCODE_MOUSESCROLL_DOWN = 406;  // stored as mouse button 7
 
 import * as cseries from '../CSeries/cseries.js';
-
-/*
-#include "player.h"
-*/
 import * as shell from '../shell.js';
-/*
-#include "preferences.h"
-*/
 import * as screen from '../RenderOther/screen.js';
 import { audioContext } from '../Sound/SoundManager.js';
 
