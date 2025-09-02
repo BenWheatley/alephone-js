@@ -22,7 +22,9 @@
 #include "ChaseCam.h"
 #include "Crosshairs.h"
 #include "OGL_Setup.h"
-#include "shell.h"
+*/
+import * as shell from '../shell.js';
+/*
 #include "SoundManager.h"
 
 enum {
