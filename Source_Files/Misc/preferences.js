@@ -17,8 +17,6 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
-import * as keyboard from `../Input/keyboard.js`
-
 /*
 #include "interface.h"
 #include "ChaseCam.h"
@@ -278,9 +276,11 @@ void transition_preferences(const DirectorySpecifier& legacy_prefs_dir);
 #include "images.h"
 #include "preference_dialogs.h"
 #include "preferences_widgets_sdl.h"
-#include "mouse.h"
-#include "joystick.h"
-
+*/
+import * as mouse from '../Input/mouse.js';
+import * as joystick from '../Input/joystick.js';
+import * as keyboard from '../Input/keyboard.js';
+/*
 #include "Music.h"
 #include "HTTP.h"
 #include "alephversion.h"
