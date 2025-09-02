@@ -17,6 +17,8 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
+import * as keyboard from `../Input/keyboard.js`
+
 /*
 #include "interface.h"
 #include "ChaseCam.h"
