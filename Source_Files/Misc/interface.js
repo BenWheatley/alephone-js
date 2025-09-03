@@ -381,9 +381,9 @@ const m1_display_screens = [
 		screen_count: NUMBER_OF_FINAL_SCREENS,
 		duration: FINAL_SCREEN_DURATION }
 ];
+
+let introduction_sound = null; // null pointer to SoundPlayer
 /*
-//  -------------- local globals 
-static std::shared_ptr<SoundPlayer> introduction_sound = nullptr;
 static FileSpecifier DraggedReplayFile;
 */
 let interface_fade_in_progress = false;
