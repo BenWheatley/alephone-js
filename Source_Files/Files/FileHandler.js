@@ -59,42 +59,93 @@ constexpr int unknown_filesystem_error = -1;
 export const ENOENT = 2;
 
 export class OpenedFile {
-	// Stub
-}
-/*
-// Abstraction for opened files; it does reading, writing, and closing of such files, without doing anything to the files' specifications
-class OpenedFile
-{
-	// This class will need to set the refnum and error value appropriately 
-	friend class FileSpecifier;
-	
-public:
-	bool IsOpen();
-	bool Close();
-	
-	bool GetPosition(int32& Position);
-	bool SetPosition(int32 Position);
-	
-	bool GetLength(int32& Length);
-	bool SetLength(int32 Length);
-	
-	bool Read(int32 Count, void *Buffer);
-	bool Write(int32 Count, void *Buffer);
+	constructor() {
+		this.f = null; // File handle (SDL_RWops) in C++ -> DataViewReader (not DataView) in JS
+		this.err = 0;
 		
-	OpenedFile();
-	~OpenedFile() {Close();}	// Auto-close when destroying
-
-	int GetError() {return err;}
-	SDL_RWops *GetRWops() {return f;}
-	SDL_RWops *TakeRWops();		// Hand over SDL_RWops
-
-private:
-	SDL_RWops *f;	// File handle
-	int err;		// Error code
-	bool is_forked;
-	int32 fork_offset, fork_length;
-};
-*/
+		this.is_forked = false;
+		this.fork_offset = 0;
+		this.fork_length = 0;
+	}
+	
+	IsOpen() {
+		return this.f != null;
+	}
+	
+	Close() {
+		if (this.f != null) {
+			this.f = null;
+			this.err = 0;
+		}
+		this.is_forked = false;
+		this.fork_offset = 0;
+		this.fork_length = 0;
+		return true;
+	}
+	
+	// C++ version returned [bool = there is a file handle], modified argument (pointer) to provide position. ByRef is not good JS, though possible, so I'm replacing this with return null if no file handle (IIRC behaves the same) or the value if there is one (should be easy to make that change)
+	GetPosition() {
+		if (this.f == null)
+			return null;
+		
+		this.err = 0;
+		return this.f.tell() - this.fork_offset;
+	}
+	
+	SetPosition(Position) {
+		if (this.f == null)
+			return false;
+		
+		this.err = 0;
+		this.f.seek(Position + this.fork_offset);
+		return this.err == 0;
+	}
+	
+	// C++ version returned [bool = there is a file handle], modified argument (pointer) to provide length. ByRef is not good JS, though possible, so I'm replacing this with return null if no file handle (IIRC behaves the same) or the value if there is one (should be easy to make that change)
+	GetLength() {
+		if (this.f == null)
+			return null;
+		
+		this.err = 0;
+		if (this.is_forked) {
+			return this.fork_length;
+		} else {
+			return this.f.byteLength();
+		}
+	}
+	
+	// C++ version returned [bool = success], modified argument (pointer) to provide buffer. ByRef is not good JS, though possible, so I'm replacing this with return null if fail (IIRC behaves the same) or the bytes (Uint8Array) if it works — this may not be entirely trivial
+	Read(Count) {
+		if (this.f == null)
+			return null;
+		
+		this.err = 0;
+		return this.f.readBytes(Count);
+	}
+	
+	Write(Count, Buffer) {
+		if (this.f == null)
+			return null;
+	
+		this.err = 0;
+		return this.f.writeBytes(Buffer, Count);
+	}
+	
+	GetError() {
+		return this.err;
+	}
+	
+	GetRWops() {
+		return this.f;
+	}
+	
+	TakeRWops() {
+		const result = this.f;
+		this.f = null;
+		this.Close();
+		return result;
+	}
+}
 
 // Abstraction for loaded resources; this object will release that resource when it finishes. MacOS resource handles will be assumed to be locked.
 export class LoadedResource {
@@ -507,93 +558,6 @@ static std::string path_to_utf8(const fs::path& path) { return path.native(); }
 #ifdef HAVE_ZZIP
 static const zzip_plugin_io_handlers& utf8_zzip_io() { return *zzip_get_default_io(); }
 #endif // HAVE_ZZIP
-
-// Opened file
-
-OpenedFile::OpenedFile() : f(NULL), err(0), is_forked(false), fork_offset(0), fork_length(0) {}
-
-bool OpenedFile::IsOpen()
-{
-	return f != NULL;
-}
-
-bool OpenedFile::Close()
-{
-	if (f) {
-		SDL_RWclose(f);
-		f = NULL;
-		err = 0;
-	}
-	is_forked = false;
-	fork_offset = 0;
-	fork_length = 0;
-	return true;
-}
-
-bool OpenedFile::GetPosition(int32 &Position)
-{
-	if (f == NULL)
-		return false;
-
-	err = 0;
-	Position = SDL_RWtell(f) - fork_offset;
-	return true;
-}
-
-bool OpenedFile::SetPosition(int32 Position)
-{
-	if (f == NULL)
-		return false;
-
-	err = 0;
-	if (SDL_RWseek(f, Position + fork_offset, SEEK_SET) < 0)
-		err = unknown_filesystem_error;
-	return err == 0;
-}
-
-bool OpenedFile::GetLength(int32 &Length)
-{
-	if (f == NULL)
-		return false;
-
-	if (is_forked)
-		Length = fork_length;
-	else {
-		int32 pos = SDL_RWtell(f);
-		SDL_RWseek(f, 0, SEEK_END);
-		Length = SDL_RWtell(f);
-		SDL_RWseek(f, pos, SEEK_SET);
-	}
-	err = 0;
-	return true;
-}
-
-bool OpenedFile::Read(int32 Count, void *Buffer)
-{
-	if (f == NULL)
-		return false;
-
-	err = 0;
-	return (SDL_RWread(f, Buffer, 1, Count) == Count);
-}
-
-bool OpenedFile::Write(int32 Count, void *Buffer)
-{
-	if (f == NULL)
-		return false;
-
-	err = 0;
-	return (SDL_RWwrite(f, Buffer, 1, Count) == Count);
-}
-
-
-SDL_RWops *OpenedFile::TakeRWops ()
-{
-	SDL_RWops *taken = f;
-	f = NULL;
-	Close ();
-	return taken;
-}
 
 // Opened resource file
 
