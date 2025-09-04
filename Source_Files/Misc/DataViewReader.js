@@ -54,6 +54,22 @@ export class DataViewReader {
     return bytes;
   }
   
+  // TODO: test this actually writes as expected
+  writeBytes(bytes, count) {
+    // Create a Uint8Array view into the same buffer that dataView uses,
+    // starting at the current offset.
+    const dest = new Uint8Array(
+      this.dataView.buffer,
+      this.dataView.byteOffset + this.offset,
+      count
+    );
+    
+    // Bulk copy from source bytes into target
+    dest.set(bytes.subarray(0, count));
+    
+    this.offset += count;
+  }
+  
   byteLength() {
     return this.dataView.byteLength;
   }
