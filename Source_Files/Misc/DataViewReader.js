@@ -53,6 +53,10 @@ export class DataViewReader {
     this.offset += length;
     return bytes;
   }
+  
+  byteLength() {
+    return this.dataView.byteLength;
+  }
 
   // Add more methods as needed...
 }
