@@ -613,13 +613,6 @@ void rewind_recording(
 {
 	if(replay.game_is_being_recorded)
 	{
-		// This is unnecessary, because it is called from reset_player_queues,
-		// which is always called from revert_game
-		//
-		//FilmFile.SetLength(sizeof(recording_header));
-		//FilmFile.SetPosition(sizeof(recording_header));
-		//
-		// Alternative that does not use "SetLength", but instead creates and re-creates the file.
 		FilmFile.SetPosition(0);
 		byte Header[SIZEOF_recording_header];
 		FilmFile.Read(SIZEOF_recording_header,Header);
