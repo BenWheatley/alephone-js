@@ -39,7 +39,7 @@ const NUMBER_UNUSED_KEYS = 10;
 export const _keyboard_or_game_pad = 0;
 export const _mouse_yaw_pitch = 1;
 
-const PREFERENCES_NAME_LENGTH = 32;
+export const PREFERENCES_NAME_LENGTH = 32;
 
 import * as shell_misc from './shell_misc.js';
 
