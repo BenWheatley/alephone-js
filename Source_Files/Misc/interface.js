@@ -476,12 +476,11 @@ export function set_change_level_destination(level_number) {
 	game_state.current_screen = level_number;
 }
 
-/*
-static short get_difficulty_level(void)
-{
-	return player_preferences->difficulty_level;
+function get_difficulty_level() {
+	return preferences.player_preferences.difficulty_level;
 }
 
+/*
 
 // ----- ZZZ start support for generalized game startup -----
 // (should this be split out (with some other game startup code) to a new file?)
