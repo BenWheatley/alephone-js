@@ -106,30 +106,50 @@ struct network_preferences_data
 	bool join_metaserver_by_default;
 	bool allow_stats;
 };
-
-enum SoloProfileType {
-	_solo_profile_aleph_one,
-	_solo_profile_unused,		// hope springs eternal
-	_solo_profile_marathon_2,
-	_solo_profile_marathon_infinity,
-	NUMBER_OF_SOLO_PROFILE_TYPES
-};
-
-struct player_preferences_data
-{
-	char name[PREFERENCES_NAME_LENGTH+1];
-	int16 color;
-	int16 team;
-	uint32 last_time_ran;
-	int16 difficulty_level;
-	bool background_music_on;
-	bool crosshairs_active;
-	struct ChaseCamData ChaseCam;
-	struct CrosshairData Crosshairs;
-
-	int solo_profile;
-};
 */
+export const _solo_profile_aleph_one = 0;
+export const _solo_profile_unused = 1; // hope springs eternal
+export const _solo_profile_marathon_2 = 2;
+export const _solo_profile_marathon_infinity = 3;
+
+class player_preferences_data {
+	constructor() {
+		this.name = get_name_from_system().slice(0, shell.PREFERENCES_NAME_LENGTH);
+		this.color = 0; // int16, not RGB
+		this.team = 0;
+		this.last_time_ran = 0;
+		this.difficulty_level = 2;
+		this.background_music_on = false;
+		this.crosshairs_active = false;
+		
+		this.ChaseCam = null;
+		this.Crosshairs = null;
+		/* TODO:
+	this.ChaseCam = new ChaseCamData();
+	this.Crosshairs = new CrosshairData();
+		--
+		Original default:
+	preferences->ChaseCam.Behind = 1536;
+	preferences->ChaseCam.Upward = 0;
+	preferences->ChaseCam.Rightward = 0;
+	preferences->ChaseCam.Flags = 0;
+	preferences->ChaseCam.Damping = 0.5;
+	preferences->ChaseCam.Spring = 0;
+	preferences->ChaseCam.Opacity = 1;
+	
+	preferences->Crosshairs.Thickness = 3;
+	preferences->Crosshairs.FromCenter = 2;
+	preferences->Crosshairs.Length = 1;
+	preferences->Crosshairs.Shape = CHShape_RealCrosshairs;
+	preferences->Crosshairs.Color = rgb_white;
+	preferences->Crosshairs.Opacity = 0.5;
+	preferences->Crosshairs.PreCalced = false;
+		*/
+		
+		this.solo_profile = _solo_profile_aleph_one;
+	}
+}
+
 // LP addition: input-modifier flags
 // run/walk and swim/sink
 // LP addition: Josh Elsasser's dont-switch-weapons patch
@@ -317,8 +337,8 @@ static std::vector<boost::filesystem::path> orphan_enabled_plugins;
 // Global preferences data
 struct graphics_preferences_data *graphics_preferences = NULL;
 struct network_preferences_data *network_preferences = NULL;
-struct player_preferences_data *player_preferences = NULL;
 */
+export let player_preferences = null; // player_preferences_data
 export let input_preferences = null; // input_preferences_data
 /*
 SoundManager::Parameters *sound_preferences = NULL;
@@ -3239,8 +3259,8 @@ export function initialize_preferences() {
 	if (PrefsInited) return;
 /*
 	graphics_preferences= new graphics_preferences_data;
-	player_preferences= new player_preferences_data;
 */
+	player_preferences = new player_preferences_data();
 	input_preferences = new input_preferences_data();
 /*
 	sound_preferences = new SoundManager::Parameters;
@@ -3272,7 +3292,6 @@ function read_preferences() {
 	// Set to defaults; will be overridden by reading in the XML stuff
 	default_graphics_preferences(graphics_preferences);
 	default_network_preferences(network_preferences);
-	default_player_preferences(player_preferences);
 	*sound_preferences = SoundManager::Parameters();
 	default_environment_preferences(environment_preferences);
 
@@ -3940,34 +3959,6 @@ static void default_network_preferences(network_preferences_data *preferences)
 	preferences->allow_stats = false;
 }
 
-static void default_player_preferences(player_preferences_data *preferences)
-{
-	obj_clear(*preferences);
-
-	preferences->difficulty_level= 2;
-	strncpy(preferences->name, get_name_from_system().c_str(), PREFERENCES_NAME_LENGTH);
-	preferences->name[PREFERENCES_NAME_LENGTH] = '\0';
-	
-	// LP additions for new fields:
-	
-	preferences->ChaseCam.Behind = 1536;
-	preferences->ChaseCam.Upward = 0;
-	preferences->ChaseCam.Rightward = 0;
-	preferences->ChaseCam.Flags = 0;
-	preferences->ChaseCam.Damping = 0.5;
-	preferences->ChaseCam.Spring = 0;
-	preferences->ChaseCam.Opacity = 1;
-	
-	preferences->Crosshairs.Thickness = 3;
-	preferences->Crosshairs.FromCenter = 2;
-	preferences->Crosshairs.Length = 1;
-	preferences->Crosshairs.Shape = CHShape_RealCrosshairs;
-	preferences->Crosshairs.Color = rgb_white;
-	preferences->Crosshairs.Opacity = 0.5;
-	preferences->Crosshairs.PreCalced = false;
-
-	preferences->solo_profile = _solo_profile_aleph_one;
-}
 static void default_environment_preferences(environment_preferences_data *preferences)
 {
 	obj_set(*preferences, NONE);
