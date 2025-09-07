@@ -763,7 +763,7 @@ static void process_game_key(const SDL_Event &event)
 	case _display_epilogue:
 	case _display_credits:
 	case _display_quit_screens:
-		if (interface_fade_finished())
+		if (_interface.interface_fade_finished())
 			force_game_state_change();
 		else
 			stop_interface_fade();
@@ -785,7 +785,7 @@ static void process_game_key(const SDL_Event &event)
 
 	case _display_main_menu: 
 	{
-		if (!interface_fade_finished())
+		if (!_interface.interface_fade_finished())
 			stop_interface_fade();
 		int item = -1;
 		switch (event.key.keysym.sym) {
