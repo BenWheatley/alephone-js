@@ -1596,20 +1596,14 @@ function display_introduction() {
 
 function display_introduction_screen_for_demo() {
 	// TODO: replace this stub with a JS conversion of the CPP in the following comment
-}
-/*
-static void display_introduction_screen_for_demo(	
-	void)
-{
-	struct screen_data *screen_data= get_screen_data(_display_intro_screens_for_demo);
+	let screen_data = get_screen_data(GameStates._display_intro_screens_for_demo);
 
-	game_state.state= _display_intro_screens_for_demo;
-	game_state.current_screen= 0;
-	if(screen_data->screen_count)
-	{
-		game_state.phase= screen_data->duration;
-		game_state.last_ticks_on_idle= cseries.machine_tick_count();
-		display_screen(screen_data->screen_base);
+	game_state.state = GameStates._display_intro_screens_for_demo;
+	game_state.current_screen = 0;
+	if (screen_data.screen_count) {
+		game_state.phase = screen_data.duration;
+		game_state.last_ticks_on_idle = cseries.machine_tick_count();
+		display_screen(screen_data.screen_base);
 	} else {
 		display_main_menu();
 	}
