@@ -83,22 +83,24 @@ Jan 17, 2001 (Loren Petrich):
 //must build different shading tables for each collection (even in 8-bit, for alternate color tables)
 */
 
-#include "cseries.h"
+import * as cseries from '../CSeries/cseries.js';
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include "shell.h"
+import * as shell from '../shell.js';
+/*
 #include "render.h"
-#include "interface.h"
+*/
+import * as _interface from '../Misc/interface.js';
+/*
 #include "collection_definition.h"
-#include "screen.h"
-#include "game_errors.h"
-#include "FileHandler.h"
+*/
+import * as screen from '../RenderOther/screen.js';
+import * as game_errors from '../Misc/game_errors.js';
+import * as FileHandler from '../Files/FileHandler.js'
+/*
 #include "progress.h"
-#include "images.h"
-
+*/
+import * as images from '../RenderOther/images.js';
+/*
 #include "map.h"
 
 // LP addition: OpenGL support
@@ -111,139 +113,46 @@ Jan 17, 2001 (Loren Petrich):
 #include "Packing.h"
 #include "SW_Texture_Extras.h"
 
-#include <SDL2/SDL_rwops.h>
-#include <memory>
-
 #include "Plugins.h"
+*/
+const iBLACK = 18;
 
-/* ---------- constants */
+// each collection has a tint table which (fully) tints the clut of that collection to whatever it looks like through the light enhancement goggles
+const NUMBER_OF_TINT_TABLES = 1;
 
-#define iWHITE 1
-#ifdef SCREAMING_METAL
-#define iBLACK 255
-#else
-#define iBLACK 18
-#endif
+// collection status
+const markNONE = 0;
+const markLOAD = 1;
+const markUNLOAD = 2;
+const markSTRIP = 4; // we don’t want bitmaps, just high/low-level shape data
+const markPATCHED = 8; // force re-load
 
-/* each collection has a tint table which (fully) tints the clut of that collection to whatever it
-	looks like through the light enhancement goggles */
-#define NUMBER_OF_TINT_TABLES 1
-
-// Moved from shapes_macintosh.c:
-
-// Possibly of historical interest:
-// #define COLLECTIONS_RESOURCE_BASE 128
-// #define COLLECTIONS_RESOURCE_BASE16 1128
-
-enum /* collection status */
-{
-	markNONE,
-	markLOAD= 1,
-	markUNLOAD= 2,
-	markSTRIP= 4 /* we don’t want bitmaps, just high/low-level shape data */,
-	markPATCHED = 8 /* force re-load */
-};
-
-enum /* flags */
-{
-	_collection_is_stripped= 0x0001
-};
-
-/* ---------- macros */
-
-// LP: fake portable-files stuff
-inline short memory_error() {return 0;}
-
-/* ---------- structures */
-
-/* ---------- globals */
-
-extern SDL_Surface* world_pixels;
-
+/*
 #include "shape_definitions.h"
 
 static pixel16 *global_shading_table16= (pixel16 *) NULL;
 static pixel32 *global_shading_table32= (pixel32 *) NULL;
+*/
 
-short number_of_shading_tables, shading_table_fractional_bits, shading_table_size;
+export let number_of_shading_tables;
+export let shading_table_fractional_bits;
+export let shading_table_size;
 
 // LP addition: opened-shapes-file object
-static OpenedFile ShapesFile;
-OpenedResourceFile M1ShapesFile;
+let ShapesFile = null; // OpenedFile
+let M1ShapesFile = null; // OpenedResourceFile
 
-static enum {
-	M1_SHAPES_VERSION = 1,
-	M2_SHAPES_VERSION
-} shapes_file_version;
+const M1_SHAPES_VERSION = 1;
+const M2_SHAPES_VERSION = 2;
+let shapes_file_version = 0; // This is what it would have been initialised as in C++ even though this wasn't one of the enum values
 
-bool shapes_file_is_m1() { return shapes_file_version == M1_SHAPES_VERSION; }
+export function shapes_file_is_m1() { return shapes_file_version == M1_SHAPES_VERSION; }
 
-/* ---------- private prototypes */
-
-static void update_color_environment(bool is_opengl);
-static short find_or_add_color(struct rgb_color_value *color, struct rgb_color_value *colors, short *color_count, bool update_flags);
-static void _change_clut(void (*change_clut_proc)(struct color_table *color_table), struct rgb_color_value *colors, short color_count);
-
-static void build_shading_tables8(struct rgb_color_value *colors, short color_count, pixel8 *shading_tables);
-static void build_shading_tables16(struct rgb_color_value *colors, short color_count, pixel16 *shading_tables, byte *remapping_table, bool is_opengl);
-static void build_shading_tables32(struct rgb_color_value *colors, short color_count, pixel32 *shading_tables, byte *remapping_table, bool is_opengl);
-static void build_global_shading_table16(void);
-static void build_global_shading_table32(void);
-
-static bool get_next_color_run(struct rgb_color_value *colors, short color_count, short *start, short *count);
-static bool new_color_run(struct rgb_color_value *_new, struct rgb_color_value *last);
-
-static int32 get_shading_table_size(short collection_code);
-
-static void build_collection_tinting_table(struct rgb_color_value *colors, short color_count, short collection_index, bool is_opengl);
-static void build_tinting_table8(struct rgb_color_value *colors, short color_count, pixel8 *tint_table, short tint_start, short tint_count);
-static void build_tinting_table16(struct rgb_color_value *colors, short color_count, pixel16 *tint_table, struct rgb_color *tint_color);
-static void build_tinting_table32(struct rgb_color_value *colors, short color_count, pixel32 *tint_table, struct rgb_color *tint_color, bool is_opengl);
-
-static void precalculate_bit_depth_constants(void);
-
-static bool collection_loaded(struct collection_header *header);
-static void unload_collection(struct collection_header *header);
-static void unlock_collection(struct collection_header *header);
-static void lock_collection(struct collection_header *header);
-static bool load_collection(short collection_index, bool strip);
-
-static void shutdown_shape_handler(void);
-static void close_shapes_file(void);
-
-// static byte *make_stripped_collection(byte *collection);
-
-/* --------- collection accessor prototypes */
-
-// Modified to return NULL for unloaded collections and out-of-range indices for collection contents.
-// This is to allow for more graceful degradation.
-
-static struct collection_header *get_collection_header(short collection_index);
-/*static*/ struct collection_definition *get_collection_definition(short collection_index);
-static void *get_collection_shading_tables(short collection_index, short clut_index);
-static void *get_collection_tint_tables(short collection_index, short tint_index);
-static struct rgb_color_value *get_collection_colors(short collection_index, short clut_number);
-static struct high_level_shape_definition *get_high_level_shape_definition(short collection_index, short high_level_shape_index);
-static struct bitmap_definition *get_bitmap_definition(short collection_index, short bitmap_index);
-
-
-#include <SDL2/SDL_endian.h>
+/*
 #include "byte_swapping.h"
+*/
 
 /*
- *  Initialize shapes handling
- */
-
-static void initialize_pixmap_handler()
-{
-	// nothing to do
-}
-
-
-/*
- *  Convert shape to surface
- */
-
 // ZZZ extension: pass out (if non-NULL) a pointer to a block of pixel data -
 // caller should free() that storage after freeing the returned surface.
 // Only needed for RLE-encoded shapes.
@@ -741,10 +650,6 @@ static void allocate_shading_tables(short collection_index, bool strip)
 	}
 }
 
-/*
- *  Load collection
- */
-
 static bool load_collection(short collection_index, bool strip)
 {
 	SDL_RWops* p;
@@ -857,10 +762,6 @@ static bool load_collection(short collection_index, bool strip)
 }	
 			
 
-/*
- *  Unload collection
- */
-
 static void unload_collection(struct collection_header *header)
 {
 	assert(header->collection);
@@ -868,14 +769,16 @@ static void unload_collection(struct collection_header *header)
 	header->shading_tables.clear();
 	header->collection = NULL;
 }
+*/
 
-#define ENDC_TAG FOUR_CHARS_TO_INT('e', 'n', 'd', 'c')
-#define CLDF_TAG FOUR_CHARS_TO_INT('c', 'l', 'd', 'f')
-#define HLSH_TAG FOUR_CHARS_TO_INT('h', 'l', 's', 'h')
-#define LLSH_TAG FOUR_CHARS_TO_INT('l', 'l', 's', 'h')
-#define BMAP_TAG FOUR_CHARS_TO_INT('b', 'm', 'a', 'p')
-#define CTAB_TAG FOUR_CHARS_TO_INT('c', 't', 'a', 'b')
+const ENDC_TAG = cseries.FOUR_CHARS_TO_INT('endc')
+const CLDF_TAG = cseries.FOUR_CHARS_TO_INT('cldf')
+const HLSH_TAG = cseries.FOUR_CHARS_TO_INT('hlsh')
+const LLSH_TAG = cseries.FOUR_CHARS_TO_INT('llsh')
+const BMAP_TAG = cseries.FOUR_CHARS_TO_INT('bmap')
+const CTAB_TAG = cseries.FOUR_CHARS_TO_INT('ctab')
 
+/*
 std::vector<uint8> shapes_patch;
 void set_shapes_patch_data(uint8 *data, size_t length)
 {
@@ -1017,10 +920,6 @@ void load_shapes_patch(SDL_RWops *p, bool override_replacements)
 	
 }
 
-/* ---------- code */
-
-/* --------- private code */
-
 void initialize_shape_handler()
 {
 	// M1 uses the resource fork, but M2 and Moo use the data fork
@@ -1032,8 +931,6 @@ void initialize_shape_handler()
 		alert_bad_extra_file(ShapesFile.GetError());
 	else
 		atexit(shutdown_shape_handler);
-	
-	initialize_pixmap_handler();
 }
 
 void open_shapes_file(FileSpecifier& File)
@@ -1189,7 +1086,7 @@ void strip_collection(
 	}
 }
 
-/* returns count, doesn’t fill NULL buffer */
+// returns count, doesn’t fill NULL buffer
 short get_shape_descriptors(
 	short shape_type,
 	shape_descriptor *buffer)
@@ -1341,7 +1238,7 @@ void *get_global_shading_table(
 	{
 		case 8:
 		{
-			/* return the last shading_table calculated */
+			// return the last shading_table calculated
 			short collection_index;
 		
 			for (collection_index=MAXIMUM_COLLECTIONS-1;collection_index>=0;--collection_index)
@@ -1391,9 +1288,9 @@ void load_collections(
 	}
 	precalculate_bit_depth_constants();
 		
-	/* first go through our list of shape collections and dispose of any collections which
-		were marked for unloading.  at the same time, unlock all those collections which
-		will be staying (so the heap can move around) */
+	// first go through our list of shape collections and dispose of any collections which
+	//	were marked for unloading.  at the same time, unlock all those collections which
+	//	will be staying (so the heap can move around)
 	for (collection_index= 0, header= collection_headers; collection_index<MAXIMUM_COLLECTIONS; ++collection_index, ++header)
 	{
 //		if (with_progress_bar)
@@ -1409,12 +1306,12 @@ void load_collections(
 		}
 	}
 	
-	/* ... then go back through the list of collections and load any that we were asked to */
+	// ... then go back through the list of collections and load any that we were asked to
 	for (collection_index= 0, header= collection_headers; collection_index<MAXIMUM_COLLECTIONS; ++collection_index, ++header)
 	{
 //		if (with_progress_bar)
 //			draw_progress_bar(MAXIMUM_COLLECTIONS+collection_index, 2*MAXIMUM_COLLECTIONS);
-		/* don’t reload collections which are already in memory, but do lock them */
+		// don’t reload collections which are already in memory, but do lock them
 		if (collection_loaded(header))
 		{
 			// In case the substitute images had been changed by some level-specific MML...
@@ -1425,7 +1322,7 @@ void load_collections(
 		{
 			if (header->status&markLOAD)
 			{
-				/* load and decompress collection */
+				// load and decompress collection
 				if (!load_collection(collection_index, (header->status&markSTRIP) ? true : false))
 				{
 					if (shapes_file_version != M1_SHAPES_VERSION)
@@ -1437,7 +1334,7 @@ void load_collections(
 			}
 		}
 		
-		/* clear action flags */
+		// clear action flags
 		header->status= markNONE;
 		header->flags= 0;
 	}
@@ -1451,8 +1348,8 @@ void load_collections(
 		SDL_RWclose(f);
 	}
 
-	/* remap the shapes, recalculate row base addresses, build our new world color table and
-		(finally) update the screen to reflect our changes */
+	// remap the shapes, recalculate row base addresses, build our new world color table and
+	//	(finally) update the screen to reflect our changes
 	update_color_environment(is_opengl);
 
 	// load software enhancements
@@ -1503,8 +1400,6 @@ void load_replacement_collections()
 
 #endif
 		
-/* ---------- private code */
-
 static void precalculate_bit_depth_constants(
 	void)
 {
@@ -1531,8 +1426,8 @@ static void precalculate_bit_depth_constants(
 	}
 }
 
-/* given a list of RGBColors, find out which one, if any, match the given color.  if there
-	aren’t any matches, add a new entry and return that index. */
+// given a list of RGBColors, find out which one, if any, match the given color.  if there
+//	aren’t any matches, add a new entry and return that index.
 static short find_or_add_color(
 	struct rgb_color_value *color,
 	struct rgb_color_value *colors,
@@ -1607,9 +1502,9 @@ static void update_color_environment(
 	colors[0].flags= colors[0].value= 0;
 	color_count= 1;
 
-	/* loop through all collections, only paying attention to the loaded ones.  we’re
-		depending on finding the gray run (white to black) first; so it’s the responsibility
-		of the lowest numbered loaded collection to give us this */
+	// loop through all collections, only paying attention to the loaded ones.  we’re
+	//	depending on finding the gray run (white to black) first; so it’s the responsibility
+	//	of the lowest numbered loaded collection to give us this
 	for (collection_index=0;collection_index<MAXIMUM_COLLECTIONS;++collection_index)
 	{
 		struct collection_definition *collection= get_collection_definition(collection_index);
@@ -1625,29 +1520,29 @@ static void update_color_environment(
 //			if (collection_index==15) dprintf("primary clut %p", primary_colors);
 //			dprintf("primary clut %d entries;dm #%d #%d", collection->color_count, primary_colors, collection->color_count*sizeof(ColorSpec));
 
-			/* add the colors from this collection’s primary color table to the aggregate color
-				table and build the remapping table */
+			// add the colors from this collection’s primary color table to the aggregate color
+			//	table and build the remapping table
 			for (color_index=0;color_index<collection->color_count-NUMBER_OF_PRIVATE_COLORS;++color_index)
 			{
 				primary_colors[color_index].value= remapping_table[primary_colors[color_index].value]= 
 					find_or_add_color(&primary_colors[color_index], colors, &color_count);
 			}
 			
-			/* then remap the collection and recalculate the base addresses of each bitmap */
+			// then remap the collection and recalculate the base addresses of each bitmap
 			for (bitmap_index= 0; bitmap_index<collection->bitmap_count; ++bitmap_index)
 			{
 				struct bitmap_definition *bitmap= get_bitmap_definition(collection_index, bitmap_index);
 				assert(bitmap);
 				
-				/* calculate row base addresses ... */
+				// calculate row base addresses...
 				bitmap->row_addresses[0]= calculate_bitmap_origin(bitmap);
 				precalculate_bitmap_row_addresses(bitmap);
 
-				/* ... and remap it */
+				// ... and remap it
 				remap_bitmap(bitmap, remapping_table);
 			}
 			
-			/* build a shading table for each clut in this collection */
+			// build a shading table for each clut in this collection
 			for (clut_index= 0; clut_index<collection->clut_count; ++clut_index)
 			{
 				void *primary_shading_table= get_collection_shading_tables(collection_index, 0);
@@ -1664,20 +1559,19 @@ static void update_color_environment(
 					
 //					dprintf("alternate clut %d entries;dm #%d #%d", collection->color_count, alternate_colors, collection->color_count*sizeof(ColorSpec));
 					
-					/* build a remapping table for the primary shading table which we can use to
-						calculate this alternate shading table */
+					// build a remapping table for the primary shading table which we can use to
+					//	calculate this alternate shading table
 					for (color_index= 0; color_index<PIXEL8_MAXIMUM_COLORS; ++color_index) shading_remapping_table[color_index]= static_cast<pixel8>(color_index);
 					for (color_index= 0; color_index<collection->color_count-NUMBER_OF_PRIVATE_COLORS; ++color_index)
 					{
 						shading_remapping_table[find_or_add_color(&primary_colors[color_index], colors, &color_count, false)]= 
 							find_or_add_color(&alternate_colors[color_index], colors, &color_count);
 					}
-//					shading_remapping_table[iBLACK]= iBLACK; /* make iBLACK==>iBLACK remapping explicit */
 
 					switch (collection_bit_depth)
 					{
 						case 8:
-							/* duplicate the primary shading table and remap it */
+							// duplicate the primary shading table and remap it
 							memcpy(alternate_shading_table, primary_shading_table, get_shading_table_size(collection_index));
 							map_bytes((unsigned char *)alternate_shading_table, shading_remapping_table, get_shading_table_size(collection_index));
 							break;
@@ -1697,7 +1591,7 @@ static void update_color_environment(
 				}
 				else
 				{
-					/* build the primary shading table */
+					// build the primary shading table
 					switch (collection_bit_depth)
 					{
 					case 8: build_shading_tables8(colors, color_count, (unsigned char *)primary_shading_table); break;
@@ -1712,7 +1606,7 @@ static void update_color_environment(
 			
 			build_collection_tinting_table(colors, color_count, collection_index, is_opengl);
 			
-			/* if we’re not in 8-bit, we don’t have to carry our colors over into the next collection */
+			// if we’re not in 8-bit, we don’t have to carry our colors over into the next collection
 			color_count= 1;
 		}
 	}
@@ -1721,7 +1615,7 @@ static void update_color_environment(
 //	dump_colors(colors, color_count);
 #endif
 
-	/* change the screen clut and rebuild our shading tables */
+	// change the screen clut and rebuild our shading tables
 	_change_clut(change_screen_clut, colors, color_count);
 }
 
@@ -2038,18 +1932,17 @@ static int32 get_shading_table_size(
 	
 	return size;
 }
+*/
+// light enhancement goggles
 
-/* --------- light enhancement goggles */
+// collection tint colors
+const _tint_collection_red = 0;
+const _tint_collection_green = 1;
+const _tint_collection_blue = 2;
+const _tint_collection_yellow = 3;
+const NUMBER_OF_TINT_COLORS = 4;
 
-enum /* collection tint colors */
-{
-	_tint_collection_red,
-	_tint_collection_green,
-	_tint_collection_blue,
-	_tint_collection_yellow,
-	NUMBER_OF_TINT_COLORS
-};
-
+/*
 struct tint_color8_data
 {
 	short start, count;
@@ -2070,7 +1963,6 @@ static struct tint_color8_data tint_colors8[NUMBER_OF_TINT_COLORS]=
 	{96, 13},
 	{83, 13},
 };
-
 
 // LP addition to make it more generic;
 // the ultimate in this would be to make every collection
@@ -2126,7 +2018,6 @@ static short CollectionTints[NUMBER_OF_COLLECTIONS] =
 	_tint_collection_red
 };
 
-
 static void build_collection_tinting_table(
 	struct rgb_color_value *colors,
 	short color_count,
@@ -2139,7 +2030,7 @@ static void build_collection_tinting_table(
 	void *tint_table= get_collection_tint_tables(collection_index, 0);
 	short tint_color;
 
-	/* get the tint color */
+	// get the tint color
 	// LP change: look up a table
 	tint_color = CollectionTints[collection_index];
 	// Idiot-proofing:
@@ -2148,7 +2039,7 @@ static void build_collection_tinting_table(
 	else
 		tint_color = MAX(tint_color,NONE);
 
-	/* build the tint table */	
+	// build the tint table
 	if (tint_color!=NONE)
 	{
 		// LP addition: OpenGL support
@@ -2255,7 +2146,7 @@ static void build_tinting_table32(
 }
 
 
-/* ---------- collection accessors */
+// collection accessors
 // Some originally from shapes_macintosh.c
 
 static struct collection_header *get_collection_header(
@@ -2268,15 +2159,9 @@ static struct collection_header *get_collection_header(
 	vassert(header,csprintf(temporary,"Collection index out of range: %d",collection_index));
 	
 	return header;
-	
-	/*
-	assert(collection_index>=0 && collection_index<MAXIMUM_COLLECTIONS);
-	
-	return collection_headers + collection_index;
-	*/
 }
 
-/*static*/ struct collection_definition *get_collection_definition(
+struct collection_definition *get_collection_definition(
 	short collection_index)
 {
 	return get_collection_header(collection_index)->collection;
@@ -2410,7 +2295,6 @@ short get_bitmap_index(short collection_index, short low_level_shape_index)
 	return low_level_shape->bitmap_index;
 }
 
-
 // XML elements for parsing infravision specification
 short *OriginalCollectionTints = NULL;
 struct rgb_color *original_tint_colors16 = NULL;
@@ -2466,3 +2350,4 @@ void parse_mml_infravision(const InfoTree& root)
 		CollectionTints[coll] = color;
 	}
 }
+*/
