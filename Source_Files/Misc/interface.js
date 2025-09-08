@@ -2270,8 +2270,6 @@ void handle_load_game(
 	}
 }
 
-extern bool current_net_game_has_scores();
-
 */
 function finish_game(return_to_main_menu) {
 	// TODO: convert real method to this
