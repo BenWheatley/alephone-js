@@ -1202,14 +1202,6 @@ function display_main_menu() {
 }
 
 
-/*
-// Kludge for Carbon/Classic -- when exiting a main-menu dialog box, redisplay 
-static void ForceRepaintMenuDisplay()
-{
-}
-*/
-
-
 void do_menu_item_command(
 	short menu_id,
 	short menu_item,
@@ -1327,7 +1319,6 @@ void do_menu_item_command(
 			{
 				case iNewGame:
 					begin_game(PseudoPlayers._single_player, cheat);
-					ForceRepaintMenuDisplay();
 					break;
 				case iPlaySingletonLevel:
 					begin_game(PseudoPlayers._single_player,2);
@@ -1358,7 +1349,6 @@ void do_menu_item_command(
 					do_preferences();
 					game_state.phase= TICKS_UNTIL_DEMO_STARTS;
 					game_state.last_ticks_on_idle= cseries.machine_tick_count();
-					ForceRepaintMenuDisplay();
 					break;
 					
 				case iCenterButton:
