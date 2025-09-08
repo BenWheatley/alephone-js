@@ -213,8 +213,8 @@ import * as screen_drawing from '../RenderOther/screen_drawing.js';
 #include "SoundManager.h"
 #include "fades.h"
 #include "game_window.h"
-#include "game_errors.h"
 */
+import * as game_errors from './game_errors.js';
 import { Music } from '../Sound/Music.js';
 import * as images from '../RenderOther/images.js';
 import * as screen from '../RenderOther/screen.js';
