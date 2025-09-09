@@ -1167,16 +1167,15 @@ bool get_sound_resource_from_images(int resource_number, LoadedResource &SoundRs
     
     return found;
 }
-
-bool images_picture_exists(int base_resource)
-{
-	if (shapes_file_is_m1() && (base_resource == MAIN_MENU_BASE || base_resource == MAIN_MENU_BASE+1))
-        return true;
-    
-    LoadedResource PictRsrc;
-    return get_picture_resource_from_images(base_resource, PictRsrc);
+*/
+export function images_picture_exists(base_resource) {
+	if (shapes.shapes_file_is_m1() && (base_resource == screen_definitions.MAIN_MENU_BASE || base_resource == screen_definitions.MAIN_MENU_BASE + 1))
+		return true;
+	
+	let PictRsrc = new FileHandler.LoadedResource();
+	return get_picture_resource_from_images(base_resource, PictRsrc);
 }
-
+/*
 // In the first Marathon, the main menu is drawn from multiple
 // shapes in collection 10, instead of a single image. We handle
 // this special case by creating the composite images in code,
