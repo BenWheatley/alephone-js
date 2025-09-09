@@ -951,6 +951,7 @@ function draw_picture_surface(/* ImageData */ picture) {
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	}
 	
+	// TODO: this disregards clipping
 	ctx.putImageData(picture, dst_x, dst_y, src_x, src_y, src_w, src_h);
 }
 
