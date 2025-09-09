@@ -2369,8 +2369,6 @@ void get_object_shape_and_transfer_mode(
 	}
 }
 
-extern bool shapes_file_is_m1();
-
 bool randomize_object_sequence(
 	short object_index,
 	shape_descriptor shape)
@@ -2382,7 +2380,7 @@ bool randomize_object_sequence(
 	animation= get_shape_animation_data(shape);
 	if (!animation) return false;
 	
-	switch (shapes_file_is_m1() ? _unanimated : animation->number_of_views)
+	switch (shapes.shapes_file_is_m1() ? _unanimated : animation->number_of_views)
 	{
 		case _unanimated:
 			object->shape= shape;

@@ -270,8 +270,6 @@ let SoundsImagesFile = new image_file_t();
 // From screen_drawing_sdl.cpp
 extern bool draw_clip_rect_active;
 extern screen_rectangle draw_clip_rect;
-
-extern bool shapes_file_is_m1();
 */
 
 //  Uncompress picture data, returns size of compressed image data that was read

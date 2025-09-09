@@ -1307,7 +1307,6 @@ public:
 
 extern float View_FOV_Normal();
 
-extern bool shapes_file_is_m1();
 extern void ResetAllMMLValues();
 
 static void graphics_dialog(void *arg)
