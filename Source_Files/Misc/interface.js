@@ -2862,10 +2862,8 @@ function stop_interface_fade() {
 }
 /*
 //  Called right before we start a game.. 
-void interface_fade_out(
-	short pict_resource_number,
-	bool fade_music)
-{
+function interface_fade_out(pict_resource_number, fade_music) {
+	/* TODO: unstub. Do I even want a current_picture_clut approach?
 	assert(current_picture_clut);
 	if(current_picture_clut)
 	{
@@ -2900,7 +2898,7 @@ void interface_fade_out(
 		//  Hopefully we can do this here.. 
 		delete current_picture_clut;
 		current_picture_clut= NULL;
-	}
+	}*/
 }
 
 static bool can_interface_fade_out(
