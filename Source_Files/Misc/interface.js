@@ -1926,15 +1926,12 @@ static void draw_button(
 
 	set_drawing_clip_rectangle(SHRT_MIN, SHRT_MIN, SHRT_MAX, SHRT_MAX);
 }
-					
-static void handle_replay( //  This is gross. 
-	bool last_replay)
-{
-	bool success;
-	
-	if(!last_replay) force_system_colors(true);
-	success= begin_game(_replay, !last_replay);
-	if(!success) display_main_menu();
+
+function handle_replay( // Original comment: //  This is gross. 
+	last_replay) {
+	if (!last_replay) force_system_colors(true);
+	let success = begin_game(_replay, !last_replay);
+	if (!success) display_main_menu();
 }
 
 // ZZZ: some modifications to use generalized game-startup
