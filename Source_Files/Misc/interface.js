@@ -22,6 +22,7 @@ INTERFACE.H
 import * as cseries from '../CSeries/cseries.js';
 import * as Logging from './Logging.js';
 import * as mouse from '../Input/mouse.js';
+import * as shapes from '../RenderMain/shapes.js';
 
 export const strFILENAMES = 129;
 export const filenameSHAPES8 = 0;
@@ -397,9 +398,7 @@ function get_screen_data(index) {
 	if (index < 0 || index >= GameStates.NUMBER_OF_SCREENS) {
 		throw new Error(`Invalid screen index: ${index}`);
 	}
-	return display_screens[index];
-	// TODO: I am not yet ready to load the shapes file, when I am this return value needs to become:
-	//	return shapes_file_is_m1() ? m1_display_screens[index] : display_screens[index];
+	return shapes.shapes_file_is_m1() ? m1_display_screens[index] : display_screens[index];
 }
 
 export function initialize_game_state() {
