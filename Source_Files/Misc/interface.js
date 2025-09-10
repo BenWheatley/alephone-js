@@ -105,45 +105,56 @@ export const ShapeTypes = Object.freeze({
 const INDEFINATE_TIME_DELAY = Number.MAX_SAFE_INTEGER;
 
 import * as shape_descriptors from '../RenderMain/shape_descriptors.js';
-/*
-struct shape_information_data
-{
-	uint16 flags; // [x-mirror.1] [y-mirror.1] [keypoint_obscured.1] [unused.13]
 
-	_fixed minimum_light_intensity; //  in [0,FIXED_ONE] 
+class shape_information_data {
+	constructor() {
+		this.flags = 0; // uint16: [x-mirror.1] [y-mirror.1] [keypoint_obscured.1] [unused.13]
+		this.minimum_light_intensity = 0; // in C++ it was fixed 16.16, try to use float for this in JS
+		this.unused = new Int16Array(5); // short[5]: I might be able to just delete this, unsure at time of writing
+		
+		// Everything else was short (int16)
+		this.world_left = 0;
+		this.world_right = 0;
+		this.world_top = 0;
+		this.world_bottom = 0;
+		this.world_x0 = 0;
+		this.world_y0 = 0;
+	}
+}
 
-	short unused[5];
-
-	short world_left, world_right, world_top, world_bottom;
-	short world_x0, world_y0;
-};
-
-struct shape_animation_data // Also used in high_level_shape_definition
-{
-	int16 number_of_views; // must be 1, 2, 5 or 8
-	
-	int16 frames_per_view, ticks_per_frame;
-	int16 key_frame;
-	
-	int16 transfer_mode;
-	int16 transfer_mode_period; //  in ticks 
-	
-	int16 first_frame_sound, key_frame_sound, last_frame_sound;
-
-	int16 pixels_to_world;
-	
-	int16 loop_frame;
-
-	int16 unused[14];
-
-	// N*frames_per_view indexes of low-level shapes follow, where
-	// N = 1 if number_of_views = _unanimated/_animated1,
-	// N = 4 if number_of_views = _animated3to4/_animated4,
-	// N = 5 if number_of_views = _animated3to5/_animated5,
-	// N = 8 if number_of_views = _animated2to8/_animated5to8/_animated8
-	int16 low_level_shape_indexes[1];
-};
-*/
+class shape_animation_data {
+	constructor() {
+		// Everything else was int16
+		this.number_of_views = 0; // must be 1, 2, 5 or 8
+		this.frames_per_view = 0;
+		this.ticks_per_frame = 0;
+		this.key_frame = 0;
+		
+		this.transfer_mode = 0;
+		this.transfer_mode_period = 0; // in ticks
+		
+		this.first_frame_sound = 0;
+		this.key_frame_sound = 0;
+		this.last_frame_sound = 0;
+		
+		this.pixels_to_world = 0;
+		
+		this.loop_frame = 0;
+		
+		this.unused = new Int16Array(14);
+		
+		// N*frames_per_view indexes of low-level shapes follow, where
+		// N = 1 if number_of_views = _unanimated/_animated1,
+		// N = 4 if number_of_views = _animated3to4/_animated4,
+		// N = 5 if number_of_views = _animated3to5/_animated5,
+		// N = 8 if number_of_views = _animated2to8/_animated5to8/_animated8
+		
+		// NOTE from ChatGPT:
+		// In C this is a "flexible array member"
+		// Variable length depending on number_of_views * frames_per_view.
+		this.low_level_shape_indexes = []; // int16 low_level_shape_indexes[1];, how does that work?
+	}
+}
 
 const PseudoPlayers = Object.freeze({
 	_single_player: 0,
