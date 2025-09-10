@@ -2911,9 +2911,8 @@ bool interface_fade_finished(
 	return fade_finished();
 }
 
-
-void do_preferences(void)
-{
+function do_preferences() {
+	/* TODO: stub, convert this
 	struct screen_mode_data mode = graphics_preferences->screen_mode;
 
 	force_system_colors(false);
@@ -2927,6 +2926,7 @@ void do_preferences(void)
 		display_main_menu();
 	} else if (memcmp(&mode, &graphics_preferences->screen_mode, sizeof(struct screen_mode_data)))
 		change_screen_mode(&graphics_preferences->screen_mode, false);
+	*/
 }
 */
 //  Update game window
