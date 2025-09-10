@@ -2901,10 +2901,8 @@ function interface_fade_out(pict_resource_number, fade_music) {
 	}*/
 }
 
-static bool can_interface_fade_out(
-	void)
-{
-	return (current_picture_clut==NULL) ? false : true;
+function can_interface_fade_out() {
+	return (current_picture_clut==null) ? false : true;
 }
 
 bool interface_fade_finished(
