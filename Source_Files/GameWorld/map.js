@@ -16,6 +16,7 @@
 	which is included with this source code; it is available online at
 	http://www.gnu.org/licenses/gpl.html
 */
+
 /*
 #include "csmacros.h"
 #include "world.h"
@@ -41,13 +42,10 @@ const TELEPORTING_DURATION = (2 * TELEPORTING_MIDPOINT);
 const MAXIMUM_LEVELS_PER_MAP = 128;
 
 const LEVEL_NAME_LENGTH = (64 + 2);
+
+import * as shape_descriptors from '../RenderMain/shape_descriptors.js';
+
 /*
-// ---------- shape descriptors
-
-#include "shape_descriptors.h"
-
-// ---------- damage
-
 enum // damage types
 {
 	_damage_explosion,
