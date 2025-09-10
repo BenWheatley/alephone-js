@@ -1666,7 +1666,12 @@ public:
 
 	void item_selected(void) { }
 };
+*/
 
+function display_about_dialog() {
+	// TODO: replace this stub with a JS conversion of the CPP in the following comment
+}
+/*
 static void display_about_dialog()
 {
 	force_system_colors(false);
