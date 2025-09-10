@@ -1799,25 +1799,22 @@ static void display_about_dialog()
 
 	display_main_menu();
 }
-
-static void display_credits(
-	void)
-{
-	if (NUMBER_OF_CREDIT_SCREENS)
-	{
-		struct screen_data *screen_data= get_screen_data(_display_credits);
+*/
+function display_credits() {
+	if (NUMBER_OF_CREDIT_SCREENS) {
+		let screen_data = get_screen_data(GameStates._display_credits);
 		
-		game_state.state= _display_credits;
-		game_state.current_screen= 0;
-		game_state.user= PseudoPlayers._single_player;
-		game_state.flags= 0;
+		game_state.state = GameStates._display_credits;
+		game_state.current_screen = 0;
+		game_state.user = PseudoPlayers._single_player;
+		game_state.flags = 0;
 
-		game_state.phase= screen_data->duration;
-		game_state.last_ticks_on_idle= cseries.machine_tick_count();
-		display_screen(screen_data->screen_base);
+		game_state.phase = screen_data.duration;
+		game_state.last_ticks_on_idle = cseries.machine_tick_count();
+		display_screen(screen_data.screen_base);
 	}
 }
-*/
+
 function display_quit_screens() {
 	// TODO: convert real method to this
 	console.log("stub method called: display_quit_screens");
