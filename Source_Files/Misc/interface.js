@@ -1934,6 +1934,10 @@ function handle_replay( // Original comment: //  This is gross.
 	if (!success) display_main_menu();
 }
 
+function begin_game(user, cheat) {
+	// TODO: stub, replace with converted version of original
+}
+/*
 // ZZZ: some modifications to use generalized game-startup
 static bool begin_game(
 	short user,
@@ -2254,6 +2258,7 @@ static void start_game(
 
 	SoundManager::instance()->UpdateListener();
 }
+*/
 
 // LP: "static" removed
 void handle_load_game(
