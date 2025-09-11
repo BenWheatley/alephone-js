@@ -4191,14 +4191,6 @@ dont_auto_recenter() {
 // These parsers are intended to work correctly on both Mac and SDL prefs files;
 // including one crossing over to the other platform (uninterpreted fields become defaults)
 
-// To get around both RGBColor and rgb_color being used in the code
-template<class CType1, class CType2> void CopyColor(CType1& Dest, CType2& Src)
-{
-	Dest.red = Src.red;
-	Dest.green = Src.green;
-	Dest.blue = Src.blue;
-}
-
 void parse_graphics_preferences(InfoTree root, std::string version)
 {
 	int scmode = -1;
