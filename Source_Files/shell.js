@@ -135,19 +135,19 @@ bool handle_open_document(const std::string& filename)
 	{
 	case _typecode_scenario:
 		set_map_file(file);
-		if (shell_options.editor && handle_edit_map())
+		if (shell_options.editor && _interface.handle_edit_map())
 		{
 			done = true;
 		}
 		break;
 	case _typecode_savegame:
-		if (load_and_start_game(file))
+		if (_interface.load_and_start_game(file))
 		{
 			done = true;
 		}
 		break;
 	case _typecode_film:
-		if (handle_open_replay(file))
+		if (_interface.handle_open_replay(file))
 		{
 			done = true;
 		}
