@@ -1011,8 +1011,7 @@ export function idle_game_state(/*uint32*/ time) {
 				case GameStates._switch_demo:
 					//  This is deferred to the idle task because it 
 					//   occurs at interrupt time.. 
-					switch(game_state.user)
-					{
+					switch(game_state.user) {
 						case PseudoPlayers._replay:
 							finish_game(true);
 							break;
@@ -1124,8 +1123,7 @@ export function idle_game_state(/*uint32*/ time) {
 }
 
 export function set_game_focus_lost() {
-	switch (game_state.state)
-	{
+	switch (game_state.state) {
 		case GameStates._display_main_menu:
 		case GameStates._display_intro_screens_for_demo:
 			game_state.phase = INDEFINATE_TIME_DELAY;
@@ -1134,8 +1132,7 @@ export function set_game_focus_lost() {
 }
 
 export function set_game_focus_gained() {
-	switch (game_state.state)
-	{
+	switch (game_state.state) {
 		case GameStates._display_main_menu:
 			game_state.phase = TICKS_UNTIL_DEMO_STARTS;
 			break;
