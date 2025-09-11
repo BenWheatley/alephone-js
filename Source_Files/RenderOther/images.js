@@ -49,6 +49,11 @@ const _scenario_file_delta32 = 20000;
 
 const _PICT = cseries.FOUR_CHARS_TO_INT('PICT');
 const _pict = cseries.FOUR_CHARS_TO_INT('pict');
+const _clut = cseries.FOUR_CHARS_TO_INT('clut');
+const _snd = cseries.FOUR_CHARS_TO_INT('snd ');
+const _TEXT = cseries.FOUR_CHARS_TO_INT('TEXT');
+const _text = cseries.FOUR_CHARS_TO_INT('text');
+const _jpeg = cseries.FOUR_CHARS_TO_INT('jpeg');
 
 class image_file_t {
 	constructor() {
@@ -220,21 +225,18 @@ class image_file_t {
 					else
 					{
 						size_t clut_length;
-						void *clut_data = extract_type_from_wad(d, FOUR_CHARS_TO_INT('c','l','u','t'), &clut_length);
+						void *clut_data = extract_type_from_wad(d, _clut, &clut_length);
 						success = make_rsrc_from_pict(raw, raw_length, rsrc, clut_data, clut_length);
 					}
 				}
 				else if (rsrc_type == FOUR_CHARS_TO_INT('c','l','u','t'))
 					success = make_rsrc_from_clut(raw, raw_length, rsrc);
-				else if (rsrc_type == FOUR_CHARS_TO_INT('s','n','d',' '))
-				{
+				} else if (rsrc_type == _snd) {
 					void *snd_data = malloc(raw_length);
 					memcpy(snd_data, raw, raw_length);
 					rsrc.SetData(snd_data, raw_length);
 					success = true;
-				}
-				else if (rsrc_type == FOUR_CHARS_TO_INT('T','E','X','T'))
-				{
+				} else if (rsrc_type == _TEXT) {
 					void *text_data = malloc(raw_length);
 					memcpy(text_data, raw, raw_length);
 					rsrc.SetData(text_data, raw_length);
@@ -754,7 +756,7 @@ async function picture_to_surface(rsrc) {
 				let id_size = p.readUint32();
 				let codec_type = p.readUint32();
 				
-				if (codec_type !== FOUR_CHARS_TO_INT('jpeg')) {
+				if (codec_type !== _jpeg) {
 					console.error(`Unsupported codec type ${codec_type}`);
 					done = true;
 					break;
@@ -1113,22 +1115,22 @@ bool image_file_t::is_open(void)
 
 bool image_file_t::has_clut(int id)
 {
-	return has_rsrc(FOUR_CHARS_TO_INT('c','l','u','t'), FOUR_CHARS_TO_INT('c','l','u','t'), id);
+	return has_rsrc(_clut, _clut, id);
 }
 
 bool image_file_t::get_clut(int id, LoadedResource &rsrc)
 {
-	return get_rsrc(FOUR_CHARS_TO_INT('c','l','u','t'), FOUR_CHARS_TO_INT('c','l','u','t'), id, rsrc);
+	return get_rsrc(_clut, _clut, id, rsrc);
 }
 
 bool image_file_t::get_snd(int id, LoadedResource &rsrc)
 {
-	return get_rsrc(FOUR_CHARS_TO_INT('s','n','d',' '), FOUR_CHARS_TO_INT('s','n','d',' '), id, rsrc);
+	return get_rsrc(_snd, _snd, id, rsrc);
 }
 
 bool image_file_t::get_text(int id, LoadedResource &rsrc)
 {
-	return get_rsrc(FOUR_CHARS_TO_INT('T','E','X','T'), FOUR_CHARS_TO_INT('t','e','x','t'), id, rsrc);
+	return get_rsrc(_TEXT, _text, id, rsrc);
 }
 */
 //  Get/draw image from Images file
@@ -1334,7 +1336,7 @@ bool get_picture_resource_from_scenario(int base_resource, LoadedResource &PictR
 	if (!found && ScenarioFile.is_open())
 	{
 		auto id = ScenarioFile.determine_pict_resource_id(base_resource, _scenario_file_delta16, _scenario_file_delta32);
-		found = Plugins::instance()->get_resource(FOUR_CHARS_TO_INT('P','I','C','T'), id, PictRsrc);
+		found = Plugins::instance()->get_resource(_PICT, id, PictRsrc);
 		if (!found)
 		{
 			found = ScenarioFile.get_pict(ScenarioFile.determine_pict_resource_id(base_resource, _scenario_file_delta16, _scenario_file_delta32), PictRsrc);
@@ -1343,7 +1345,7 @@ bool get_picture_resource_from_scenario(int base_resource, LoadedResource &PictR
 	
     if (!found && ShapesImagesFile.is_open())
 	{
-		found = Plugins::instance()->get_resource(FOUR_CHARS_TO_INT('P','I','C','T'), base_resource, PictRsrc);
+		found = Plugins::instance()->get_resource(_PICT, base_resource, PictRsrc);
 
 		if (!found)
 		{
@@ -1375,7 +1377,7 @@ bool get_sound_resource_from_scenario(int resource_number, LoadedResource &Sound
     
     if (!found && ScenarioFile.is_open())
 	{
-		found = Plugins::instance()->get_resource(FOUR_CHARS_TO_INT('s','n','d',' '), resource_number, SoundRsrc);
+		found = Plugins::instance()->get_resource(_snd, resource_number, SoundRsrc);
 		if (!found)
 		{
 			found = ScenarioFile.get_snd(resource_number, SoundRsrc);
@@ -1385,7 +1387,7 @@ bool get_sound_resource_from_scenario(int resource_number, LoadedResource &Sound
     if (!found && SoundsImagesFile.is_open())
 	{
         // Marathon 1 case: only one sound used for chapter screens
-		found = Plugins::instance()->get_resource(FOUR_CHARS_TO_INT('s','n','d', ' '), 1240, SoundRsrc);
+		found = Plugins::instance()->get_resource(_snd, 1240, SoundRsrc);
 
 		if (!found)
 		{
@@ -1403,7 +1405,7 @@ bool get_text_resource_from_scenario(int resource_number, LoadedResource &TextRs
 	if (!ScenarioFile.is_open())
 		return false;
 
-	auto success = Plugins::instance()->get_resource(FOUR_CHARS_TO_INT('T','E','X','T'), resource_number, TextRsrc);
+	auto success = Plugins::instance()->get_resource(_TEXT, resource_number, TextRsrc);
 
 	if (!success)
 	{
