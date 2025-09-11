@@ -746,8 +746,6 @@ bool join_networked_resume_game()
 }
 #endif // !defined(DISABLE_NETWORKING)
 
-extern bool load_and_start_game(FileSpecifier& File);
-
 // ZZZ: changes to use generalized game startup support
 // This will be used only on the machine that picked "Continue Saved Game".
 bool load_and_start_game(FileSpecifier& File)
@@ -885,8 +883,6 @@ bool load_and_start_game(FileSpecifier& File)
 
 	return success;
 }
-
-extern bool handle_open_replay(FileSpecifier& File);
 
 bool handle_open_replay(FileSpecifier& File)
 {
