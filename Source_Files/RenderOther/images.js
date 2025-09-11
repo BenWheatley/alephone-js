@@ -32,6 +32,7 @@ import * as wad from '../Files/wad.js';
 import { DataViewReader } from '../Misc/DataViewReader.js';
 import * as screen_drawing from './screen_drawing.js';
 import * as Logging from '../Misc/Logging.js';
+import * as shapes from '../RenderMain/shapes.js';
 /*
 #include "render.h"
 #include "OGL_Render.h"
