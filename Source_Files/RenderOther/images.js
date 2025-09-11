@@ -1295,22 +1295,21 @@ static void create_m1_menu_surfaces(void)
 }
 */
 function m1_draw_full_screen_pict_resource_from_images(pict_resource_number) {
-/* TODO: stub
-    if (!shapes_file_is_m1())
+    if (!shapes.shapes_file_is_m1())
         return false;
-    if (pict_resource_number == MAIN_MENU_BASE)
-    {
+    if (pict_resource_number == screen_definitions.MAIN_MENU_BASE) {
+/* TODO: stub
         create_m1_menu_surfaces();
         draw_picture_surface(m1_menu_unpressed);
         return true;
-    }
-    else if (pict_resource_number == MAIN_MENU_BASE+1)
-    {
+*/
+    } else if (pict_resource_number == screen_definitions.MAIN_MENU_BASE+1) {
+/* TODO: stub
         create_m1_menu_surfaces();
         draw_picture_surface(m1_menu_pressed);
         return true;
+*/
     }
-    */
     return false;
 }
 
