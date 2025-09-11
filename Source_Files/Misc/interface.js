@@ -1214,19 +1214,14 @@ void do_menu_item_command(
 	{
             
 		case mGame:
-			switch(menu_item)
-			{
+			switch(menu_item) {
 				case iPause:
-					switch(game_state.user)
-					{
+					switch(game_state.user) {
 						case PseudoPlayers._single_player:
 						case _replay:
-							if (get_keyboard_controller_status())
-							{
+							if (get_keyboard_controller_status()) {
 								pause_game();
-							}
-							else
-							{	
+							} else {
 								resume_game();
 							}
 							break;
@@ -1245,8 +1240,7 @@ void do_menu_item_command(
 					break;
 					
 				case iSave:
-					switch(game_state.user)
-					{
+					switch(game_state.user) {
 						case PseudoPlayers._single_player:
 #if 0
 							save_game();
@@ -1273,12 +1267,10 @@ void do_menu_item_command(
 					break;
 					
 				case iCloseGame:
-				case iQuitGame:
-					{
-						bool really_wants_to_quit= false;
+				case iQuitGame: {
+						let really_wants_to_quit = false;
 					
-						switch(game_state.user)
-						{
+						switch (game_state.user) {
 							case PseudoPlayers._single_player:
 								if(PLAYER_IS_DEAD(local_player) || 
 								   dynamic_world->tick_count-local_player->ticks_at_last_successful_save<CLOSE_WITHOUT_WARNING_DELAY)
@@ -1304,8 +1296,7 @@ void do_menu_item_command(
 								break;
 						}
 	
-						if(really_wants_to_quit)
-						{
+						if (really_wants_to_quit) {
 							set_game_state(_close_game);
 						}
 					}
@@ -1318,13 +1309,12 @@ void do_menu_item_command(
 			break;
 			
 		case mInterface:
-			switch(menu_item)
-			{
+			switch(menu_item) {
 				case iNewGame:
 					begin_game(PseudoPlayers._single_player, cheat);
 					break;
 				case iPlaySingletonLevel:
-					begin_game(PseudoPlayers._single_player,2);
+					begin_game(PseudoPlayers._single_player, 2);
 					break;
 
 				case iJoinGame:
@@ -1350,8 +1340,8 @@ void do_menu_item_command(
 					
 				case iPreferences:
 					do_preferences();
-					game_state.phase= TICKS_UNTIL_DEMO_STARTS;
-					game_state.last_ticks_on_idle= cseries.machine_tick_count();
+					game_state.phase = TICKS_UNTIL_DEMO_STARTS;
+					game_state.last_ticks_on_idle = cseries.machine_tick_count();
 					break;
 					
 				case iCenterButton:
@@ -1367,8 +1357,8 @@ void do_menu_item_command(
 					break;
 				case iAbout:
 					display_about_dialog();
-					game_state.phase= TICKS_UNTIL_DEMO_STARTS;
-					game_state.last_ticks_on_idle= cseries.machine_tick_count();
+					game_state.phase = TICKS_UNTIL_DEMO_STARTS;
+					game_state.last_ticks_on_idle = cseries.machine_tick_count();
 					break;
 		
 				default:
