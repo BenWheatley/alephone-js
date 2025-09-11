@@ -17,6 +17,7 @@
 	http://www.gnu.org/licenses/gpl.html
 */
 
+// NOTE: all uses of RGBColor should become rgb_color
 export class rgb_color {
   constructor(r, g, b) {
     // NOTE: C++ version used uint16, JS will use bytes, so if everything's gone beyond white that's probably what caused it
