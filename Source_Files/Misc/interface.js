@@ -1469,19 +1469,14 @@ void process_main_menu_highlight_advance(bool reverse)
 			}
 		}
 
-		if (reverse)
-		{
+		if (reverse) {
 			--index;
-			if (index < 0)
-			{
+			if (index < 0) {
 				index = last_index();
 			}
-		}
-		else
-		{
+		} else {
 			++index;
-			if (menu_item_order[index] == -1)
-			{
+			if (menu_item_order[index] == -1) {
 				index = 0;
 			}
 		}
