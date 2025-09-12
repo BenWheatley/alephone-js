@@ -45,41 +45,35 @@ const LEVEL_NAME_LENGTH = (64 + 2);
 
 import * as shape_descriptors from '../RenderMain/shape_descriptors.js';
 
+export const _damage_explosion = 0;
+export const _damage_electrical_staff = 1;
+export const _damage_projectile = 2;
+export const _damage_absorbed = 3;
+export const _damage_flame = 4;
+export const _damage_hound_claws = 5;
+export const _damage_alien_projectile = 6;
+export const _damage_hulk_slap = 7;
+export const _damage_compiler_bolt = 8;
+export const _damage_fusion_bolt = 9;
+export const _damage_hunter_bolt = 10;
+export const _damage_fist = 11;
+export const _damage_teleporter = 12;
+export const _damage_defender = 13;
+export const _damage_yeti_claws = 14;
+export const _damage_yeti_projectile = 15;
+export const _damage_crushing = 16;
+export const _damage_lava = 17;
+export const _damage_suffocation = 18;
+export const _damage_goo = 19;
+export const _damage_energy_drain = 20;
+export const _damage_oxygen_drain = 21;
+export const _damage_hummer_bolt = 22;
+export const _damage_shotgun_projectile = 23;
+export const NUMBER_OF_DAMAGE_TYPES = 24;
+
+export const _alien_damage = 0x1; // will be decreased at lower difficulty levels
+
 /*
-enum // damage types
-{
-	_damage_explosion,
-	_damage_electrical_staff,
-	_damage_projectile,
-	_damage_absorbed,
-	_damage_flame,
-	_damage_hound_claws,
-	_damage_alien_projectile,
-	_damage_hulk_slap,
-	_damage_compiler_bolt,
-	_damage_fusion_bolt,
-	_damage_hunter_bolt,
-	_damage_fist,
-	_damage_teleporter,
-	_damage_defender,
-	_damage_yeti_claws,
-	_damage_yeti_projectile,
-	_damage_crushing,
-	_damage_lava,
-	_damage_suffocation,
-	_damage_goo,
-	_damage_energy_drain,
-	_damage_oxygen_drain,
-	_damage_hummer_bolt,
-	_damage_shotgun_projectile,
-	NUMBER_OF_DAMAGE_TYPES
-};
-
-enum // damage flags
-{
-	_alien_damage= 0x1 // will be decreased at lower difficulty levels
-};
-
 struct damage_definition
 {
 	int16 type, flags;
