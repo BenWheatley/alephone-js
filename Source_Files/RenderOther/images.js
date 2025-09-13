@@ -1415,7 +1415,6 @@ bool get_text_resource_from_scenario(int resource_number, LoadedResource &TextRs
 }
 
 //  Calculate color table for image
-
 struct color_table *calculate_picture_clut(int CLUTSource, int pict_resource_number)
 {
 	struct color_table *picture_table = NULL;
