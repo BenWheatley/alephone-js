@@ -69,22 +69,21 @@ class image_file_t {
 		// Try to open as a resource file
 		this.file = new FileHandler.FileSpecifier(url);
 		const was_opened = await this.file.Open(this.rsrc_file);
-		/*
 		if (!was_opened) {
 			// This failed, maybe it's a wad file (M2 Win95 style)
-			if (!await wad.open_wad_file_for_reading(url, this.wad_file) ||
+			if (!await wad.open_wad_file_for_reading(this.file, this.wad_file) ||
 				!await wad.read_wad_header(this.wad_file, this.wad_hdr)) {
 	
 				wad_file.Close();
 				return false;
 			}
 		} else if (!this.wad_file || !this.wad_file.IsOpen()) {
-			if (await wad.open_wad_file_for_reading(url, this.wad_file)) {
+			if (await wad.open_wad_file_for_reading(this.file, this.wad_file)) {
 				if (!await wad.read_wad_header(this.wad_file, this.wad_hdr)) {
 					wad_file.Close();
 				}
 			}
-		}*/
+		}
 	
 		return true;
 	}
